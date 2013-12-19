@@ -1,0 +1,140 @@
+﻿
+@model IEnumerable<Sellers.WMS.Domain.ProductSKUType>
+@{
+    ViewBag.Title = "Index";
+}
+<body class="easyui-layout">
+<script language="javascript" type="text/javascript">
+        var grid;
+        $(function () {
+            grid = $('#dg').datagrid({
+                url:  '@Url.Action("List", "ProductSKU")',
+                idField: 'Id',
+                iconCls: 'icon-view',
+                height: 600,
+                width: function () { return document.body.clientWidth * 0.9 },
+                nowrap: true,  
+				singleSelect:true, 
+				animate: true,  
+				resizable: true,  
+                pagination: true,
+				pageNumber: 1,
+                pageSize: 100,
+                pageList: [50, 100, 200],
+                rownumbers: true,
+                columns: [[
+                    { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                    { title: '父编号', field: 'ParentSKU', width: 100, sortable: true,align: 'center' },
+                    { title: '子编号', field: 'SKU', width: 100, sortable: true,align: 'center' },
+                    { title: '标题', field: 'Title', width: 100, sortable: true,align: 'center' },
+                    { title: '价格', field: 'Price', width: 100, sortable: true,align: 'center' },
+                    { title: '规格', field: 'Memo', width: 100, sortable: true,align: 'center' },
+                    { title: '数量', field: 'Qty', width: 100, sortable: true,align: 'center' },
+                    { title: '库存天数', field: 'DayOfStock', width: 100, sortable: true,align: 'center' }
+
+                ]]
+                ,
+                toolbar: '#toolbar',
+				rowStyler: function (index, row, css) {
+					if (row.Id != "") {
+						return 'font-weight:bold;';
+					}
+				},
+				onLoadSuccess: function (data) {
+					if (data.rows.length > 0) {
+						$('#dg').datagrid("selectRow", 0);
+					}
+				}
+            })
+        });
+
+        function addClick() {
+            parent.$.modalDialog({
+                title: '添加数据',
+                width: 650,
+                height: 350,
+                href: '@Url.Action("Create", "ProductSKU")',
+                buttons: [{
+                    text: '添加',
+                    handler: function () {
+                        parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                }]
+            });
+        }
+
+        //编辑框
+        function editClick() {
+            var id = getselectedRow(grid);
+            if (id) {
+                parent.$.modalDialog({
+                    title: '编辑数据',
+                    width: 650,
+                    height: 300,
+                    href: '@Url.Action("Edit", "ProductSKU")/' + id,
+                    buttons: [{
+                        text: '修改',
+                        handler: function () {
+                            parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
+                        }
+                    }]
+                });
+            }
+        }
+
+
+
+        function doSearch() {
+            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            grid.datagrid("load", {
+                search: search
+            });
+        }
+
+</script>
+<div region="center">
+		<fieldset>
+            <legend>数据查询</legend>
+            <table border="0">
+                                 <tr>
+                    <td><label>主键:</label><input type='text' id='Id' /></td>
+
+                    <td><label>父编号:</label><input type='text' id='ParentSKU' /></td>
+
+                    <td><label>子编号:</label><input type='text' id='SKU' /></td>
+
+                    <td><label>标题:</label><input type='text' id='Title' /></td>
+
+                </tr>
+                <tr>
+                    <td><label>价格:</label><input type='text' id='Price' /></td>
+
+                    <td><label>规格:</label><input type='text' id='Memo' /></td>
+
+                    <td><label>数量:</label><input type='text' id='Qty' /></td>
+
+                    <td><label>库存天数:</label><input type='text' id='DayOfStock' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                        
+                </tr>
+
+            </table>
+        </fieldset>
+		<div id="toolbar">
+			@Html.Raw(ViewData["toolbarButtons"])
+        </div> 
+        <table id="dg">
+        </table>
+		<div id="dropdown" style="width:200px; display:none;">  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick1">Excel2003表格所有页</div>  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick2">Excel2003表格指定页</div> 
+			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click:downloadClick3">Excel2003压缩zip</div>  
+			<div data-options="iconCls:'icon-page_excel'"   data-bind="click:downloadClick4">Excel2007/2010</div>  
+			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click:downloadClick5">PDF</div>  
+			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click:downloadClick6">Word</div>   
+		</div>
+</div>
+</body>

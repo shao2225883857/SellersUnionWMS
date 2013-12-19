@@ -1,0 +1,52 @@
+﻿@model Sellers.WMS.Domain.SKUCodeType
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sellers.WMS.Domain.SKUCodeType</title>
+</head>
+<body>
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Sellers.WMS.Domain.SKUCodeType</legend>
+    <div class="display-label">Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Id)
+    </div>
+
+    <div class="display-label">Code</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Code)
+    </div>
+
+    <div class="display-label">SKU</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SKU)
+    </div>
+
+    <div class="display-label">IsOut</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsOut)
+    </div>
+
+    <div class="display-label">IsNew</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsNew)
+    </div>
+
+
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("返回列表", "Index")
+    </p>
+}
+
+
+</body>
+</html>

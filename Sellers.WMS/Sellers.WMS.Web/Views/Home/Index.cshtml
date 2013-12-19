@@ -1,0 +1,206 @@
+﻿@model IList<Sellers.WMS.Domain.ModuleType>
+<script type="text/javascript">
+    var index_tabs;
+    var index_tabsMenu;
+    var index_layout;
+    $(function () {
+        initLeftMenu();
+
+        addTab('主页', '@Url.Action("Default", "Home")', "false");
+
+        $('#loginOut').click(function () {
+            $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function (r) {
+                if (r) {
+                    location.href = '/User/LogOff/';
+                }
+            });
+        });
+
+        index_layout = $('#index_layout').layout({
+            fit: true
+        });
+        /*index_layout.layout('collapse', 'east');*/
+
+        index_tabs = $('#index_tabs').tabs({
+            fit: true,
+            border: false,
+            onContextMenu: function (e, title) {
+                e.preventDefault();
+                index_tabsMenu.menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                }).data('tabTitle', title);
+            },
+            tools: [{
+                iconCls: 'icon-reload',
+                handler: function () {
+                    var href = index_tabs.tabs('getSelected').panel('options').href;
+                    if (href) {/*说明tab是以href方式引入的目标页面*/
+                        var index = index_tabs.tabs('getTabIndex', index_tabs.tabs('getSelected'));
+                        index_tabs.tabs('getTab', index).panel('refresh');
+                    } else {/*说明tab是以content方式引入的目标页面*/
+                        var panel = index_tabs.tabs('getSelected').panel('panel');
+                        var frame = panel.find('iframe');
+                        try {
+                            if (frame.length > 0) {
+                                for (var i = 0; i < frame.length; i++) {
+                                    frame[i].contentWindow.document.write('');
+                                    frame[i].contentWindow.close();
+                                    frame[i].src = frame[i].src;
+                                }
+                                if (navigator.userAgent.indexOf("MSIE") > 0) {// IE特有回收内存方法
+                                    try {
+                                        CollectGarbage();
+                                    } catch (e) {
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                        }
+                    }
+                }
+            }, {
+                iconCls: 'icon-no',
+                handler: function () {
+                    var index = index_tabs.tabs('getTabIndex', index_tabs.tabs('getSelected'));
+                    var tab = index_tabs.tabs('getTab', index);
+                    if (tab.panel('options').closable) {
+                        index_tabs.tabs('close', index);
+                    } else {
+                        $.messager.alert('提示', '[' + tab.panel('options').title + ']不可以被关闭！', 'error');
+                    }
+                }
+            }]
+        });
+
+        index_tabsMenu = $('#index_tabsMenu').menu({
+            onClick: function (item) {
+                var curTabTitle = $(this).data('tabTitle');
+                var type = $(item.target).attr('title');
+                if (type === 'refresh') {
+                    index_tabs.tabs('getTab', curTabTitle).panel('refresh');
+                    return;
+                }
+                if (type === 'close') {
+                    var t = index_tabs.tabs('getTab', curTabTitle);
+                    if (t.panel('options').closable) {
+                        index_tabs.tabs('close', curTabTitle);
+                    }
+                    return;
+                }
+                var allTabs = index_tabs.tabs('tabs');
+                var closeTabsTitle = [];
+                $.each(allTabs, function () {
+                    var opt = $(this).panel('options');
+                    if (opt.closable && opt.title != curTabTitle && type === 'closeOther') {
+                        closeTabsTitle.push(opt.title);
+                    } else if (opt.closable && type === 'closeAll') {
+                        closeTabsTitle.push(opt.title);
+                    }
+                });
+                for (var i = 0; i < closeTabsTitle.length; i++) {
+                    index_tabs.tabs('close', closeTabsTitle[i]);
+                }
+            }
+        });
+    });
+
+    function getCookie(name)//取cookies函数       
+    {
+        var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+        if (arr != null) return unescape(arr[2]); return null;
+    }
+
+    function initLeftMenu() {
+        $("#nav").accordion({ animate: true });
+        $('.easyui-accordion li a').click(function () {
+            var tabTitle = $(this).children('.nav').text();
+            var url = $(this).attr("rel");
+            var parentmenu = $(this).attr("ref");
+            addTab(parentmenu + '-' + tabTitle, url);
+            $('.easyui-accordion li div').removeClass("selected");
+            $(this).parent().addClass("selected");
+        }).hover(function () {
+            $(this).parent().addClass("hover");
+        }, function () {
+            $(this).parent().removeClass("hover");
+        });
+        var panels = $('#nav').accordion('panels');
+        var t = panels[0].panel('options').title;
+        $('#nav').accordion('select', t);
+    }
+
+    function addTab(subtitle, url, closable) {
+        if (!$('#index_tabs').tabs('exists', subtitle)) {
+            var cl = true;
+            if (closable == 'false')
+                cl = false;
+            $('#index_tabs').tabs('add', {
+                title: subtitle,
+                content: createFrame(url),
+                closable: cl
+            });
+        } else {
+            $('#index_tabs').tabs('select', subtitle);
+        }
+        // tabClose();
+    }
+
+
+
+
+    function tabClose() {
+        /*双击关闭TAB选项卡*/
+        $(".tabs-inner").dblclick(function () {
+            var subtitle = $(this).children(".tabs-closable").text();
+            $('#index_tabs').tabs('close', subtitle);
+        });
+    }
+
+</script>
+<style type="text/css">
+    a {
+        color: Black;
+        text-decoration: none;
+    }
+</style>
+
+<body class="easyui-layout" id="mainframe">
+    <div region="north" border="false" style="overflow: hidden; height: 68px; line-height: 20px; font-family: 微软雅黑,黑体;">
+        <div id="mainlogo">
+            <h1 style="padding-top: 5px; padding-left: 10px;">仓库管理系统测试版 V1.0</h1>
+        </div>
+        <div id="center">
+        </div>
+        <div id="mainctrl">
+            <div class="wel">
+                登录者: 东东
+            </div>
+            <div style="position: absolute; right: 0px; bottom: 0px;">
+
+                <a href="#" id="loginOut" class="easyui-menubutton" data-options="iconCls:'icon-help'" onclick="changePass()">修改密码</a>
+                <a href="#" id="loginOut" class="easyui-menubutton" data-options="iconCls:'icon-back'">注销</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           
+            </div>
+
+
+        </div>
+    </div>
+    <div region="west" split="true" title="功能菜单" style="width: 170px; padding: 1px; overflow: hidden;">
+        @{
+            Html.RenderPartial("Nav", Model);
+        }
+    </div>
+    <div region="center" title="" style="overflow: hidden; padding: 0px;" id="centerArea">
+        <div class="easyui-tabs" fit="true" border="false" id="index_tabs">
+        </div>
+    </div>
+    <div id="index_tabsMenu" style="width: 120px; display: none;">
+        <div title="refresh" data-options="iconCls:'transmit'">刷新</div>
+        <div class="menu-sep"></div>
+        <div title="close" data-options="iconCls:'delete'">关闭</div>
+        <div title="closeOther" data-options="iconCls:'delete'">关闭其他</div>
+        <div title="closeAll" data-options="iconCls:'delete'">关闭所有</div>
+    </div>
+
+</body>

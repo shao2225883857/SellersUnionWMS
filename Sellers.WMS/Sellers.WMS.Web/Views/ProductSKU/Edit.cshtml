@@ -1,0 +1,72 @@
+﻿@model Sellers.WMS.Domain.ProductSKUType
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        //这里写加载下拉列表、修改编辑控件的初始化值
+		//parent.$.messager.progress('close');
+
+        $('#form').form({
+            url: '@Url.Action("Edit", "ProductSKU")',
+            onSubmit: function () {
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.IsSuccess) {
+                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
+                    //parent.layout_west_tree.tree('reload');
+                    parent.$.modalDialog.penner_grid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                }
+                else {
+                    alert(result.Result);
+                }
+            }
+        });
+    });
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "form" }))
+        {
+            <table class="grid">
+                <tr>
+                    <td align="right">主键：</td>
+                    <td align="left"><input  type='text' name='Id' id='Id' value='@Model.Id' ></input></td>
+                    <td align="right">父编号：</td>
+                    <td align="left"><input  type='text' name='ParentSKU' id='ParentSKU' value='@Model.ParentSKU' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">子编号：</td>
+                    <td align="left"><input  type='text' name='SKU' id='SKU' value='@Model.SKU' ></input></td>
+                    <td align="right">标题：</td>
+                    <td align="left"><input  type='text' name='Title' id='Title' value='@Model.Title' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">价格：</td>
+                    <td align="left"><input  type='text' name='Price' id='Price' value='@Model.Price' ></input></td>
+                    <td align="right">规格：</td>
+                    <td align="left"><input  type='text' name='Memo' id='Memo' value='@Model.Memo' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">数量：</td>
+                    <td align="left"><input  type='text' name='Qty' id='Qty' value='@Model.Qty' ></input></td>
+                    <td align="right">库存天数：</td>
+                    <td align="left"><input  type='text' name='DayOfStock' id='DayOfStock' value='@Model.DayOfStock' ></input></td>
+                </tr>
+
+			</table>
+        }
+    </div>
+</div>

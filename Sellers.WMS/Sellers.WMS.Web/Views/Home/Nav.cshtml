@@ -1,0 +1,24 @@
+﻿@model IList<Sellers.WMS.Domain.ModuleType>
+@{
+    Layout = null;
+}
+
+<div id="nav" class="easyui-accordion" fit="true" border="false">
+    @foreach (var menu in Model)
+    {
+        <div title=" @menu.FullName" iconCls="menuItem @menu.ImageIndex" >
+            @if (menu.children != null)
+            {
+                <ul>
+                    @foreach (var submenu in menu.children)
+                    {
+                        string menuid = "menu" + submenu.Id;
+                        <li>
+                            <div><a ref="@menu.FullName" href="#" rel='@submenu.NavigateUrl' id="@menuid"><span class="icons @submenu.ImageIndex" >&nbsp;</span>&nbsp;&nbsp;<span class="nav">@submenu.FullName</span></a></div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+</div>

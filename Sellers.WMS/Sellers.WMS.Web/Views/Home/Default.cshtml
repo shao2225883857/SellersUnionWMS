@@ -1,0 +1,96 @@
+﻿<link href="~/Content/Themes/portal.css" rel="stylesheet" />
+<
+
+<script src="~/Content/Scripts/EasyUI/jquery.portal.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var panels = [];
+    $(function () {
+        panels = [{
+            id: 'p1',
+            title: '公告',
+            height: 150,
+            collapsible: true,
+            content: '<h1>123</h1>'
+        }, {
+            id: 'p2',
+            title: '考勤报表',
+            height: 200,
+            collapsible: true,
+            content: '<h1>123</h1>'
+        }, {
+            id: 'p3',
+            title: '部门公告',
+            height: 200,
+            collapsible: true,
+            content: '<h1>预留</h1>'
+        }, {
+            id: 'p4',
+            title: '公司新闻',
+            height: 150,
+            collapsible: true,
+            content: '<h1>123</h1>'
+
+        }, {
+            id: 'p5',
+            title: '公司论坛',
+            height: 200,
+            collapsible: true,
+            content: '<h1>123</h1>'
+        }, {
+            id: 'p6',
+            title: '常用网址',
+            height: 200,
+            collapsible: true,
+            content: '<h1>123</h1>'
+        }];
+
+        $('#layout_portal_portal').portal({
+            border: false,
+            fit: true
+        });
+
+
+        var state = 'p1,p2,p3:p4,p6,p5';
+
+        addPortalPanels(state);
+        $('#layout_portal_portal').portal('resize');
+
+    });
+
+    function getPanelOptions(id) {
+        for (var i = 0; i < panels.length; i++) {
+            if (panels[i].id == id) {
+                return panels[i];
+            }
+        }
+        return undefined;
+    }
+    function addPortalPanels(portalState) {
+        var columns = portalState.split(':');
+        for (var i = 0; i < columns.length; i++) {
+            var cc = columns[i].split(',');
+            for (var j = 0; j < cc.length; j++) {
+                var options = getPanelOptions(cc[j]);
+                if (options) {
+                    var p = $('<div/>').attr('id', options.id).appendTo('body');
+                    p.panel(options);
+                    $('#layout_portal_portal').portal('add', {
+                        panel: p,
+                        columnIndex: i
+                    });
+                }
+            }
+        }
+    }
+</script>
+<body class="easyui-layout">
+
+    <div region="center" border="false">
+        <div id="layout_portal_portal" style="position: relative">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
+</body>
