@@ -12,7 +12,7 @@
             idField: 'Id',
             iconCls: 'icon-view',
             height: 600,
-            width: 400,
+            width: function () { return (document.body.clientWidth * 0.9 - 420) },
             nowrap: true,
             singleSelect: true,
             animate: true,
@@ -30,36 +30,83 @@
 
             ]]
                 ,
-            toolbar: '#toolbar',
+            toolbar: [{
+                id: 'btnAdd2',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.addnew();
+                }
+            }, '-', {
+                id: 'btnEdit2',
+                text: '保存',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.accept();
+                }
+            }, '-', {
+                id: 'btnDelete2',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.deleterow();
+                }
+            }],
             onLoadSuccess: function (data) {
                 if (data.rows.length > 0) {
                     $('#dg').datagrid("selectRow", 0);
                 }
             }
         })
-        grid = $('#dg2').datagrid({
+
+        grid2 = $('#dg2').datagrid({
             url: '@Url.Action("List", "DataDictionary")',
             idField: 'Id',
             iconCls: 'icon-view',
             height: 600,
             width: 400,
-            nowrap: true,
+
             singleSelect: true,
             animate: true,
-            resizable: true,
+
             rownumbers: true,
             columns: [[
-                { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
-                { title: '分类', field: 'ClassName', width: 100, sortable: true, align: 'center' },
-                { title: '代码', field: 'Code', width: 100, sortable: true, align: 'center' },
-                { title: '系统内置', field: 'AllowDelete', width: 100, sortable: true, align: 'center' }
-            ]],
-            onLoadSuccess: function (data) {
-                if (data.rows.length > 0) {
-                    $('#dg').datagrid("selectRow", 0);
+                    { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                    { title: '分类代码', field: 'DicCode', width: 100, sortable: true },
+                    { title: '名称', field: 'FullName', width: 100, sortable: true, editor: 'text' },
+                    { title: '值', field: 'DicValue', width: 100, sortable: true, editor: 'text' }
+            ]], toolbar: [{
+                id: 'btnAdd',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.addnew();
                 }
-            }
+            }, '-', {
+                id: 'btnEdit',
+                text: '保存',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.accept();
+                }
+            }, '-', {
+                id: 'btnDelete',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    var editgrid = editGridViewModel($('#dg2'));
+                    editgrid.deleterow();
+                }
+            }],
+            onDblClickRow: function () { editGridViewModel($('#dg2')).begin() },
+            onClickRow: function () { editGridViewModel($('#dg2')).ended() }
         });
+
     });
 
 
@@ -97,8 +144,9 @@
 			@Html.Raw(ViewData["toolbarButtons"])
         </div> 
     <table border="0">
-    <tr><td> <table id="dg">
-    </table></td>
+    <tr><td><fieldset>
+        <legend>明细分类</legend> <table id="dg">
+    </table> </fieldset></td>
         <td><fieldset>
         <legend>字典明细</legend>
             <table id="dg2">

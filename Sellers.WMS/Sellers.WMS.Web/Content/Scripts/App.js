@@ -198,3 +198,70 @@ openTab = function (subtitle, url, closable) {
 };
 
 
+function editGridViewModel(grid) {
+    var self = this;
+    this.begin = function (index, row) {
+        if (index == undefined || typeof index === 'object') {
+            row = grid.datagrid('getSelected');
+            index = grid.datagrid('getRowIndex', row);
+        }
+        self.editIndex = self.ended() ? index : self.editIndex;
+        grid.datagrid('selectRow', self.editIndex).datagrid('beginEdit', self.editIndex);
+    };
+    this.ended = function () {
+        if (self.editIndex == undefined) return true;
+        if (grid.datagrid('validateRow', self.editIndex)) {
+            grid.datagrid('endEdit', self.editIndex);
+            self.editIndex = undefined;
+            return true;
+        }
+        grid.datagrid('selectRow', self.editIndex);
+        return false;
+    };
+    this.addnew = function (rowData) {
+        if (self.ended()) {
+            if (Object.prototype.toString.call(rowData) != '[object Object]') rowData = {};
+            rowData = $.extend({ _isnew: true }, rowData);
+            grid.datagrid('appendRow', rowData);
+            self.editIndex = grid.datagrid('getRows').length - 1;
+            grid.datagrid('selectRow', self.editIndex);
+            self.begin(self.editIndex, rowData);
+        }
+    };
+    this.deleterow = function () {
+        var selectRow = grid.datagrid('getSelected');
+        if (selectRow) {
+            var selectIndex = grid.datagrid('getRowIndex', selectRow);
+            if (selectIndex == self.editIndex) {
+                grid.datagrid('cancelEdit', self.editIndex);
+                self.editIndex = undefined;
+            }
+            grid.datagrid('deleteRow', selectIndex);
+        }
+    };
+    this.reject = function () {
+        grid.datagrid('rejectChanges');
+    };
+    this.accept = function () {
+        grid.datagrid('acceptChanges');
+        var rows = grid.datagrid('getRows');
+        for (var i in rows) delete rows[i]._isnew;
+    };
+    this.getChanges = function (include, ignore) {
+        if (!include) include = [], ignore = true;
+        alert("123");
+        //var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
+        //    updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
+        //    inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
+
+        //var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
+        //changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
+
+        return changes;
+    };
+    this.isChangedAndValid = function () {
+        return self.ended() && self.getChanges()._changed;
+    };
+    return self;
+};
+

@@ -18,6 +18,20 @@ namespace Sellers.WMS.Web
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            // 在应用程序启动时运行的代码
+            System.Timers.Timer myTimer = new System.Timers.Timer();
+            myTimer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
+            myTimer.Interval = 40000;
+            myTimer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            if (DateTime.Now.Hour == 20 && DateTime.Now.Minute == 3)
+            {
+                //更新汇率
+                Common.UpdateCurrency();
+            }
         }
     }
 }

@@ -6,7 +6,7 @@
 var wms = wms || {};
 wms.viewModel = wms.viewModel || {};
 
-com.editGridViewModel = function (grid) {
+editGridViewModel = function (grid) {
     var self = this;
     this.begin = function (index, row) {
         if (index == undefined || typeof index === 'object') {
@@ -57,12 +57,13 @@ com.editGridViewModel = function (grid) {
     };
     this.getChanges = function (include, ignore) {
         if (!include) include = [], ignore = true;
-        var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
-            updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
-            inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
+        alert("123");
+        //var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
+        //    updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
+        //    inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
 
-        var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
-        changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
+        //var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
+        //changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
 
         return changes;
     };
