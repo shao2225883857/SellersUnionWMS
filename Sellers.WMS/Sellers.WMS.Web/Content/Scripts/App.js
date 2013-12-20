@@ -1,4 +1,13 @@
-﻿/// easyUI  时间改写
+﻿
+/******
+定义各种参数
+*/
+var checks = [["1", "是"], ["0", "否"]];
+var checksall = [["ALL", "ALL"], ["1", "是"], ["0", "否"]];
+var checkSex = '[["男"],["女"]]';
+
+
+// easyUI  时间改写
 Date.prototype.format = function (format) {
     var o = {
         "M+": this.getMonth() + 1, //month
@@ -117,6 +126,37 @@ function del(grid, url, t) {
     });
 };
 
+
+function comboboxInit(url, postdata, combo, vf, tf, h) {
+    $.ajax({
+        url: url,
+        type: "post",
+        data: postdata,
+        success: function (data) {
+            $('#' + combo).combobox({
+                data: data.rows,
+                valueField: vf,
+                textField: tf,
+                panelHeight: 'auto',
+                width: 150,
+                onLoadSuccess: function () { //加载完成后,设置选中第一项
+                    var val = $(this).combobox("getData");
+                    for (var item in val[0]) {
+                        if (item == vf) {
+                            $(this).combobox("select", val[0][item]);
+                        }
+                    }
+                },
+                onSelect: function (r) {
+                    if(h) {
+                        h(r);
+                    }
+                },
+
+            });
+        }
+    });
+}
 
 /**
  * @author 孙宇

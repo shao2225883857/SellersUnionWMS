@@ -55,6 +55,17 @@ namespace Sellers.WMS.Web.Controllers
         [HttpPost]
         public JsonResult Create(UserType obj)
         {
+            obj.LastVisit = DateTime.Now;
+            RoleType role = this.Get<RoleType>(obj.RoleId);
+            if (role != null)
+                obj.RoleName = role.Realname;
+            OrganizeType company = this.Get<OrganizeType>(obj.CId);
+            if (company != null)
+                obj.CompanyName = company.FullName;
+            OrganizeType department = this.Get<OrganizeType>(obj.DId);
+            if (department != null)
+                obj.DepartmentName = department.FullName;
+            
             bool isOk = Save(obj);
             return Json(new { IsSuccess = isOk });
         }

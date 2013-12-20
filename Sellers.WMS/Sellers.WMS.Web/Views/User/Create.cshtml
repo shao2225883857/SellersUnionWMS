@@ -7,6 +7,33 @@
 <script type="text/javascript">
 
     $(function () {
+
+        //初始化控件
+        $('#Birthday').datetimebox();
+        comboboxInit('@Url.Action("List", "Role")', 'page=1&rows=100', 'RoleId', 'Id', 'Realname');
+
+        comboboxInit('@Url.Action("ALLList", "Organize")', 'page=1&rows=100', 'RoleId', 'Id', 'Realname');
+
+        $('#CId').combotree({
+            url: '/Organize/ALLTreeList/',
+            required: true,
+            width: 150,
+            panelHeight: 'auto',
+            onChange: function (n, o) {
+                selectDepartment(n);
+            }
+        });
+
+        $('#Gender').combobox({
+            valueField: 0,
+            textField: 1,
+            panelHeight: 'auto',
+            data: checkSex,
+            width: 150
+        });
+
+        $('#DId').combotree();
+
         //parent.$.messager.progress('close');
         $('#form').form({
             url: '@Url.Action("Create", "User")',
@@ -37,6 +64,15 @@
         });
     });
 
+
+    function selectDepartment(n) {
+        $('#DId').combotree({
+            url: '/Organize/DepartmentList/' + n,
+            required: true,
+            panelHeight: 'auto',
+            width: 150
+        });
+    }
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -64,7 +100,7 @@
                 <tr>
                     <td align="right">职位：</td>
                     <td align="left" colspan="3">
-                        <input type='text' name='RoleName' id='RoleName'></input></td>
+                        <input type='text' name='RoleId' id='RoleId'></input></td>
 
                 </tr>
 
