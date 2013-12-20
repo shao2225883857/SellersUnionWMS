@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.3.5
+ * jQuery EasyUI 1.3.2
  * 
  * Copyright (c) 2009-2013 www.jeasyui.com. All rights reserved.
  *
  * Licensed under the GPL or commercial licenses
- * To use it on other terms please contact us: info@jeasyui.com
+ * To use it on other terms please contact us: jeasyui@gmail.com
  * http://www.gnu.org/licenses/gpl.txt
  * http://www.jeasyui.com/license_commercial.php
  *
@@ -106,8 +106,9 @@ _1(this);
 });
 };
 $.fn.combotree.methods={options:function(jq){
-var _1d=jq.combo("options");
-return $.extend($.data(jq[0],"combotree").options,{originalValue:_1d.originalValue,disabled:_1d.disabled,readonly:_1d.readonly});
+var _1d=$.data(jq[0],"combotree").options;
+_1d.originalValue=jq.combo("options").originalValue;
+return _1d;
 },tree:function(jq){
 return $.data(jq[0],"combotree").tree;
 },loadData:function(jq,_1e){
