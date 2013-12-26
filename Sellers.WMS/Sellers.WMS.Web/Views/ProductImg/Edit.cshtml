@@ -1,4 +1,4 @@
-﻿@model Sellers.WMS.Domain.ProductIsInfractionType
+﻿@model Sellers.WMS.Domain.ProductImgType
 @{
     Layout = null;
 }
@@ -8,7 +8,7 @@
 		//parent.$.messager.progress('close');
 
         $('#form').form({
-            url: '@Url.Action("Edit", "ProductIsInfraction")',
+            url: '@Url.Action("Edit", "ProductImg")',
             onSubmit: function () {
                 parent.$.messager.progress({
                     title: '提示',
@@ -44,16 +44,20 @@
                 <tr>
                     <td align="right">主键：</td>
                     <td align="left"><input  type='text' name='Id' id='Id' value='@Model.Id' ></input></td>
-                    <td align="right">主编号：</td>
-                    <td align="left"><input  type='text' name='OldSKU' id='OldSKU' value='@Model.OldSKU' ></input></td>
-                </tr>
-                <tr>
                     <td align="right">SKU：</td>
                     <td align="left"><input  type='text' name='SKU' id='SKU' value='@Model.SKU' ></input></td>
-                    <td align="right">平台：</td>
-                    <td align="left"><input  type='text' name='Platform' id='Platform' value='@Model.Platform' ></input></td>
-                    <td align="right">是否侵权：</td>
-                    <td align="left"><input  type='text' name='Isinfraction' id='Isinfraction' value='@Model.Isinfraction' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">主SKU：</td>
+                    <td align="left"><input  type='text' name='MainSKU' id='MainSKU' value='@Model.MainSKU' ></input></td>
+                    <td align="right">图片名称：</td>
+                    <td align="left"><input  type='text' name='ImgName' id='ImgName' value='@Model.ImgName' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">路径：</td>
+                    <td align="left"><input  type='text' name='Src' id='Src' value='@Model.Src' ></input></td>
+                    <td align="right">文件保存：</td>
+                    <td align="left"><input  type='text' name='Img' id='Img' value='@Model.Img' ></input></td>
                 </tr>
 
 			</table>

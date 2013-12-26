@@ -89,7 +89,14 @@
 
 
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+          
+            if ($('#txtCode').val().length != 0)
+                search += 'Code&' + $('#txtCode').val() + '^';
+            if ($('#txtRealname').val().length != 0)
+                search += 'Realname&' + $('#txtRealname').val() + '^';
+           
+
             grid.datagrid("load", {
                 search: search
             });
@@ -101,15 +108,13 @@
             <legend>数据查询</legend>
             <table border="0">
                                  <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+             
+                    <td class='z-searchlable'>角色编号:</td>
+                    <td><input type='text' id='txtCode' /></td>
+                    <td class='z-searchlable'>角色名称:</td>
+                    <td><input type='text' id='txtRealname' /><a href='#' class='easyui-linkbutton z-searchbtn' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
 
-                    <td><label>角色编号:</label><input type='text' id='Code' /></td>
-
-                    <td><label>角色名称:</label><input type='text' id='Realname' /></td>
-
-                    <td><label>排序码:</label><input type='text' id='SortCode' /></td>
-
-                    <td><label>描述:</label><input type='text' id='Description' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                        
                         
                 </tr>
 

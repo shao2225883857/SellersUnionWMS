@@ -24,9 +24,11 @@
                 rownumbers: true,
                 columns: [[
                     { title: 'Id', field: 'Id', width: 100, sortable: true, hidden: true },
-                    { title: 'SKU', field: 'SKU', width: 100, sortable: true,align: 'center' },
-                    { title: 'OldSKU', field: 'OldSKU', width: 100, sortable: true,align: 'center' },
-                    { title: 'N', field: 'N', width: 100, sortable: true,align: 'center' }
+                    { title: '主SKU', field: 'MainSKU', width: 100, sortable: true,align: 'center' },
+                    { title: '子SKU', field: 'SKU', width: 100, sortable: true,align: 'center' },
+                    { title: '采购批次', field: 'PurchaseBatch', width: 100, sortable: true,align: 'center' },
+                    { title: '价格', field: 'Price', width: 100, sortable: true,align: 'center' },
+                    { title: '和上一次相差', field: 'Difference', width: 100, sortable: true,align: 'center' }
 
                 ]]
                 ,
@@ -82,28 +84,44 @@
             }
         }
 
-
-
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+            if ($('#txtId').val().length != 0)
+                search += 'Id&' + $('#txtId').val() + '^';
+            if ($('#txtMainSKU').val().length != 0)
+                search += 'MainSKU&' + $('#txtMainSKU').val() + '^';
+            if ($('#txtSKU').val().length != 0)
+                search += 'SKU&' + $('#txtSKU').val() + '^';
+            if ($('#txtPurchaseBatch').val().length != 0)
+                search += 'PurchaseBatch&' + $('#txtPurchaseBatch').val() + '^';
+            if ($('#txtPrice').val().length != 0)
+                search += 'Price&' + $('#txtPrice').val() + '^';
+            if ($('#txtDifference').val().length != 0)
+                search += 'Difference&' + $('#txtDifference').val() + '^';
+
             grid.datagrid("load", {
                 search: search
             });
         }
-
 </script>
 <div region="center">
 		<fieldset>
             <legend>数据查询</legend>
             <table border="0">
                                  <tr>
-                    <td><label>Id:</label><input type='text' id='Id' /></td>
+                    <td><label>Id:</label><input type='text' id='txtId' /></td>
 
-                    <td><label>SKU:</label><input type='text' id='SKU' /></td>
+                    <td><label>主SKU:</label><input type='text' id='txtMainSKU' /></td>
 
-                    <td><label>OldSKU:</label><input type='text' id='OldSKU' /></td>
+                    <td><label>子SKU:</label><input type='text' id='txtSKU' /></td>
 
-                    <td><label>N:</label><input type='text' id='N' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                    <td><label>采购批次:</label><input type='text' id='txtPurchaseBatch' /></td>
+
+                </tr>
+                <tr>
+                    <td><label>价格:</label><input type='text' id='txtPrice' /></td>
+
+                    <td><label>和上一次相差:</label><input type='text' id='txtDifference' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
                         
                 </tr>
 

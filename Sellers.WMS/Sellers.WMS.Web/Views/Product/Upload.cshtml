@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Upload";
+}
+<link href="~/Content/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        
+        //初始化
+        $('#batchImport').uploadify({
+            'auto': false,
+            'buttonText': '请选择文件',
+            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'uploader': '/Home/SaveFile/',
+            'multi': false,
+            'onUploadSuccess': function (file, data, response) {
+                eval("data=" + data);
+                $.ajax({
+                    url: '/Product/BatchImport',
+                    type: 'post',
+                    data: 'filename=' + data.SaveName,
+                    success: function(res) {
+                        window.open('/Home/ShowResult');
+                    }
+                });
+            }
+        });
+        
+        //初始化
+        $('#ImgImport').uploadify({
+            'auto': false,
+            'buttonText': '请选择图片',
+            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'uploader': '/Home/SaveFile/',
+            'multi': true,
+            'onUploadSuccess': function (file, data, response) {
+                eval("data=" + data);
+            }
+        });
+    })
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        <fieldset>
+            <legend>商品批量导入</legend>
+            <table>
+                <tr>
+                    <td>选择文件：</td>
+                    <td>
+                        <input type="file" id="batchImport" /></td>
+                    <td>
+                        <input type="button" value="导入" onclick="$('#batchImport').uploadify('upload', '*');" /></td>
+                </tr>
+            </table>
+            Ps:订单文件导入格式为excel 2003格式，工作薄名称需要为：sheet1
+           
+          
+        </fieldset>
+        <fieldset>
+            <legend>商品图片导入</legend>
+            <table>
+                <tr>
+                    <td>选择文件：</td>
+                    <td>
+                        <input type="file" id="ImgImport" /></td>
+                    <td>
+                        <input type="button" value="导入"  onclick="$('#ImgImport').uploadify('upload', '*');" /></td>
+                </tr>
+            </table>
+
+        </fieldset>
+    </div>
+</div>

@@ -84,34 +84,44 @@
             }
         }
 
-
-
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+            if ($('#txtId').val().length != 0)
+                search += 'Id&' + $('#txtId').val() + '^';
+            if ($('#txtPId').val().length != 0)
+                search += 'PId&' + $('#txtPId').val() + '^';
+            if ($('#txtSKU').val().length != 0)
+                search += 'SKU&' + $('#txtSKU').val() + '^';
+            if ($('#txtSrcPId').val().length != 0)
+                search += 'SrcPId&' + $('#txtSrcPId').val() + '^';
+            if ($('#txtSrcSKU').val().length != 0)
+                search += 'SrcSKU&' + $('#txtSrcSKU').val() + '^';
+            if ($('#txtSrcQty').val().length != 0)
+                search += 'SrcQty&' + $('#txtSrcQty').val() + '^';
+
             grid.datagrid("load", {
                 search: search
             });
         }
-
 </script>
 <div region="center">
 		<fieldset>
             <legend>数据查询</legend>
             <table border="0">
                                  <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+                    <td><label>主键:</label><input type='text' id='txtId' /></td>
 
-                    <td><label>组合产品ID:</label><input type='text' id='PId' /></td>
+                    <td><label>组合产品ID:</label><input type='text' id='txtPId' /></td>
 
-                    <td><label>组合产品SKU:</label><input type='text' id='SKU' /></td>
+                    <td><label>组合产品SKU:</label><input type='text' id='txtSKU' /></td>
 
-                    <td><label>被组合产品ID:</label><input type='text' id='SrcPId' /></td>
+                    <td><label>被组合产品ID:</label><input type='text' id='txtSrcPId' /></td>
 
                 </tr>
                 <tr>
-                    <td><label>被组合产品SKU:</label><input type='text' id='SrcSKU' /></td>
+                    <td><label>被组合产品SKU:</label><input type='text' id='txtSrcSKU' /></td>
 
-                    <td><label>被组合产品数量:</label><input type='text' id='SrcQty' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                    <td><label>被组合产品数量:</label><input type='text' id='txtSrcQty' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
                         
                 </tr>
 

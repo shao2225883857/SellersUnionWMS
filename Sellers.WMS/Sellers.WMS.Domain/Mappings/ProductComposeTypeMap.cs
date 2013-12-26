@@ -1,5 +1,5 @@
 ﻿//--------------------------------------------------------------------
-// All Rights Reserved , Copyright (C)  , Dean TECH, Ltd.
+// All Rights Reserved , Copyright (C) 2013-12-23 , Dean TECH, Ltd.
 //--------------------------------------------------------------------
 
 using System;
@@ -16,12 +16,12 @@ namespace Sellers.WMS.Domain
     /// 
     /// 修改纪录
     /// 
-    ///  版本：1.0  创建主键。
+    ///  版本：1.0 Dean 创建主键。
     /// 
     /// 版本：1.0
     /// 
     /// <author>
-    /// <name></name>
+    /// <name>Dean</name>
     /// <date></date>
     /// </author>
     /// </summary>

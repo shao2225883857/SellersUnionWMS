@@ -38,12 +38,11 @@ namespace Sellers.WMS.Web.Controllers
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
             sb.Append("<a id=\"a_refresh\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"icon-reload\"  title=\"重新加载\"  onclick='refreshClick()'>刷新</a> ");
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append(string.Format(linkbtn_template, "add", "icon-user_add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加","addClick()"));
+            sb.Append(string.Format(linkbtn_template, "add", "icon-user_add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加", "addClick()"));
             sb.Append(string.Format(linkbtn_template, "edit", "icon-user_edit", permissionEdit ? "" : "disabled=\"True\"", "修改用户", "修改", "editClick()"));
             sb.Append(string.Format(linkbtn_template, "delete", "icon-user_delete", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport? "": "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-export'\">导出</a>");
-
+            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport ? "" : "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-export'\">导出</a>");
             return sb.ToString();
         }
 
@@ -52,11 +51,20 @@ namespace Sellers.WMS.Web.Controllers
             return View();
         }
 
+
+
         [HttpPost]
         public JsonResult Create(DataDictionaryType obj)
         {
-            bool isOk = Save(obj);
+            bool isOk = base.Save(obj);
             return Json(new { IsSuccess = isOk });
+        }
+
+        [HttpPost]
+        public JsonResult Save(DataDictionaryType obj)
+        {
+          bool isOk=  SaveOrUpdate(obj);
+          return Json(new { IsSuccess = isOk });
         }
 
         /// <summary>
@@ -64,7 +72,7 @@ namespace Sellers.WMS.Web.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public  DataDictionaryType GetById(int Id)
+        public DataDictionaryType GetById(int Id)
         {
             DataDictionaryType obj = Get<DataDictionaryType>(Id);
             return obj;
@@ -88,11 +96,11 @@ namespace Sellers.WMS.Web.Controllers
         [HttpPost, ActionName("Delete")]
         public JsonResult DeleteConfirmed(int id)
         {
-			bool isOk = Delete<DataDictionaryType>(id);
+            bool isOk = DeleteObj<DataDictionaryType>(id);
             return Json(new { IsSuccess = isOk });
         }
 
-		public JsonResult List(int page, int rows, string sort, string order, string search)
+        public JsonResult List(int page, int rows, string sort, string order, string search)
         {
             string where = "";
             string orderby = " order by Id desc ";
@@ -100,7 +108,6 @@ namespace Sellers.WMS.Web.Controllers
             {
                 orderby = " order by " + sort + " " + order;
             }
-
             if (!string.IsNullOrEmpty(search))
             {
                 where = StringUtil.Resolve(search);
@@ -113,8 +120,7 @@ namespace Sellers.WMS.Web.Controllers
                 .SetFirstResult(rows * (page - 1))
                 .SetMaxResults(rows)
                 .List<DataDictionaryType>();
-
-            object count = NSession.CreateQuery("select count(Id) from DataDictionaryType " + where ).UniqueResult();
+            object count = NSession.CreateQuery("select count(Id) from DataDictionaryType " + where).UniqueResult();
             return Json(new { total = count, rows = objList });
         }
 

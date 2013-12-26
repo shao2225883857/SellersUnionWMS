@@ -18,6 +18,11 @@
         @Html.DisplayFor(model => model.Id)
     </div>
 
+    <div class="display-label">临时编号</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TempSKU)
+    </div>
+
     <div class="display-label">商品编号</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SKU)
@@ -31,6 +36,11 @@
     <div class="display-label">商品状态</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Status)
+    </div>
+
+    <div class="display-label">商品特性</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ProductAttr)
     </div>
 
     <div class="display-label">类别</div>
@@ -63,6 +73,21 @@
         @Html.DisplayFor(model => model.Weight)
     </div>
 
+    <div class="display-label">7Day</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.7Day)
+    </div>
+
+    <div class="display-label">15Day</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.15Day)
+    </div>
+
+    <div class="display-label">30Day</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.30Day)
+    </div>
+
     <div class="display-label">长</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Long)
@@ -85,72 +110,12 @@
 
     <div class="display-label">简单描述</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Summary)
+        @Html.DisplayFor(model => model.Memo)
     </div>
 
-    <div class="display-label">包装注意事项</div>
+    <div class="display-label">图片路径</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.PackMemo)
-    </div>
-
-    <div class="display-label">是否侵权</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.IsInfraction)
-    </div>
-
-    <div class="display-label">大图片网址</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.PicUrl)
-    </div>
-
-    <div class="display-label">小图片网址</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.SPicUrl)
-    </div>
-
-    <div class="display-label">采购人</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Purchaser)
-    </div>
-
-    <div class="display-label">验货人</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Examiner)
-    </div>
-
-    <div class="display-label">包装人</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Packer)
-    </div>
-
-    <div class="display-label">包装系数</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.PackCoefficient)
-    </div>
-
-    <div class="display-label">电子</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.IsElectronic)
-    </div>
-
-    <div class="display-label">电池</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.HasBattery)
-    </div>
-
-    <div class="display-label">库位</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Location)
-    </div>
-
-    <div class="display-label">创建时间</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreateOn)
-    </div>
-
-    <div class="display-label">创建人</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreateBy)
+        @Html.DisplayFor(model => model.ImgPath)
     </div>
 
 

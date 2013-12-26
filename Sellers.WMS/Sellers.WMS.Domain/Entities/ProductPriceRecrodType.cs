@@ -1,5 +1,5 @@
 ﻿//--------------------------------------------------------------------
-// All Rights Reserved , Copyright (C)  , Dean TECH, Ltd.
+// All Rights Reserved , Copyright (C) 2013-12-23 , Dean TECH, Ltd.
 //--------------------------------------------------------------------
 
 using System;
@@ -15,12 +15,12 @@ namespace Sellers.WMS.Domain
     /// 
     /// 修改纪录
     /// 
-    ///  版本：1.0  创建主键。
+    ///  版本：1.0 Dean 创建主键。
     /// 
     /// 版本：1.0
     /// 
     /// <author>
-    /// <name></name>
+    /// <name>Dean</name>
     /// <date></date>
     /// </author>
     /// </summary>
@@ -29,22 +29,32 @@ namespace Sellers.WMS.Domain
         /// <summary>
         /// Id
         /// </summary>
-        public virtual String Id { get; set; }
+        public virtual int Id { get; set; }
 
         /// <summary>
-        /// SKU
+        /// 主SKU
+        /// </summary>
+        public virtual String MainSKU { get; set; }
+
+        /// <summary>
+        /// 子SKU
         /// </summary>
         public virtual String SKU { get; set; }
 
         /// <summary>
-        /// OldSKU
+        /// 采购批次
         /// </summary>
-        public virtual String OldSKU { get; set; }
+        public virtual String PurchaseBatch { get; set; }
 
         /// <summary>
-        /// N
+        /// 价格
         /// </summary>
-        public virtual String N { get; set; }
+        public virtual double Price { get; set; }
+
+        /// <summary>
+        /// 和上一次相差
+        /// </summary>
+        public virtual double Difference { get; set; }
 
     }
 }

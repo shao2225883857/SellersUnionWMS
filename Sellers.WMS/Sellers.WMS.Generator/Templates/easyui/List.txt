@@ -78,15 +78,13 @@
             }
         }
 
-
-
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+<#easySearch2#>
             grid.datagrid("load", {
                 search: search
             });
         }
-
 </script>
 <div region="center">
 		<fieldset>

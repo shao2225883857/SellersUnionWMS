@@ -88,7 +88,7 @@ namespace Sellers.WMS.Web.Controllers
         [HttpPost, ActionName("Delete")]
         public JsonResult DeleteConfirmed(int id)
         {
-			bool isOk = Delete<RoleType>(id);
+			bool isOk = DeleteObj<RoleType>(id);
             return Json(new { IsSuccess = isOk });
         }
 

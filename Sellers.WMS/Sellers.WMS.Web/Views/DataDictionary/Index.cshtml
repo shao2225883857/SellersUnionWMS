@@ -1,167 +1,183 @@
-﻿
-@model IEnumerable<Sellers.WMS.Domain.DataDictionaryType>
+﻿@model IEnumerable<Sellers.WMS.Domain.DataDictionaryType>
 @{
     ViewBag.Title = "Index";
 }
 <body class="easyui-layout">
-<script language="javascript" type="text/javascript">
-    var grid;
-    $(function () {
-        grid = $('#dg').datagrid({
-            url: '@Url.Action("List", "DataDictionary")',
-            idField: 'Id',
-            iconCls: 'icon-view',
-            height: 600,
-            width: function () { return (document.body.clientWidth * 0.9 - 420) },
-            nowrap: true,
-            singleSelect: true,
-            animate: true,
-            resizable: true,
-            pagination: true,
-            pageNumber: 1,
-            pageSize: 100,
-            pageList: [50, 100, 200],
-            rownumbers: true,
-            columns: [[
-                { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
-                { title: '分类', field: 'ClassName', width: 100, sortable: true, align: 'center' },
-                { title: '代码', field: 'Code', width: 100, sortable: true, align: 'center' },
-                { title: '系统内置', field: 'AllowDelete', width: 100, sortable: true, align: 'center' }
-
-            ]]
-                ,
-            toolbar: [{
-                id: 'btnAdd2',
-                text: '添加',
-                iconCls: 'icon-add',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.addnew();
-                }
-            }, '-', {
-                id: 'btnEdit2',
-                text: '保存',
-                iconCls: 'icon-edit',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.accept();
-                }
-            }, '-', {
-                id: 'btnDelete2',
-                text: '删除',
-                iconCls: 'icon-remove',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.deleterow();
-                }
-            }],
-            onLoadSuccess: function (data) {
-                if (data.rows.length > 0) {
-                    $('#dg').datagrid("selectRow", 0);
-                }
-            }
-        })
-
-        grid2 = $('#dg2').datagrid({
-            url: '@Url.Action("List", "DataDictionary")',
-            idField: 'Id',
-            iconCls: 'icon-view',
-            height: 600,
-            width: 400,
-
-            singleSelect: true,
-            animate: true,
-
-            rownumbers: true,
-            columns: [[
+    <script language="javascript" type="text/javascript">
+        var grid;
+        var v;
+        $(function () {
+            var editgrid = editGridViewModel($('#dg'), "/DataDictionary/Save/", "/DataDictionary/Delete/");
+            var editgrid2 = editGridViewModel($('#dg2'), "/DataDictionaryDetail/Save/", "/DataDictionaryDetail/Delete/");
+            grid = $('#dg').datagrid({
+                url: '@Url.Action("List", "DataDictionary")',
+                idField: 'Id',
+                iconCls: 'icon-view',
+                height: 530,
+                singleSelect: true,
+                animate: true,
+                fitColumns: true,
+                pagination: true,
+                pageNumber: 1,
+                pageSize: 100,
+                pageList: [50, 100, 200],
+                rownumbers: true,
+                columns: [[
                     { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
-                    { title: '分类代码', field: 'DicCode', width: 100, sortable: true },
-                    { title: '名称', field: 'FullName', width: 100, sortable: true, editor: 'text' },
-                    { title: '值', field: 'DicValue', width: 100, sortable: true, editor: 'text' }
-            ]], toolbar: [{
-                id: 'btnAdd',
-                text: '添加',
-                iconCls: 'icon-add',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.addnew();
+                    { title: '分类', field: 'ClassName', width: 100, sortable: true, align: 'center', editor: 'text' },
+                    { title: '代码', field: 'Code', width: 100, sortable: true, align: 'center', editor: 'text' }
+                ]],
+                toolbar: [{
+                    id: 'btnAdd2',
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        editgrid.addnew();
+                    }
+                }, '-', {
+                    id: 'btnEdit2',
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+
+                        editgrid.accept();
+                    }
+                }, '-', {
+                    id: 'btnDelete2',
+                    text: '删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+
+                        editgrid.deleterow();
+                    }
+                }],
+                onLoadSuccess: function (data) {
+                    if (data.rows.length > 0) {
+                        $('#dg').datagrid("selectRow", 0);
+                    }
+                },
+                onDblClickRow: function (rowIndex) { editgrid.begin(rowIndex); },
+                onClickRow: function (rowIndex) { editgrid.ended(); changedic(rowIndex); }
+            });
+
+            grid2 = $('#dg2').datagrid({
+                url: '@Url.Action("List", "DataDictionaryDetail")',
+                idField: 'Id',
+                iconCls: 'icon-view',
+                height: 530,
+                fitColumns: true,
+                singleSelect: true,
+                pagination: true,
+                pageNumber: 1,
+                pageSize: 100,
+                pageList: [50, 100, 200],
+                rownumbers: true,
+                columns: [[
+                        { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                        { title: '分类代码', field: 'DicCode', width: 100, sortable: true },
+                        { title: '名称', field: 'FullName', width: 100, sortable: true, editor: 'text' },
+                        { title: '值', field: 'DicValue', width: 100, sortable: true, editor: 'text' }
+                ]], toolbar: [{
+                    id: 'btnAdd',
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        editgrid2.addnew({ "DicCode": v });
+                    }
+                }, '-', {
+                    id: 'btnEdit',
+                    text: '保存',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        editgrid2.accept();
+                    }
+                }, '-', {
+                    id: 'btnDelete',
+                    text: '删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+
+                        editgrid2.deleterow();
+                    }
+                }],
+                onDblClickRow: function (rowIndex) { editgrid2.begin(rowIndex) },
+                onClickRow: function () {
+                    editgrid2.ended();
                 }
-            }, '-', {
-                id: 'btnEdit',
-                text: '保存',
-                iconCls: 'icon-edit',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.accept();
-                }
-            }, '-', {
-                id: 'btnDelete',
-                text: '删除',
-                iconCls: 'icon-remove',
-                handler: function () {
-                    var editgrid = editGridViewModel($('#dg2'));
-                    editgrid.deleterow();
-                }
-            }],
-            onDblClickRow: function () { editGridViewModel($('#dg2')).begin() },
-            onClickRow: function () { editGridViewModel($('#dg2')).ended() }
+            });
+
         });
 
-    });
+        function changedic(rowIndex) {
+            v = grid.datagrid("getRows")[rowIndex].Code;
+            $('#dg2').datagrid("load", {
+                search: "dicCode_ds&" + v + "^",
+                page: 1,
+                rows: 50
+            });
+        }
 
+        function doSearch() {
+            var search = "";
+            if ($('#txtClassName').val().length != 0)
+                search += "ClassName&" + $('#txtClassName').val() + "^";
+            if ($('#txtCode').val().length != 0)
+                search += "Code&" + $('#txtCode').val() + "^";
+            grid.datagrid("load", {
+                search: search
+            });
+        }
 
-
-
-
-
-
-    function doSearch() {
-        search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
-        grid.datagrid("load", {
-            search: search
-        });
-    }
-
-</script>
-<div region="center">
-		<fieldset>
+    </script>
+    <div region="center">
+        <fieldset>
             <legend>数据查询</legend>
             <table border="0">
-                                 <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+                <tr>
 
-                    <td><label>分类:</label><input type='text' id='ClassName' /></td>
+                    <td>
+                        <label>分类:</label><input type='text' id='txtClassName' /></td>
 
-                    <td><label>代码:</label><input type='text' id='Code' /></td>
+                    <td>
+                        <label>代码:</label><input type='text' id='txtCode' /></td>
 
-                    <td><label>系统内置:</label><input type='text' id='AllowDelete' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
-                        
+                    <td>
+                        <a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+
                 </tr>
 
             </table>
         </fieldset>
-		<div id="toolbar">
-			@Html.Raw(ViewData["toolbarButtons"])
-        </div> 
-    <table border="0">
-    <tr><td><fieldset>
-        <legend>明细分类</legend> <table id="dg">
-    </table> </fieldset></td>
-        <td><fieldset>
-        <legend>字典明细</legend>
-            <table id="dg2">
-            </table>
-        </fieldset></td>
-    </tr>
-   
-    
-		<div id="dropdown" style="width:200px; display:none;">  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click: downloadClick1">Excel2003表格所有页</div>  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click: downloadClick2">Excel2003表格指定页</div> 
-			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click: downloadClick3">Excel2003压缩zip</div>  
-			<div data-options="iconCls:'icon-page_excel'"   data-bind="click: downloadClick4">Excel2007/2010</div>  
-			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click: downloadClick5">PDF</div>  
-			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click: downloadClick6">Word</div>   
-		</div>
-</div>
+        <table border="0" width="100%" style="margin: 0; padding: 0;">
+            <tr>
+                <td style="width: 600px;">
+                    <fieldset>
+                        <legend>明细分类</legend>
+
+                        <table id="dg">
+                        </table>
+
+                    </fieldset>
+                </td>
+                <td>
+                    <fieldset>
+                        <legend>字典明细</legend>
+                        <table id="dg2">
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <div id="dropdown" style="width: 200px; display: none;">
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click: downloadClick1">Excel2003表格所有页</div>
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click: downloadClick2">Excel2003表格指定页</div>
+            <div data-options="iconCls:'icon-ext-rar'" data-bind="click: downloadClick3">Excel2003压缩zip</div>
+            <div data-options="iconCls:'icon-page_excel'" data-bind="click: downloadClick4">Excel2007/2010</div>
+            <div data-options="iconCls:'icon-ext-pdf'" data-bind="click: downloadClick5">PDF</div>
+            <div data-options="iconCls:'icon-ext-doc'" data-bind="click: downloadClick6">Word</div>
+        </div>
+    </div>
 </body>

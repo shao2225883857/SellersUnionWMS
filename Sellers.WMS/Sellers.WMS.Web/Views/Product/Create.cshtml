@@ -1,13 +1,78 @@
 ﻿@model Sellers.WMS.Domain.ProductType
-
 @{
-    Layout = null;
+    
 }
-
+<link href="~/Content/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+<script src="~/Content/Scripts/Kindeditor/kindeditor-min.js"></script>
 <script type="text/javascript">
 
-	$(function () {
-		//parent.$.messager.progress('close');
+    $(function () {
+
+        //初始化
+        $('#up_file').uploadify({
+            'auto': true,
+            'buttonText': '请选择图片',
+            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'uploader': '/Home/SaveFile/',
+            'multi': false,
+            'onUploadSuccess': function (file, data, response) {
+                eval("data=" + data);
+                $("#pic").attr("src", data.SaveName);
+                $('#ImgPath').val(data.SaveName);
+                //alert(data.SaveName);
+            }
+        });
+        $('#TempSKU,#SKU,#Title').validatebox({
+            required: true
+        });
+        $('#Category').combotree({
+            url: '/ProductCategory/ALLTreeList',
+            valueField: 'FullName',
+            textField: 'FullName',
+            required: true,
+            width: 150
+        });
+
+        $('#ProductAttr').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductAttr',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Status').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductState',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Brand').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/Brand',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Weight').numberbox({
+            min: 0
+        });
+
+        $('#Price').numberbox({
+            min: 0,
+            precision: 2
+        });
+        $('#Wide').numberbox({
+            min: 0
+        });
+        $('#Long').numberbox({
+            min: 0
+        });
+        $('#High').numberbox({
+            min: 0
+        });
+
         $('#form').form({
             url: '@Url.Action("Create", "Product")',
             onSubmit: function () {
@@ -16,6 +81,10 @@
                     text: '数据处理中，请稍后....'
                 });
                 var isValid = $(this).form('validate');
+                if ($('#ImgPath').val() == "") {
+                    isValid = false;
+                    alert("请上传图片");
+                }
                 if (!isValid) {
                     parent.$.messager.progress('close');
                 }
@@ -25,111 +94,109 @@
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.IsSuccess) {
-                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
-                    //parent.layout_west_tree.tree('reload');
-                    parent.$.modalDialog.penner_grid.datagrid('reload');
-                    parent.$.modalDialog.handler.dialog('close');
+
                 }
-				else{
-					alert(result.Result);
-				}
+                else {
+                    alert(result.Result);
+                }
             }
         });
     });
-    
-</script>
 
+    function saveClick() {
+        var f = $('#form');
+        f.submit();
+    }
+
+</script>
 <div class="easyui-layout" data-options="fit:true,border:false">
     <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        <div class="z-toolbar">
+            <a href="#" plain="true" class="easyui-linkbutton" icon="icon-save" title="保存" onclick="saveClick()">保存</a>
+            <a href="#" plain="true" class="easyui-linkbutton" icon="icon-undo" title="撤消" data-bind="click: rejectClick">撤消</a>
+        </div>
         @using (Html.BeginForm("", "", FormMethod.Post, new { id = "form" }))
         {
-            <table class="grid">
-                <tr>
-                    <td align="right">主键：</td>
-                    <td align="left"><input type='text' name='Id' id='Id'></input></td>
-                    <td align="right">商品编号：</td>
-                    <td align="left"><input type='text' name='SKU' id='SKU'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">商品名称：</td>
-                    <td align="left"><input type='text' name='Title' id='Title'></input></td>
-                    <td align="right">商品状态：</td>
-                    <td align="left"><input type='text' name='Status' id='Status'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">类别：</td>
-                    <td align="left"><input type='text' name='Category' id='Category'></input></td>
-                    <td align="right">型号：</td>
-                    <td align="left"><input type='text' name='Model' id='Model'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">品牌：</td>
-                    <td align="left"><input type='text' name='Brand' id='Brand'></input></td>
-                    <td align="right">规格：</td>
-                    <td align="left"><input type='text' name='Standard' id='Standard'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">商品价格：</td>
-                    <td align="left"><input type='text' name='Price' id='Price'></input></td>
-                    <td align="right">重量：</td>
-                    <td align="left"><input type='text' name='Weight' id='Weight'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">长：</td>
-                    <td align="left"><input type='text' name='Long' id='Long'></input></td>
-                    <td align="right">宽：</td>
-                    <td align="left"><input type='text' name='Wide' id='Wide'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">高：</td>
-                    <td align="left"><input type='text' name='High' id='High'></input></td>
-                    <td align="right">库存天数：</td>
-                    <td align="left"><input type='text' name='DayByStock' id='DayByStock'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">简单描述：</td>
-                    <td align="left"><input type='text' name='Summary' id='Summary'></input></td>
-                    <td align="right">包装注意事项：</td>
-                    <td align="left"><input type='text' name='PackMemo' id='PackMemo'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">是否侵权：</td>
-                    <td align="left"><input type='text' name='IsInfraction' id='IsInfraction'></input></td>
-                    <td align="right">大图片网址：</td>
-                    <td align="left"><input type='text' name='PicUrl' id='PicUrl'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">小图片网址：</td>
-                    <td align="left"><input type='text' name='SPicUrl' id='SPicUrl'></input></td>
-                    <td align="right">采购人：</td>
-                    <td align="left"><input type='text' name='Purchaser' id='Purchaser'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">验货人：</td>
-                    <td align="left"><input type='text' name='Examiner' id='Examiner'></input></td>
-                    <td align="right">包装人：</td>
-                    <td align="left"><input type='text' name='Packer' id='Packer'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">包装系数：</td>
-                    <td align="left"><input type='text' name='PackCoefficient' id='PackCoefficient'></input></td>
-                    <td align="right">电子：</td>
-                    <td align="left"><input type='text' name='IsElectronic' id='IsElectronic'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">电池：</td>
-                    <td align="left"><input type='text' name='HasBattery' id='HasBattery'></input></td>
-                    <td align="right">库位：</td>
-                    <td align="left"><input type='text' name='Location' id='Location'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">创建时间：</td>
-                    <td align="left"><input type='text' name='CreateOn' id='CreateOn'></input></td>
-                    <td align="right">创建人：</td>
-                    <td align="left"><input type='text' name='CreateBy' id='CreateBy'></input></td>
-                </tr>
-
-			</table>
+            <fieldset>
+                <legend>产品信息</legend>
+                <table class="grid">
+                    <tr>
+                        <td align="center" valign="bottom" colspan="2" rowspan="6" style="width: 150px;">
+                            <img src="" id="pic" width="200px" height="200px" />
+                            <input id="up_file" type="file" name="up_file" />
+                            <input type="hidden" id="ImgPath" name='ImgPath' />
+                        </td>
+                        <td class="z-lable z-red">临时编号：</td>
+                        <td align="left">
+                            <input type='text' name='TempSKU' id='TempSKU' class="z-txt"></input></td>
+                        <td class="z-lable z-red">商品编号：</td>
+                        <td align="left">
+                            <input type='text' name='SKU' id='SKU' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">商品名称：</td>
+                        <td align="left" colspan="3">
+                            <input type='text' name='Title' id='Title' style="width: 400px;"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">商品状态：</td>
+                        <td align="left">
+                            <input type='text' name='Status' id='Status' class="z-txt"></input></td>
+                        <td class="z-lable">商品特性：</td>
+                        <td align="left">
+                            <input type='text' name='ProductAttr' id='ProductAttr' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">类别：</td>
+                        <td align="left">
+                            <input type='text' name='Category' id='Category' class="z-txt"></input></td>
+                        <td class="z-lable">商品价格：</td>
+                        <td align="left">
+                            <input type='text' name='Price' id='Price' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">品牌：</td>
+                        <td align="left">
+                            <input type='text' name='Brand' id='Brand' class="z-txt"></input></td>
+                        <td class="z-lable">规格：</td>
+                        <td align="left">
+                            <input type='text' name='Standard' id='Standard' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">型号：</td>
+                        <td align="left">
+                            <input type='text' name='Model' id='Model' class="z-txt"></input></td>
+                        <td class="z-lable">重量：</td>
+                        <td align="left">
+                            <input type='text' name='Weight' id='Weight' class="z-txt"></input></td>
+                    </tr>
+                </table>
+            </fieldset>
+            <div id="tt" class="easyui-tabs" style="height: 250px;">
+                <div title="仓库信息" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td class="z-lable">长：</td>
+                            <td align="left">
+                                <input type='text' name='Wide' id='Long' class="z-txt"></input></td>
+                            <td class="z-lable">宽：</td>
+                            <td align="left">
+                                <input type='text' name='Wide' id='Wide' class="z-txt"></input></td>
+                            <td class="z-lable">高：</td>
+                            <td align="left">
+                                <input type='text' name='High' id='High'></input></td>
+                        </tr>
+                        <tr>
+                            <td class="z-lable">库存天数：</td>
+                            <td align="left">
+                                <input type='text' name='DayByStock' id='DayByStock' class="z-txt"></input></td>
+                            <td class="z-lable">简单描述：</td>
+                            <td align="left" colspan="3">
+                                <input type='text' name='Memo' id='Memo' class="z-txt"></input></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         }
     </div>
 </div>

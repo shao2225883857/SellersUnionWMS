@@ -86,38 +86,52 @@
             }
         }
 
-
-
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+            if ($('#txtId').val().length != 0)
+                search += 'Id&' + $('#txtId').val() + '^';
+            if ($('#txtParentSKU').val().length != 0)
+                search += 'ParentSKU&' + $('#txtParentSKU').val() + '^';
+            if ($('#txtSKU').val().length != 0)
+                search += 'SKU&' + $('#txtSKU').val() + '^';
+            if ($('#txtTitle').val().length != 0)
+                search += 'Title&' + $('#txtTitle').val() + '^';
+            if ($('#txtPrice').val().length != 0)
+                search += 'Price&' + $('#txtPrice').val() + '^';
+            if ($('#txtMemo').val().length != 0)
+                search += 'Memo&' + $('#txtMemo').val() + '^';
+            if ($('#txtQty').val().length != 0)
+                search += 'Qty&' + $('#txtQty').val() + '^';
+            if ($('#txtDayOfStock').val().length != 0)
+                search += 'DayOfStock&' + $('#txtDayOfStock').val() + '^';
+
             grid.datagrid("load", {
                 search: search
             });
         }
-
 </script>
 <div region="center">
 		<fieldset>
             <legend>数据查询</legend>
             <table border="0">
                                  <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+                    <td><label>主键:</label><input type='text' id='txtId' /></td>
 
-                    <td><label>父编号:</label><input type='text' id='ParentSKU' /></td>
+                    <td><label>父编号:</label><input type='text' id='txtParentSKU' /></td>
 
-                    <td><label>子编号:</label><input type='text' id='SKU' /></td>
+                    <td><label>子编号:</label><input type='text' id='txtSKU' /></td>
 
-                    <td><label>标题:</label><input type='text' id='Title' /></td>
+                    <td><label>标题:</label><input type='text' id='txtTitle' /></td>
 
                 </tr>
                 <tr>
-                    <td><label>价格:</label><input type='text' id='Price' /></td>
+                    <td><label>价格:</label><input type='text' id='txtPrice' /></td>
 
-                    <td><label>规格:</label><input type='text' id='Memo' /></td>
+                    <td><label>规格:</label><input type='text' id='txtMemo' /></td>
 
-                    <td><label>数量:</label><input type='text' id='Qty' /></td>
+                    <td><label>数量:</label><input type='text' id='txtQty' /></td>
 
-                    <td><label>库存天数:</label><input type='text' id='DayOfStock' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                    <td><label>库存天数:</label><input type='text' id='txtDayOfStock' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
                         
                 </tr>
 

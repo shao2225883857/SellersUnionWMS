@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "ShowResult";
+}
+<body class="easyui-layout">
+    <script type="text/javascript">
+        $(function () {
+            $('#dg').datagrid({
+                rownumbers: true,
+                singleSelect: true,
+                autoRowHeight: true,
+                fitColumns: true,
+                url: '@Url.Action("GetResult", "Home")',
+        });
+
+    });
+
+    </script>
+    <div region="center">
+
+        <table id="dg">
+            <thead>
+                <tr>
+                    <th field="Key" width="100">Key
+                    </th>
+
+                    <th field="Info" width="300">原因
+                    </th>
+                    <th field="Field1" width="100">原因2
+                    </th>
+                    <th field="Field2" width="100">原因3
+                    </th>
+                    <th field="Result" width="250">结果
+                    </th>
+                    <th field="CreateOn" width="200" formatter="getDate">时间
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>

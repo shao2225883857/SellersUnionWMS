@@ -52,6 +52,9 @@ function getStartDate(value) {
     return enddate;
 }
 
+function getSmallImg(v) {
+    return '<img  src=' + v + '  height="64px" width="64px" />';
+}
 
 function getTrue(value) {
     if (value == 1)
@@ -148,7 +151,7 @@ function comboboxInit(url, postdata, combo, vf, tf, h) {
                     }
                 },
                 onSelect: function (r) {
-                    if(h) {
+                    if (h) {
                         h(r);
                     }
                 },
@@ -238,27 +241,44 @@ openTab = function (subtitle, url, closable) {
 };
 
 
-function editGridViewModel(grid) {
-    var self = this;
-    this.begin = function (index, row) {
+function editGridViewModel(grid, saveurl, delurl) {
+    var self = self || {};
+    self.begin = function (index, row) {
         if (index == undefined || typeof index === 'object') {
             row = grid.datagrid('getSelected');
             index = grid.datagrid('getRowIndex', row);
         }
-        self.editIndex = self.ended() ? index : self.editIndex;
+        self.editIndex = index;
         grid.datagrid('selectRow', self.editIndex).datagrid('beginEdit', self.editIndex);
     };
-    this.ended = function () {
+    self.ended = function () {
         if (self.editIndex == undefined) return true;
         if (grid.datagrid('validateRow', self.editIndex)) {
             grid.datagrid('endEdit', self.editIndex);
+            $.post(saveurl, grid.datagrid("getRows")[self.editIndex], function (rsp) {
+                if (rsp.IsSuccess) {
+                    $.messager.show({
+                        title: '提示',
+                        msg: "操作成功",
+                        timeout: 2000,
+                        showType: 'slide'
+                    });
+                }
+            }, "JSON").error(function () {
+                $.messager.show({
+                    title: '提示',
+                    msg: "操作失败",
+                    timeout: 2000,
+                    showType: 'slide'
+                });
+            });
             self.editIndex = undefined;
             return true;
         }
         grid.datagrid('selectRow', self.editIndex);
         return false;
     };
-    this.addnew = function (rowData) {
+    self.addnew = function (rowData) {
         if (self.ended()) {
             if (Object.prototype.toString.call(rowData) != '[object Object]') rowData = {};
             rowData = $.extend({ _isnew: true }, rowData);
@@ -268,38 +288,57 @@ function editGridViewModel(grid) {
             self.begin(self.editIndex, rowData);
         }
     };
-    this.deleterow = function () {
+    self.deleterow = function () {
         var selectRow = grid.datagrid('getSelected');
         if (selectRow) {
             var selectIndex = grid.datagrid('getRowIndex', selectRow);
             if (selectIndex == self.editIndex) {
                 grid.datagrid('cancelEdit', self.editIndex);
                 self.editIndex = undefined;
+              
             }
+            $.post(delurl,"id="+selectRow.Id, function (rsp) {
+                if (rsp.IsSuccess) {
+                    $.messager.show({
+                        title: '提示',
+                        msg: "删除成功",
+                        timeout: 2000,
+                        showType: 'slide'
+                    });
+                }
+            }, "JSON").error(function () {
+                $.messager.show({
+                    title: '提示',
+                    msg: "删除失败",
+                    timeout: 2000,
+                    showType: 'slide'
+                });
+            });
+           
             grid.datagrid('deleteRow', selectIndex);
         }
     };
-    this.reject = function () {
+    self.reject = function () {
         grid.datagrid('rejectChanges');
     };
-    this.accept = function () {
-        grid.datagrid('acceptChanges');
-        var rows = grid.datagrid('getRows');
-        for (var i in rows) delete rows[i]._isnew;
+    self.accept = function () {
+        if (self.ended()) {
+            grid.datagrid('acceptChanges');
+            var rows = grid.datagrid('getRows');
+            for (var i in rows) delete rows[i]._isnew;
+        }
     };
-    this.getChanges = function (include, ignore) {
+    self.getChanges = function (include, ignore) {
         if (!include) include = [], ignore = true;
-        alert("123");
+        alert("放弃本方法，使用实时保存模式");
         //var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
         //    updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
         //    inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
-
         //var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
         //changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
-
         return changes;
     };
-    this.isChangedAndValid = function () {
+    self.isChangedAndValid = function () {
         return self.ended() && self.getChanges()._changed;
     };
     return self;

@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link href="~/Images/User_Login.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="~/Scripts/EasyUI/jquery-1.8.0.min.js"></script>
+</head>
+<script type="text/javascript">
+    function login() {
+        var u = $('#UserName').val();
+        var p = $('#Password').val();
+        var t = $('#DropExpiration').val();
+        jQuery.ajax({
+            url: "/User/Login",
+            type: "post",
+            data: "u=" + u + "&p=" + p + "&t=" + t,
+            success: function (res) {
+                if (res.IsSuccess)
+                    location.href = '/Home/Index/';
+                else {
+                    alert(res.Result);
+                }
+            }
+        });
+    }
+</script>
+<body id="userlogin_body">
+
+    <div id="user_login">
+        <dl>
+            <dd id="user_top">
+                <ul>
+                    <li class="user_top_l"></li>
+                    <li class="user_top_c"></li>
+                    <li class="user_top_r"></li>
+                </ul>
+                <dd id="user_main">
+                    <ul>
+                        <li class="user_main_l"></li>
+                        <li class="user_main_c">
+                            <div class="user_main_box">
+                                <ul>
+                                    <li class="user_main_text">用户名： </li>
+                                    <li class="user_main_input">
+                                        <input class="TxtUserNameCssClass" type="text" id="UserName"
+                                            maxlength="20" name="UserName">
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="user_main_text">密 码： </li>
+                                    <li class="user_main_input">
+                                        <input class="TxtPasswordCssClass" id="Password"
+                                            type="password" maxlength="20" name="Password">
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="user_main_text">Cookie： </li>
+                                    <li class="user_main_input">
+                                        <select id="DropExpiration" name="DropExpiration">
+                                            <option value="0" selected>不保存</option>
+                                            <option value="1">保存一天</option>
+                                            <option value="30">保存一月</option>
+                                            <option value="365">保存一年</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="user_main_r">
+                            <img src="/Images/user_botton.gif" name="IbtnEnter" onclick="javascript: login();">
+                        </li>
+                    </ul>
+                    <dd id="user_bottom">
+                        <ul>
+                            <li class="user_bottom_l"></li>
+                            <li class="user_bottom_c"><span style="MARGIN-TOP: 40px"></span></li>
+                            <li class="user_bottom_r"></li>
+                        </ul>
+                    </dd>
+        </dl>
+    </div>
+</body>
+
+</html>

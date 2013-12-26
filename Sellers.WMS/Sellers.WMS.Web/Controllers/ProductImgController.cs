@@ -11,7 +11,7 @@ using NHibernate;
 
 namespace Sellers.WMS.Web.Controllers
 {
-    public class ProductIsInfractionController : BaseController
+    public class ProductImgController : BaseController
     {
         public ViewResult Index()
         {
@@ -22,10 +22,10 @@ namespace Sellers.WMS.Web.Controllers
 
         public override void GetPermission()
         {
-            this.permissionAdd = this.IsAuthorized("ProductIsInfraction.Add");
-            this.permissionDelete = this.IsAuthorized("ProductIsInfraction.Delete");
-            this.permissionEdit = this.IsAuthorized("ProductIsInfraction.Edit");
-            this.permissionExport = this.IsAuthorized("ProductIsInfraction.Export");
+            this.permissionAdd = this.IsAuthorized("ProductImg.Add");
+            this.permissionDelete = this.IsAuthorized("ProductImg.Delete");
+            this.permissionEdit = this.IsAuthorized("ProductImg.Edit");
+            this.permissionExport = this.IsAuthorized("ProductImg.Export");
         }
 
         /// <summary>  
@@ -53,7 +53,7 @@ namespace Sellers.WMS.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(ProductIsInfractionType obj)
+        public JsonResult Create(ProductImgType obj)
         {
             bool isOk = Save(obj);
             return Json(new { IsSuccess = isOk });
@@ -64,31 +64,31 @@ namespace Sellers.WMS.Web.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public  ProductIsInfractionType GetById(int Id)
+        public  ProductImgType GetById(int Id)
         {
-            ProductIsInfractionType obj = Get<ProductIsInfractionType>(Id);
+            ProductImgType obj = Get<ProductImgType>(Id);
             return obj;
         }
 
         [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult Edit(int id)
         {
-            ProductIsInfractionType obj = GetById(id);
+            ProductImgType obj = GetById(id);
             return View(obj);
         }
 
         [HttpPost]
         [OutputCache(Location = OutputCacheLocation.None)]
-        public ActionResult Edit(ProductIsInfractionType obj)
+        public ActionResult Edit(ProductImgType obj)
         {
-            bool isOk = Update<ProductIsInfractionType>(obj);
+            bool isOk = Update<ProductImgType>(obj);
             return Json(new { IsSuccess = isOk });
         }
 
         [HttpPost, ActionName("Delete")]
         public JsonResult DeleteConfirmed(int id)
         {
-			bool isOk = Delete<ProductIsInfractionType>(id);
+			bool isOk = DeleteObj<ProductImgType>(id);
             return Json(new { IsSuccess = isOk });
         }
 
@@ -109,12 +109,12 @@ namespace Sellers.WMS.Web.Controllers
                     where = " where " + where;
                 }
             }
-            IList<ProductIsInfractionType> objList = NSession.CreateQuery("from ProductIsInfractionType " + where + orderby)
+            IList<ProductImgType> objList = NSession.CreateQuery("from ProductImgType " + where + orderby)
                 .SetFirstResult(rows * (page - 1))
                 .SetMaxResults(rows)
-                .List<ProductIsInfractionType>();
+                .List<ProductImgType>();
 
-            object count = NSession.CreateQuery("select count(Id) from ProductIsInfractionType " + where ).UniqueResult();
+            object count = NSession.CreateQuery("select count(Id) from ProductImgType " + where ).UniqueResult();
             return Json(new { total = count, rows = objList });
         }
 

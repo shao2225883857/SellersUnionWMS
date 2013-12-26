@@ -18,19 +18,29 @@
         @Html.DisplayFor(model => model.Id)
     </div>
 
-    <div class="display-label">SKU</div>
+    <div class="display-label">主SKU</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MainSKU)
+    </div>
+
+    <div class="display-label">子SKU</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SKU)
     </div>
 
-    <div class="display-label">OldSKU</div>
+    <div class="display-label">采购批次</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.OldSKU)
+        @Html.DisplayFor(model => model.PurchaseBatch)
     </div>
 
-    <div class="display-label">N</div>
+    <div class="display-label">价格</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.N)
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">和上一次相差</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Difference)
     </div>
 
 

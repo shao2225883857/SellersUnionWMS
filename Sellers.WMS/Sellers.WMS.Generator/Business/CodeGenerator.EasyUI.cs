@@ -17,6 +17,7 @@ namespace Sellers.WMS.Generator.Business
         StringBuilder detailhtml = new StringBuilder();
 
         StringBuilder easySearch = new StringBuilder();
+        StringBuilder easySearch2 = new StringBuilder();
         StringBuilder advancedSearch = new StringBuilder();
 
 
@@ -44,6 +45,7 @@ namespace Sellers.WMS.Generator.Business
             code = code.Replace("<#ihtml#>", ihtml.ToString());
             code = code.Replace("<#detailhtml#>", detailhtml.ToString());
             code = code.Replace("<#easySearch#>", easySearch.ToString());
+            code = code.Replace("<#easySearch2#>", easySearch2.ToString());
             return code;
         }
 
@@ -144,6 +146,8 @@ namespace Sellers.WMS.Generator.Business
                         else
                             ihtml.AppendLine(string.Format("                    {{ title: '{1}', field: '{0}', width: 100, sortable: true,align: 'center' }},", fieldKey, fieldName));
 
+                        easySearch2.AppendLine(string.Format("            if ($('#txt{0}').val().length != 0)", fieldKey));
+                        easySearch2.AppendLine(string.Format("                search += '{0}&' + $('#txt{0}').val() + '^';", fieldKey));
                         if (j % 4 == 0 && j != xmlNode.ChildNodes[i].ChildNodes.Count - 1)
                         {
                             if (j != 0)
@@ -154,8 +158,10 @@ namespace Sellers.WMS.Generator.Business
                         }
                         if (j == xmlNode.ChildNodes[i].ChildNodes.Count - 1)
                         {
-                            easySearch.AppendLine(string.Format(@"                    <td><label>{1}:</label><input type='text' id='{0}' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
-                        ", fieldKey, fieldName));
+                            easySearch.AppendLine(
+                                string.Format("                    <td class='z-searchlable'>{0}:</td>", fieldName));
+                            easySearch.AppendLine(string.Format(@"                    <td><input type='text' id='txt{0}' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                        ", fieldKey));
                             easySearch.AppendLine("                </tr>");
                             chtml.AppendLine("                </tr>");
                             ehtml.AppendLine("                </tr>");
@@ -166,8 +172,9 @@ namespace Sellers.WMS.Generator.Business
                         else
                         {
                             easySearch.AppendLine(
-                                string.Format(@"                    <td><label>{1}:</label><input type='text' id='{0}' /></td>
-", fieldKey, fieldName));
+                                string.Format("                    <td class='z-searchlable'>{0}:</td>", fieldName));
+                            easySearch.AppendLine(
+                                string.Format("                    <td><input type='text' id='txt{0}' /></td>", fieldKey));
 
                         }
 

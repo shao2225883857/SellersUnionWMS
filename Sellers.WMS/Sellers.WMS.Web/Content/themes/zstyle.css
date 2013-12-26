@@ -1,0 +1,23 @@
+﻿
+.z-txt {
+    width:220px;
+
+}
+
+.z-lable {
+    text-align: left;
+}
+.z-searchlable {
+    text-align: right;width: 60px;padding-left: 10px;
+}
+.z-red {
+    color: red;
+}
+
+.z-searchbtn {
+    margin-left: 20px;
+}
+
+.z-betweenNum {
+    width:50px;
+}

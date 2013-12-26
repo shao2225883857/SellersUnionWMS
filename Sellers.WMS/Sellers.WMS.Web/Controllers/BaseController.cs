@@ -13,7 +13,7 @@ using Sellers.WMS.Web.Controllers.Filters;
 namespace Sellers.WMS.Web.Controllers
 {
     [Authorize(Order = 0)]
-    //[ErrorAttribute]
+    [AllowAnonymous]
     public class BaseController : System.Web.Mvc.Controller
     {
         public BaseController()
@@ -72,28 +72,41 @@ namespace Sellers.WMS.Web.Controllers
             return "";
         }
 
-        //protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        //{
-        //    return;
-        //    List<string> ExFilterField = new List<string>();
-        //    ExFilterField.Add("LOGIN");
-        //    ExFilterField.Add("REG");
-        //    ExFilterField.Add("LOGOFF");
-        //    ExFilterField.Add("INDEX");
-        //    bool iscon = false;
-        //    var controller = filterContext.RouteData.Values["controller"].ToString().ToString();
-        //    var action = filterContext.RouteData.Values["action"].ToString().ToUpper();
-        //    if (ExFilterField.Contains(action))
-        //    {
-        //        return;
-        //    }
-        //    if (filterContext.HttpContext.Session["user"] == null)
-        //    {
-        //        filterContext.HttpContext.Response.Write(" <script type='text/javascript'> window.top.location='/User/Login/'; </script>");
-        //        filterContext.Result = new EmptyResult();
-        //        return;
-        //    }
-        //}
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            List<string> ExFilterField = new List<string>();
+            ExFilterField.Add("LOGIN");
+            ExFilterField.Add("REG");
+            ExFilterField.Add("LOGOFF");
+            bool iscon = false;
+            var controller = filterContext.RouteData.Values["controller"].ToString().ToString();
+            var action = filterContext.RouteData.Values["action"].ToString().ToUpper();
+            if (ExFilterField.Contains(action))
+            {
+                return;
+            }
+            if (filterContext.HttpContext.Session["user"] == null)
+            {
+                string str = Common.GetCookies();
+                if (!string.IsNullOrEmpty(str))
+                {
+                    if (str.IndexOf('&') != -1)
+                    {
+                        string[] strs = str.Split('&');
+                        iscon = Common.LoginByUser(strs[0], strs[1], NSession);
+                        //IsAuthorization(filterContext, controller, action);
+                    }
+                }
+                if (!iscon)
+                {
+                    filterContext.HttpContext.Response.Write(" <script type='text/javascript'> window.top.location='/User/Login/'; </script>");
+                    filterContext.Result = new EmptyResult();
+                    return;
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// ISession
@@ -152,7 +165,7 @@ namespace Sellers.WMS.Web.Controllers
         }
 
         //物理删除数据
-        public virtual bool Delete<T>(T entity)
+        public virtual bool DeleteObj<T>(T entity)
         {
             try
             {
@@ -167,7 +180,7 @@ namespace Sellers.WMS.Web.Controllers
             return true;
         }
         //物理删除数据
-        public virtual bool Delete<T>(object id)
+        public virtual bool DeleteObj<T>(object id)
         {
             try
             {

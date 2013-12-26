@@ -19,8 +19,8 @@
         index_layout = $('#index_layout').layout({
             fit: true
         });
-        /*index_layout.layout('collapse', 'east');*/
 
+        /*index_layout.layout('collapse', 'east');*/
         index_tabs = $('#index_tabs').tabs({
             fit: true,
             border: false,
@@ -146,9 +146,6 @@
         // tabClose();
     }
 
-
-
-
     function tabClose() {
         /*双击关闭TAB选项卡*/
         $(".tabs-inner").dblclick(function () {
@@ -174,16 +171,12 @@
         </div>
         <div id="mainctrl">
             <div class="wel">
-                登录者: 东东
+                登录者: @ViewData["username"]
             </div>
             <div style="position: absolute; right: 0px; bottom: 0px;">
-
                 <a href="#" id="loginOut" class="easyui-menubutton" data-options="iconCls:'icon-help'" onclick="changePass()">修改密码</a>
                 <a href="#" id="loginOut" class="easyui-menubutton" data-options="iconCls:'icon-back'">注销</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           
             </div>
-
-
         </div>
     </div>
     <div region="west" split="true" title="功能菜单" style="width: 170px; padding: 1px; overflow: hidden;">

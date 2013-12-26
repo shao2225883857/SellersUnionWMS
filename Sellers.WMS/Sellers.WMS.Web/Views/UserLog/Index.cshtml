@@ -1,45 +1,44 @@
-﻿
-@model IEnumerable<Sellers.WMS.Domain.UserLogType>
+﻿@model IEnumerable<Sellers.WMS.Domain.UserLogType>
 @{
     ViewBag.Title = "Index";
 }
 <body class="easyui-layout">
-<script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript">
         var grid;
         $(function () {
             grid = $('#dg').datagrid({
-                url:  '@Url.Action("List", "UserLog")',
+                url: '@Url.Action("List", "UserLog")',
                 idField: 'Id',
                 iconCls: 'icon-view',
                 height: 600,
                 width: function () { return document.body.clientWidth * 0.9 },
-                nowrap: true,  
-				singleSelect:true, 
-				animate: true,  
-				resizable: true,  
+                nowrap: true,
+                singleSelect: true,
+                animate: true,
+                resizable: true,
                 pagination: true,
-				pageNumber: 1,
+                pageNumber: 1,
                 pageSize: 100,
                 pageList: [50, 100, 200],
                 rownumbers: true,
                 columns: [[
                     { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
-                    { title: '用户代码', field: 'UId', width: 100, sortable: true,align: 'center' },
-                    { title: '操作详情', field: 'Memo', width: 100, sortable: true,align: 'center' }
+                    { title: '用户代码', field: 'UId', width: 100, sortable: true, align: 'center' },
+                    { title: '操作详情', field: 'Memo', width: 100, sortable: true, align: 'center' }
 
                 ]]
                 ,
                 toolbar: '#toolbar',
-				rowStyler: function (index, row, css) {
-					if (row.Id != "") {
-						return 'font-weight:bold;';
-					}
-				},
-				onLoadSuccess: function (data) {
-					if (data.rows.length > 0) {
-						$('#dg').datagrid("selectRow", 0);
-					}
-				}
+                rowStyler: function (index, row, css) {
+                    if (row.Id != "") {
+                        return 'font-weight:bold;';
+                    }
+                },
+                onLoadSuccess: function (data) {
+                    if (data.rows.length > 0) {
+                        $('#dg').datagrid("selectRow", 0);
+                    }
+                }
             })
         });
 
@@ -90,34 +89,37 @@
             });
         }
 
-</script>
-<div region="center">
-		<fieldset>
+    </script>
+    <div region="center">
+        <fieldset>
             <legend>数据查询</legend>
             <table border="0">
-                                 <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+                <tr>
+                    <td>
+                        <label>主键:</label><input type='text' id='Id' /></td>
 
-                    <td><label>用户代码:</label><input type='text' id='UId' /></td>
+                    <td>
+                        <label>用户代码:</label><input type='text' id='UId' /></td>
 
-                    <td><label>操作详情:</label><input type='text' id='Memo' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
-                        
+                    <td>
+                        <label>操作详情:</label><input type='text' id='Memo' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+
                 </tr>
 
             </table>
         </fieldset>
-		<div id="toolbar">
-			@Html.Raw(ViewData["toolbarButtons"])
-        </div> 
+        <div id="toolbar">
+            @Html.Raw(ViewData["toolbarButtons"])
+        </div>
         <table id="dg">
         </table>
-		<div id="dropdown" style="width:200px; display:none;">  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick1">Excel2003表格所有页</div>  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick2">Excel2003表格指定页</div> 
-			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click:downloadClick3">Excel2003压缩zip</div>  
-			<div data-options="iconCls:'icon-page_excel'"   data-bind="click:downloadClick4">Excel2007/2010</div>  
-			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click:downloadClick5">PDF</div>  
-			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click:downloadClick6">Word</div>   
-		</div>
-</div>
+        <div id="dropdown" style="width: 200px; display: none;">
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click:downloadClick1">Excel2003表格所有页</div>
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click:downloadClick2">Excel2003表格指定页</div>
+            <div data-options="iconCls:'icon-ext-rar'" data-bind="click:downloadClick3">Excel2003压缩zip</div>
+            <div data-options="iconCls:'icon-page_excel'" data-bind="click:downloadClick4">Excel2007/2010</div>
+            <div data-options="iconCls:'icon-ext-pdf'" data-bind="click:downloadClick5">PDF</div>
+            <div data-options="iconCls:'icon-ext-doc'" data-bind="click:downloadClick6">Word</div>
+        </div>
+    </div>
 </body>

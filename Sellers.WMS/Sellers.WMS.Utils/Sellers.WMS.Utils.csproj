@@ -75,6 +75,7 @@
     <Compile Include="Extensions\EasyUICommon.cs" />
     <Compile Include="Extensions\EasyUIUtil.cs" />
     <Compile Include="Extensions\ImageUtil.cs" />
+    <Compile Include="Extensions\ResultInfo.cs" />
     <Compile Include="Extensions\ZConvert.cs" />
     <Compile Include="Extensions\ZFiles.cs" />
     <Compile Include="Extensions\ZGeneric.cs" />

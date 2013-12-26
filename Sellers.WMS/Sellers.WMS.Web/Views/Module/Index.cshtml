@@ -13,25 +13,26 @@
             idField: 'Id',
             treeField: 'FullName',
             iconCls: 'icon-view',
-            height: 600,
+            height: 650,
+            fitColumns:true,
+           // autoRowHeight:true,
             width: function () { return document.body.clientWidth * 0.9 },
             nowrap: true,
             singleSelect: true,
             animate: true,
-            resizable: true,
-            rownumbers: true,
+            
+           
             columns: [[
                 { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
                 { title: '父节点主键', field: 'ParentId', width: 100, sortable: true, align: 'center', hidden: true },
-                { title: '名称', field: 'FullName', width: 100, sortable: true, align: 'center' },
+                { title: '名称', field: 'FullName', width: 200, sortable: true, align: 'left' },
                    { title: '编号', field: 'Code', width: 100, sortable: true, align: 'center' },
                 { title: '图标编号', field: 'ImageIndex', width: 100, sortable: true, align: 'center' },
-                { title: '导航地址', field: 'NavigateUrl', width: 100, sortable: true, align: 'center' },
+                { title: '导航地址', field: 'NavigateUrl', width: 200, sortable: true, align: 'center' },
                 { title: '排序码', field: 'SortCode', width: 100, sortable: true, align: 'center' },
                 { title: '备注', field: 'Description', width: 100, sortable: true, align: 'center' }
             ]],
             toolbar: '#toolbar',
-          
             onLoadSuccess: function (data) {
                 if (data.rows.length > 0) {
                     $('#dg').treegrid("selectRow", 0);
@@ -93,32 +94,7 @@
 
 </script>
 <div region="center">
-		<fieldset>
-            <legend>数据查询</legend>
-            <table border="0">
-                                 <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
 
-                    <td><label>父节点主键:</label><input type='text' id='ParentId' /></td>
-
-                    <td><label>编号:</label><input type='text' id='Code' /></td>
-
-                    <td><label>名称:</label><input type='text' id='FullName' /></td>
-
-                </tr>
-                <tr>
-                    <td><label>图标编号:</label><input type='text' id='ImageIndex' /></td>
-
-                    <td><label>导航地址:</label><input type='text' id='NavigateUrl' /></td>
-
-                    <td><label>排序码:</label><input type='text' id='SortCode' /></td>
-
-                    <td><label>备注:</label><input type='text' id='Description' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
-                        
-                </tr>
-
-            </table>
-        </fieldset>
 		<div id="toolbar">
 			@Html.Raw(ViewData["toolbarButtons"])
         </div> 

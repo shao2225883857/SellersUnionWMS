@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<Sellers.WMS.Domain.ProductIsInfractionType>
+@model IEnumerable<Sellers.WMS.Domain.ProductImgType>
 @{
     ViewBag.Title = "Index";
 }
@@ -8,7 +8,7 @@
         var grid;
         $(function () {
             grid = $('#dg').datagrid({
-                url:  '@Url.Action("List", "ProductIsInfraction")',
+                url:  '@Url.Action("List", "ProductImg")',
                 idField: 'Id',
                 iconCls: 'icon-view',
                 height: 600,
@@ -24,10 +24,11 @@
                 rownumbers: true,
                 columns: [[
                     { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
-                    { title: '主编号', field: 'OldSKU', width: 100, sortable: true,align: 'center' },
                     { title: 'SKU', field: 'SKU', width: 100, sortable: true,align: 'center' },
-                    { title: '平台', field: 'Platform', width: 100, sortable: true,align: 'center' },
-                    { title: '是否侵权', field: 'Isinfraction', width: 100, sortable: true,align: 'center' }
+                    { title: '主SKU', field: 'MainSKU', width: 100, sortable: true,align: 'center' },
+                    { title: '图片名称', field: 'ImgName', width: 100, sortable: true,align: 'center' },
+                    { title: '路径', field: 'Src', width: 100, sortable: true,align: 'center' },
+                    { title: '文件保存', field: 'Img', width: 100, sortable: true,align: 'center' }
 
                 ]]
                 ,
@@ -50,7 +51,7 @@
                 title: '添加数据',
                 width: 650,
                 height: 350,
-                href: '@Url.Action("Create", "ProductIsInfraction")',
+                href: '@Url.Action("Create", "ProductImg")',
                 buttons: [{
                     text: '添加',
                     handler: function () {
@@ -70,7 +71,7 @@
                     title: '编辑数据',
                     width: 650,
                     height: 300,
-                    href: '@Url.Action("Edit", "ProductIsInfraction")/' + id,
+                    href: '@Url.Action("Edit", "ProductImg")/' + id,
                     buttons: [{
                         text: '修改',
                         handler: function () {
@@ -83,30 +84,44 @@
             }
         }
 
-
-
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+            if ($('#txtId').val().length != 0)
+                search += 'Id&' + $('#txtId').val() + '^';
+            if ($('#txtSKU').val().length != 0)
+                search += 'SKU&' + $('#txtSKU').val() + '^';
+            if ($('#txtMainSKU').val().length != 0)
+                search += 'MainSKU&' + $('#txtMainSKU').val() + '^';
+            if ($('#txtImgName').val().length != 0)
+                search += 'ImgName&' + $('#txtImgName').val() + '^';
+            if ($('#txtSrc').val().length != 0)
+                search += 'Src&' + $('#txtSrc').val() + '^';
+            if ($('#txtImg').val().length != 0)
+                search += 'Img&' + $('#txtImg').val() + '^';
+
             grid.datagrid("load", {
                 search: search
             });
         }
-
 </script>
 <div region="center">
 		<fieldset>
             <legend>数据查询</legend>
             <table border="0">
                                  <tr>
-                    <td><label>主键:</label><input type='text' id='Id' /></td>
+                    <td><label>主键:</label><input type='text' id='txtId' /></td>
 
-                    <td><label>主编号:</label><input type='text' id='OldSKU' /></td>
+                    <td><label>SKU:</label><input type='text' id='txtSKU' /></td>
 
-                    <td><label>SKU:</label><input type='text' id='SKU' /></td>
+                    <td><label>主SKU:</label><input type='text' id='txtMainSKU' /></td>
 
-                    <td><label>平台:</label><input type='text' id='Platform' /></td>
+                    <td><label>图片名称:</label><input type='text' id='txtImgName' /></td>
 
-                    <td><label>是否侵权:</label><input type='text' id='Isinfraction' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                </tr>
+                <tr>
+                    <td><label>路径:</label><input type='text' id='txtSrc' /></td>
+
+                    <td><label>文件保存:</label><input type='text' id='txtImg' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
                         
                 </tr>
 
