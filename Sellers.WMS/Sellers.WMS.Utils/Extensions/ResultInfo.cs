@@ -22,7 +22,12 @@ namespace Sellers.WMS.Utils.Extensions
         public virtual string Result { get; set; }
 
 
-        public virtual DateTime CreateOn { get; set; }
+        public virtual DateTime CreateOn
+        {
+            get
+            ;
+            set;
+        }
         /// <summary>
         /// 备注
         /// </summary>

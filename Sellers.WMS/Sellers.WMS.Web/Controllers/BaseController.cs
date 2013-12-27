@@ -179,6 +179,7 @@ namespace Sellers.WMS.Web.Controllers
             }
             return true;
         }
+
         //物理删除数据
         public virtual bool DeleteObj<T>(object id)
         {
@@ -195,6 +196,7 @@ namespace Sellers.WMS.Web.Controllers
             }
             return true;
         }
+
         //获取数据（如果为空抛异常）
         public T Get<T>(object id)
         {

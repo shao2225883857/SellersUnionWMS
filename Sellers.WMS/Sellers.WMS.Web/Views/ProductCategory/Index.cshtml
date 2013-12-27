@@ -18,15 +18,12 @@
             singleSelect: true,
             animate: true,
             resizable: true,
-            pagination: true,
-            pageNumber: 1,
-            pageSize: 100,
-            pageList: [50, 100, 200],
+            fitColumns:true,
             rownumbers: true,
             columns: [[
                 { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
                   { title: '父Id', field: 'ParentId', width: 100, sortable: true, align: 'center', hidden: true },
-                { title: '名称', field: 'Name', width: 100, sortable: true, align: 'center' },
+                { title: '名称', field: 'Name', width: 200, sortable: true, align: 'left' },
                 { title: '分类代码', field: 'Code', width: 100, sortable: true, align: 'center' },
 
                 { title: '排序', field: 'SortCode', width: 100, sortable: true, align: 'center' }
@@ -74,6 +71,11 @@
         }
     }
 
+    function delClick(parameters) {
+        del(grid, '@Url.Action("Delete", "ProductCategory")/', 'tg');
+    }
+   
+
     function refreshClick() {
         grid.treegrid('reload');
     }
@@ -95,7 +97,6 @@
     }
 </script>
 <div region="center">
-	
 		<div id="toolbar">
 			@Html.Raw(ViewData["toolbarButtons"])
         </div> 

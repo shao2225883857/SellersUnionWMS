@@ -1232,6 +1232,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\asda.pubxml" />
+    <Content Include="Views\Product\BatchUpdate.cshtml" />
+    <Content Include="Views\Home\NotFound.cshtml" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
+    <Content Include="Views\User\SetupUserModule.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

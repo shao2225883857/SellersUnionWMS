@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "产品批量修改";
+}
+<script type="text/javascript">
+    $(function () {
+        $('#dg').datagrid({
+            height: 500,
+            width: 500,
+            rownumbers: true,
+            singleSelect: true,
+            autoRowHeight: true,
+            fitColumns: true
+
+        });
+    });
+
+    function doUpdate() {
+        var search = "data=" + $('#data').val() + "&" + "key=" + $('#state').combobox("getValue");
+        jQuery.ajax({
+            url: "/Product/DoBatchUpdate/",
+            type: "post",
+            data: search,
+            success: function (res) {
+                $('#dg').datagrid({
+                    height: 500,
+                    width: 500,
+                    rownumbers: true,
+                    singleSelect: true,
+                    autoRowHeight: true,
+                    fitColumns: true,
+                    url: '@Url.Action("GetResult", "Home")'
+                });
+            }
+        });
+    }
+
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        <table>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend>批量修改</legend>
+                        选择需要修改的属性：<select class="easyui-combobox" id="state" style="width: 100px;">
+                            <option value="Status">状态</option>
+                            <option value="ProductAttr">特性</option>
+                            <option value="Category">分类</option>
+                            <option value="Model">型号</option>
+                            <option value="Brand">品牌</option>
+                            <option value="Standard">规格</option>
+                            <option value="Price">价格</option>
+                            <option value="Weight">重量</option>
+                            <option value="Long">长</option>
+                            <option value="Wide">宽</option>
+                            <option value="High">高</option>
+                        </select><br />
+                        <textarea style="width: 400px; height:480px;" id="data"></textarea>
+                    </fieldset>
+                </td>
+                <td><a href="#" plain="true" class="easyui-linkbutton" icon="icon-save" title="执行" onclick="doUpdate()">执行</a></td>
+                <td>
+                    <fieldset>
+                        <legend>修改结果</legend>
+                        <table id="dg">
+                            <thead>
+                                <tr>
+                                    <th field="Key" width="80">Key
+                                    </th>
+
+                                    <th field="Info" width="150">原因
+                                    </th>
+
+                                    <th field="Result" width="100">结果
+                                    </th>
+                                    <th field="CreateOn" width="100" formatter="getDate">时间
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

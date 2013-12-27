@@ -1,8 +1,8 @@
 ﻿@{
     ViewBag.Title = "Upload";
 }
-<link href="~/Content/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
-<script src="~/Content/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+<link href="~/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
         
@@ -10,7 +10,7 @@
         $('#batchImport').uploadify({
             'auto': false,
             'buttonText': '请选择文件',
-            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'swf': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
             'uploader': '/Home/SaveFile/',
             'multi': false,
             'onUploadSuccess': function (file, data, response) {
@@ -30,7 +30,7 @@
         $('#ImgImport').uploadify({
             'auto': false,
             'buttonText': '请选择图片',
-            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'swf': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
             'uploader': '/Home/SaveFile/',
             'multi': true,
             'onUploadSuccess': function (file, data, response) {

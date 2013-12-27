@@ -45,6 +45,15 @@ namespace Sellers.WMS.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 登录页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult NotFound()
+        {
+            return View();
+        }
+
         public ActionResult Nav()
         {
             return View();

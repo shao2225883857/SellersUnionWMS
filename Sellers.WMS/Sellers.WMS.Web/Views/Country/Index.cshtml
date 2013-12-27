@@ -1,46 +1,41 @@
-﻿
-@model IEnumerable<Sellers.WMS.Domain.CountryType>
+﻿@model IEnumerable<Sellers.WMS.Domain.CountryType>
 @{
     ViewBag.Title = "Index";
 }
 <body class="easyui-layout">
-<script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript">
         var grid;
         $(function () {
             grid = $('#dg').datagrid({
-                url:  '@Url.Action("List", "Country")',
+                url: '@Url.Action("List", "Country")',
                 idField: 'Id',
                 iconCls: 'icon-view',
                 height: 600,
                 width: function () { return document.body.clientWidth * 0.9 },
-                nowrap: true,  
-				singleSelect:true, 
-				animate: true,  
-				resizable: true,  
+                nowrap: true,
+                singleSelect: true,
+                animate: true,
+                resizable: true,
                 pagination: true,
-				pageNumber: 1,
+                fitColumns:true,
+                pageNumber: 1,
                 pageSize: 100,
                 pageList: [50, 100, 200],
                 rownumbers: true,
                 columns: [[
                     { title: '主键标识', field: 'Id', width: 100, sortable: true, hidden: true },
-                    { title: '国家中文', field: 'CCountry', width: 100, sortable: true,align: 'center' },
-                    { title: '国家英文', field: 'ECountry', width: 100, sortable: true,align: 'center' },
-                    { title: '国家代码', field: 'CountryCode', width: 100, sortable: true,align: 'center' }
+                    { title: '国家中文', field: 'CCountry', width: 200, sortable: true },
+                    { title: '国家英文', field: 'ECountry', width: 200, sortable: true },
+                    { title: '国家代码', field: 'CountryCode', width: 100, sortable: true }
 
                 ]]
                 ,
                 toolbar: '#toolbar',
-				rowStyler: function (index, row, css) {
-					if (row.Id != "") {
-						return 'font-weight:bold;';
-					}
-				},
-				onLoadSuccess: function (data) {
-					if (data.rows.length > 0) {
-						$('#dg').datagrid("selectRow", 0);
-					}
-				}
+                onLoadSuccess: function (data) {
+                    if (data.rows.length > 0) {
+                        $('#dg').datagrid("selectRow", 0);
+                    }
+                }
             })
         });
 
@@ -85,42 +80,50 @@
 
 
         function doSearch() {
-            search = $('#txtSearch').searchbox("getName") + "&" + $('#txtSearch').searchbox("getValue") + "^";
+            var search = "";
+          if ($('#txtCCountry').val().length != 0)
+                search += 'CCountry&' + $('#txtCCountry').val() + '^';
+            if ($('#txtECountry').val().length != 0)
+                search += 'ECountry&' + $('#txtECountry').val() + '^';
+            if ($('#txtCountryCode').val().length != 0)
+                search += 'CountryCode&' + $('#txtCountryCode').val() + '^';
             grid.datagrid("load", {
                 search: search
             });
         }
 
-</script>
-<div region="center">
-		<fieldset>
+    </script>
+    <div region="center">
+        <fieldset>
             <legend>数据查询</legend>
             <table border="0">
-                                 <tr>
-                    <td><label>主键标识:</label><input type='text' id='Id' /></td>
+                <tr>
+                    <td class='z-searchlable'>国家中文:</td>
+                    <td>
+                        <input type='text' id='txtCCountry' /></td>
+                    <td class='z-searchlable'>国家英文:</td>
+                    <td>
+                        <input type='text' id='txtECountry' /></td>
+                    <td class='z-searchlable'>国家代码:</td>
+                    <td>
+                        <input type='text' id='txtCountryCode' /><a href='#' class='easyui-linkbutton z-searchbtn' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
 
-                    <td><label>国家中文:</label><input type='text' id='CCountry' /></td>
-
-                    <td><label>国家英文:</label><input type='text' id='ECountry' /></td>
-
-                    <td><label>国家代码:</label><input type='text' id='CountryCode' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
-                        
                 </tr>
 
             </table>
         </fieldset>
-		<div id="toolbar">
-			@Html.Raw(ViewData["toolbarButtons"])
-        </div> 
+        <div id="toolbar">
+            @Html.Raw(ViewData["toolbarButtons"])
+        </div>
         <table id="dg">
         </table>
-		<div id="dropdown" style="width:200px; display:none;">  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick1">Excel2003表格所有页</div>  
-			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick2">Excel2003表格指定页</div> 
-			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click:downloadClick3">Excel2003压缩zip</div>  
-			<div data-options="iconCls:'icon-page_excel'"   data-bind="click:downloadClick4">Excel2007/2010</div>  
-			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click:downloadClick5">PDF</div>  
-			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click:downloadClick6">Word</div>   
-		</div>
-</div>
+        <div id="dropdown" style="width: 200px; display: none;">
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click: downloadClick1">Excel2003表格所有页</div>
+            <div data-options="iconCls:'icon-ext-xls'" data-bind="click: downloadClick2">Excel2003表格指定页</div>
+            <div data-options="iconCls:'icon-ext-rar'" data-bind="click: downloadClick3">Excel2003压缩zip</div>
+            <div data-options="iconCls:'icon-page_excel'" data-bind="click: downloadClick4">Excel2007/2010</div>
+            <div data-options="iconCls:'icon-ext-pdf'" data-bind="click: downloadClick5">PDF</div>
+            <div data-options="iconCls:'icon-ext-doc'" data-bind="click: downloadClick6">Word</div>
+        </div>
+    </div>
 </body>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -55,14 +56,55 @@ namespace Sellers.WMS.Web.Controllers
 
         public ActionResult Upload()
         {
-
             return View();
+        }
+
+        public ActionResult BatchUpdate()
+        {
+            return View();
+        }
+
+        public JsonResult DoBatchUpdate(string data, string key)
+        {
+            string[] datas = data.Replace("\r", "").Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string sqltemp = "Update ProductType set {0}={1} where SKU='{3}'";
+            Type type = typeof(ProductType);
+
+            PropertyInfo f = type.GetProperty(key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
+  | BindingFlags.Static);
+            List<ResultInfo> results = new List<ResultInfo>();
+            foreach (string s in datas)
+            {
+                string[] cels = s.Replace("\t", " ").Replace("  ", " ").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (cels.Length == 2)
+                {
+                    List<ProductType> products = GetList<ProductType>("SKU", cels[0].Trim(), "");
+                    if (products.Count > 0)
+                    {
+
+                        foreach (ProductType productType in products)
+                        {
+                            object obj = cels[1].Trim();
+                            f.SetValue(productType, obj, null);
+                            Update(productType);
+                        }
+                        results.Add(new ResultInfo { Key = cels[0], Info = "修改完成", CreateOn = DateTime.Now });
+                    }
+                    else
+                        results.Add(new ResultInfo { Key = cels[0], Info = "没有找到对应的产品数据", CreateOn = DateTime.Now });
+                }
+                else
+                    results.Add(new ResultInfo { Key = s, Info = "格式错误", CreateOn = DateTime.Now });
+
+            }
+            Session["result"] = results;
+            return Json(new { IsSuccess = true });
         }
 
         [HttpPost]
         public JsonResult Create(ProductType obj)
         {
-
             if (!IsFieldExist<ProductType>("SKU", obj.SKU, "-1"))
             {
                 ProductImgType productImg = new ProductImgType();
@@ -119,7 +161,7 @@ namespace Sellers.WMS.Web.Controllers
                 list.Add(new ResultInfo { CreateOn = DateTime.Now, Key = product.SKU, Info = "该SKU已经存在，请检查需要导入的数据", Result = "导入失败" });
             }
             Session["result"] = list;
-            return Json(new {IsSuccess = true});
+            return Json(new { IsSuccess = true });
         }
 
         /// <summary>

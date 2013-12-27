@@ -4,7 +4,7 @@
 */
 var checks = [["1", "是"], ["0", "否"]];
 var checksall = [["ALL", "ALL"], ["1", "是"], ["0", "否"]];
-var checkSex = '[["男"],["女"]]';
+var checkSex = [["男", "男"], ["女", "女"]];;
 
 
 // easyUI  时间改写
@@ -26,12 +26,12 @@ Date.prototype.format = function (format) {
         ("00" + o[k]).substr(("" + o[k]).length));
     return format;
 }
-function getDate(value) {
+function getDateTime(value) {
     var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
     return date.format("yyyy-MM-dd hh:mm:ss");
 }
 
-function getOnlyDate(value) {
+function getDate(value) {
     var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
     return date.format("yyyy-MM-dd");
 }

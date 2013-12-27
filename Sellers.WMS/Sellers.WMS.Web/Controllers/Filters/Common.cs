@@ -54,13 +54,14 @@ namespace Sellers.WMS.Web
                 CurrencyType c = new CurrencyType();
                 c.CurrencySign = dr["Symbol"].ToString();
                 c.CurrencyName = dr["Name"].ToString();
-                NSession.Delete(" from CurrencyType where CurrencySign='" + c.CurrencySign + "'");
+                NSession.Delete(" from CurrencyType where IsAutoUpdate=1 and CurrencySign='" + c.CurrencySign + "'");
                 NSession.Flush();
                 string str = dr["fBuyPrice"].ToString();
                 if (string.IsNullOrEmpty(str))
                 {
                     str = "0";
                 }
+                c.IsAutoUpdate = 1;
                 c.CurrencyValue = Math.Round(Convert.ToDecimal(str) / 100, 5);
                 c.UpdateOn = DateTime.Now;
                 NSession.Save(c);

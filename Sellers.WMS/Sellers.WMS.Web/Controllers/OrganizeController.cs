@@ -174,8 +174,6 @@ namespace Sellers.WMS.Web.Controllers
 
         public JsonResult DepartmentList(int id)
         {
-
-
             List<SystemTree> tree = new List<SystemTree>();
             string sql = @"DECLARE @ID int 
                         SET @ID = 1;

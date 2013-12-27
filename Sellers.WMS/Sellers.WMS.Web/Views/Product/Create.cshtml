@@ -2,18 +2,32 @@
 @{
     
 }
-<link href="~/Content/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
-<script src="~/Content/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
-<script src="~/Content/Scripts/Kindeditor/kindeditor-min.js"></script>
+<link href="~/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+<script src="~/Scripts/Kindeditor/kindeditor-min.js"></script>
 <script type="text/javascript">
 
+    var editor;
+    var editor2;
+    KindEditor.ready(function (K) {
+        editor = K.create('#Memo', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            allowImageUpload: false,
+            items: [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link'],
+            afterBlur: function () { this.sync(); }
+        });
+    });
     $(function () {
 
         //初始化
         $('#up_file').uploadify({
             'auto': true,
             'buttonText': '请选择图片',
-            'swf': '@Url.Content("~/Content/Scripts/uploadify/uploadify.swf")',
+            'swf': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
             'uploader': '/Home/SaveFile/',
             'multi': false,
             'onUploadSuccess': function (file, data, response) {
@@ -23,6 +37,7 @@
                 //alert(data.SaveName);
             }
         });
+
         $('#TempSKU,#SKU,#Title').validatebox({
             required: true
         });
@@ -188,11 +203,21 @@
                         </tr>
                         <tr>
                             <td class="z-lable">库存天数：</td>
-                            <td align="left">
+                            <td align="left" colspan="5">
                                 <input type='text' name='DayByStock' id='DayByStock' class="z-txt"></input></td>
-                            <td class="z-lable">简单描述：</td>
-                            <td align="left" colspan="3">
-                                <input type='text' name='Memo' id='Memo' class="z-txt"></input></td>
+
+                        </tr>
+                    </table>
+
+                </div>
+                <div title="产品详细描述" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td class="z-lable z-searchlable" >简单描述：</td>
+                            <td align="left">
+                                <textarea name='Memo' id='Memo' style="width:800px;height:40px;resize:none;"></textarea>
+                               
+                            </td>
                         </tr>
                     </table>
                 </div>

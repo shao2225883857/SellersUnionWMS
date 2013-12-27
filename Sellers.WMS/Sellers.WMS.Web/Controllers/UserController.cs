@@ -20,12 +20,18 @@ namespace Sellers.WMS.Web.Controllers
             return View();
         }
 
+        private bool permissionModuleSetup = false;
+        private bool permissionPermissionSetup = false;
+        private bool permissionDataSetup = false;
         public override void GetPermission()
         {
             this.permissionAdd = this.IsAuthorized("User.Add");
             this.permissionDelete = this.IsAuthorized("User.Delete");
             this.permissionEdit = this.IsAuthorized("User.Edit");
             this.permissionExport = this.IsAuthorized("User.Export");
+            this.permissionModuleSetup=this.this.IsAuthorized("Module.Setup");
+            this.permissionPermissionSetup=this.IsAuthorized("Permission.Setup");
+            this.permissionDataSetup=this.IsAuthorized("Data.Setup");
         }
 
         /// <summary>  
@@ -43,7 +49,9 @@ namespace Sellers.WMS.Web.Controllers
             sb.Append(string.Format(linkbtn_template, "delete", "icon-user_delete", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
             sb.Append("<div class='datagrid-btn-separator'></div> ");
             sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport ? "" : "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-export'\">导出</a>");
-
+            sb.Append(string.Format(linkbtn_template, "moduleSetup", "icon-user_moudle", permissionModuleSetup ? "" : "disabled=\"True\"", "设置菜单访问", "设置菜单访问", "moduleSetup()"));
+            sb.Append(string.Format(linkbtn_template, "permissionSetup", "icon-user_permission", permissionPermissionSetup ? "" : "disabled=\"True\"", "设置操作权限", "设置操作权限", "permissionSetup()"));
+            sb.Append(string.Format(linkbtn_template, "dataSetup", "icon-user_data", permissionDataSetup ? "" : "disabled=\"True\"", "设置数据权限", "设置数据权限", "dataSetup()"));
             return sb.ToString();
         }
 
@@ -139,10 +147,17 @@ namespace Sellers.WMS.Web.Controllers
             bool iscon = Common.LoginByUser(u, p, NSession);
             if (iscon)
             {
-                Common.CreateCookies(u,p,t);
-                return Json(new {IsSuccess = true});
+                Common.CreateCookies(u, p, t);
+                return Json(new { IsSuccess = true });
             }
             return Json(new { IsSuccess = false, Result = "用户名或者密码出错" });
+        }
+
+        public ActionResult LogOff()
+        {
+            Common.ClearCookies();
+            return View("Login");
+
         }
 
 

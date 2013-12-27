@@ -1,5 +1,4 @@
 ﻿@model Sellers.WMS.Domain.UserType
-
 @{
     Layout = null;
 }
@@ -7,13 +6,9 @@
 <script type="text/javascript">
 
     $(function () {
-
         //初始化控件
-        $('#Birthday').datetimebox();
+        $('#Birthday').datebox();
         comboboxInit('@Url.Action("List", "Role")', 'page=1&rows=100', 'RoleId', 'Id', 'Realname');
-
-        comboboxInit('@Url.Action("ALLList", "Organize")', 'page=1&rows=100', 'RoleId', 'Id', 'Realname');
-
         $('#CId').combotree({
             url: '/Organize/ALLTreeList/',
             required: true,
@@ -29,12 +24,10 @@
             textField: 1,
             panelHeight: 'auto',
             data: checkSex,
-            width: 150
         });
 
         $('#DId').combotree();
 
-        //parent.$.messager.progress('close');
         $('#form').form({
             url: '@Url.Action("Create", "User")',
             onSubmit: function () {
@@ -52,10 +45,9 @@
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.IsSuccess) {
-                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
-                    //parent.layout_west_tree.tree('reload');
                     parent.$.modalDialog.penner_grid.datagrid('reload');
                     parent.$.modalDialog.handler.dialog('close');
+
                 }
                 else {
                     alert(result.Result);
@@ -63,7 +55,6 @@
             }
         });
     });
-
 
     function selectDepartment(n) {
         $('#DId').combotree({
@@ -73,8 +64,8 @@
             width: 150
         });
     }
+    
 </script>
-
 <div class="easyui-layout" data-options="fit:true,border:false">
     <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
         @using (Html.BeginForm("", "", FormMethod.Post, new { id = "form" }))
@@ -132,17 +123,17 @@
                 <tr>
                     <td align="right">电子邮件：</td>
                     <td align="left" colspan="3">
-                        <input type='text' name='Email' id='Email'></input></td>
+                        <input type='text' name='Email' id='Email' class="z-txt"></input></td>
                 </tr>
                 <tr>
                     <td align="right">家庭住址：</td>
                     <td align="left" colspan="3">
-                        <input type='text' name='HomeAddress' id='HomeAddress'></input></td>
+                        <input type='text' name='HomeAddress' id='HomeAddress' class="z-txt"></input></td>
                 </tr>
                 <tr>
                     <td align="right">备注：</td>
                     <td align="left" colspan="3">
-                        <input type='text' name='Description' id='Description'></input></td>
+                        <input type='text' name='Description' id='Description' class="z-txt"></input></td>
                 </tr>
 
             </table>

@@ -1708,7 +1708,8 @@ a:hover.pagination-link {
   top: -7px;
   margin-left: -10px;
 }
-.slider-tip {
+.slider
+ {
   position: absolute;
   display: inline-block;
   line-height: 12px;
