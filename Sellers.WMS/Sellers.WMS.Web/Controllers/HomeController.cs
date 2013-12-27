@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Sellers.WMS.Core.Aliexpress;
 using Sellers.WMS.Domain;
 using Sellers.WMS.Utils.Extensions;
+using Sellers.WMS.Web.Controllers;
 
 namespace Sellers.WMS.Web.Controllers
 {
@@ -15,7 +17,14 @@ namespace Sellers.WMS.Web.Controllers
         //GET: /Home/
         public ActionResult Index()
         {
-            List<ModuleType> list = GetAll<ModuleType>().ToList();
+            List<PermissionScopeType> permissionScopeTypes = CurrentUser.PermissionList.Where(p => p.TargetCategory == TargetCategoryEnum.Module.ToString()).ToList().ToList();
+            string ids = "";
+            foreach (PermissionScopeType permission in permissionScopeTypes)
+            {
+                ids += permission.TargetId + ",";
+            }
+            ids = ids.Trim(',');
+            List<ModuleType> list = NSession.CreateQuery("from ModuleType where Id in(" + ids + ")").List<ModuleType>().ToList();
             list = list.OrderByDescending(f => f.SortCode).ToList();
             var items = new List<ModuleType>();
             //循环加载第一层
@@ -58,6 +67,11 @@ namespace Sellers.WMS.Web.Controllers
         {
             return View();
         }
+        public ActionResult GetAliexpressAuthCode(string code)
+        {
+            ViewData["code"] = AliUtil.GetRefreshToken(code).refresh_token;
+            return View();
+        }
 
         public ActionResult ShowResult()
         {
@@ -67,11 +81,11 @@ namespace Sellers.WMS.Web.Controllers
         public ActionResult GetResult()
         {
             List<ResultInfo> list = Session["result"] as List<ResultInfo>;
-            if(list==null)
+            if (list == null)
             {
-                list=new List<ResultInfo>();
+                list = new List<ResultInfo>();
             }
-            return Json(new {total = list.Count, rows = list});
+            return Json(new { total = list.Count, rows = list });
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

@@ -7,6 +7,8 @@ using System.Web;
 using NHibernate;
 using Sellers.WMS.Data.Repository;
 using Sellers.WMS.Domain;
+using Sellers.WMS.Web.Controllers;
+using Sellers.WMS.Web.Controllers.Filters;
 
 namespace Sellers.WMS.Web
 {
@@ -134,6 +136,10 @@ namespace Sellers.WMS.Web
                 UserType user = list[0];
                 user.LastVisit = DateTime.Now;
                 NSession.Update(user);
+                user.PermissionList =
+                    NSession.CreateQuery("from PermissionScopeType where ResourceCategory=:p1 and ResourceId=:p2").
+                        SetString("p1", ResourceCategoryEnum.User.ToString()).SetInt32("p2", user.Id).List
+                        <PermissionScopeType>();
                 NSession.Flush();
                 //GetPM(user, NSession);
                 System.Web.HttpContext.Current.Session["user"] = user;

@@ -127,6 +127,7 @@
     <Compile Include="Controllers\DataDictionaryController.cs" />
     <Compile Include="Controllers\DataDictionaryDetailController.cs" />
     <Compile Include="Controllers\Filters\Common.cs" />
+    <Compile Include="Controllers\Filters\Enums.cs" />
     <Compile Include="Controllers\Filters\ErrorAttribute.cs" />
     <Compile Include="Controllers\Filters\ExceptionFilterAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1016,6 +1017,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="API\" />
     <Folder Include="App_Data\" />
     <Folder Include="Product\Images\333.png\" />
   </ItemGroup>
@@ -1236,6 +1238,7 @@
     <Content Include="Views\Home\NotFound.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Views\User\SetupUserModule.cshtml" />
+    <Content Include="Views\Home\GetAliexpressAuthCode.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

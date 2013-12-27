@@ -64,21 +64,21 @@
             });
 
             $('#txtProductAttr').combobox({
-                url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductAttr',
+                url: '@Url.Action("GetSearchOptions", "DataDictionaryDetail")/ProductAttr',
                 valueField: 'DicValue',
                 textField: 'FullName',
                 panelHeight: 'auto'
             });
 
             $('#txtStatus').combobox({
-                url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductState',
+                url: '@Url.Action("GetSearchOptions", "DataDictionaryDetail")/ProductState',
                 valueField: 'DicValue',
                 textField: 'FullName',
                 panelHeight: 'auto'
             });
 
             $('#txtBrand').combobox({
-                url: '@Url.Action("GetOptions", "DataDictionaryDetail")/Brand',
+                url: '@Url.Action("GetSearchOptions", "DataDictionaryDetail")/Brand',
                 valueField: 'DicValue',
                 textField: 'FullName',
                 panelHeight: 'auto'
@@ -89,48 +89,33 @@
             openTab("官品管理-添加商品", '@Url.Action("Create", "Product")', true);
 
         }
-
-        //编辑框
         function editClick() {
             var id = getselectedRow(grid);
-            if (id) {
-                parent.$.modalDialog({
-                    title: '编辑数据',
-                    width: 650,
-                    height: 300,
-                    href: '@Url.Action("Edit", "Product")/' + id,
-                    buttons: [{
-                        text: '修改',
-                        handler: function () {
-                            parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }]
-                });
-            }
+            openTab("官品管理-编辑商品", '@Url.Action("Edit", "Product")/'+id, true);
+
         }
+
+
 
         function doSearch() {
             var search = "";
-            
+
             if ($('#txtTempSKU').val().length != 0)
                 search += 'TempSKU&' + $('#txtTempSKU').val() + '^';
             if ($('#txtSKU').val().length != 0)
                 search += 'SKU&' + $('#txtSKU').val() + '^';
             if ($('#txtTitle').val().length != 0)
                 search += 'Title&' + $('#txtTitle').val() + '^';
-            if ($('#txtStatus').combobox("getValue").length != 0)
+            if ($('#txtStatus').combobox("getValue").length != 0 && $('#txtStatus').combobox("getValue") != 0)
                 search += 'Status&' + $('#txtStatus').combobox("getValue") + '^';
-            if ($('#txtProductAttr').combobox("getValue").length != 0)
+            if ($('#txtProductAttr').combobox("getValue").length != 0 && $('#txtProductAttr').combobox("getValue") != 0)
                 search += 'ProductAttr&' + $('#txtProductAttr').combobox("getValue") + '^';
-       
-            if ($('#txtCategory').combotree("getValue").length != 0)
+            if ($('#txtCategory').combotree("getValue").length != 0 && $('#txtCategory').combobox("getValue") != 0)
                 search += 'Category&' + $('#txtCategory').combotree("getValue") + '^';
             if ($('#txtModel').val().length != 0)
                 search += 'Model&' + $('#txtModel').val() + '^';
             if ($('#txtBrand').combobox("getValue").length != 0)
-                search += 'Brand&' + $('#txtBrand').combobox("getValue") + '^';
+                search += 'Brand&' + $('#txtBrand').combobox("getValue" && $('#txtBrand').combobox("getValue") != 0) + '^';
             if ($('#txtStandard').val().length != 0)
                 search += 'Standard&' + $('#txtStandard').val() + '^';
             if ($('#txtPrice1').val().length != 0)
@@ -141,10 +126,6 @@
                 search += 'Weight_si&' + $('#txtWeight1').val() + '^';
             if ($('#txtWeight2').val().length != 0)
                 search += 'Weight_ei&' + $('#txtWeight2').val() + '^';
-            
-           
-          
-
             grid.datagrid("load", {
                 search: search
             });

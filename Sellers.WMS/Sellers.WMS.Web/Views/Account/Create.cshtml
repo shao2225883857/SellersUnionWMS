@@ -5,9 +5,15 @@
 }
 
 <script type="text/javascript">
+    var v = 1;
+    $(function () {
+        $('#Platform').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/SalePlatform',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
 
-	$(function () {
-		//parent.$.messager.progress('close');
         $('#form').form({
             url: '@Url.Action("Create", "Account")',
             onSubmit: function () {
@@ -25,18 +31,27 @@
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.IsSuccess) {
-                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
-                    //parent.layout_west_tree.tree('reload');
                     parent.$.modalDialog.penner_grid.datagrid('reload');
                     parent.$.modalDialog.handler.dialog('close');
                 }
-				else{
-					alert(result.Result);
-				}
+                else {
+                    alert(result.Result);
+                }
             }
         });
     });
-    
+
+    function gotoAuth() {
+        $.ajax({
+            url: '/Account/GetAuthUrl',
+            type: 'post',
+            data: 'type=' + v,
+            success: function (res) {
+                window.open(res.Result);
+            }
+        });
+    }
+
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -45,37 +60,46 @@
         {
             <table class="grid">
                 <tr>
-                    <td align="right">主键：</td>
-                    <td align="left"><input type='text' name='Id' id='Id'></input></td>
                     <td align="right">账户名称：</td>
-                    <td align="left"><input type='text' name='AccountName' id='AccountName'></input></td>
+                    <td align="left"  colspan="3">
+                        <input type='text' name='AccountName' id='AccountName'></input></td>
                 </tr>
+                <tr>
+
+                    <td align="right">平台：</td>
+                    <td align="left">
+                        <input type='text' name='Platform' id='Platform'></input></td>
+                     <td align="right">Token：</td>
+                    <td align="left">
+                        <input type='text' name='ApiToken' id='ApiToken'></input><br />
+                        <input type="button" value="去授权" onclick="gotoAuth()" />
+                    </td>
+                </tr>
+                @*      <tr>
+                    <td align="right">APIKey：</td>
+                    <td align="left">
+                        <input type='text' name='ApiKey' id='ApiKey'></input></td>
+                    <td align="right">API密钥：</td>
+                    <td align="left">
+                        <input type='text' name='ApiSecret' id='ApiSecret'></input></td>
+                    <td align="right">API会话：</td>
+                </tr>*@
                 <tr>
                     <td align="right">平台网址：</td>
-                    <td align="left"><input type='text' name='AccountUrl' id='AccountUrl'></input></td>
-                    <td align="right">APIKey：</td>
-                    <td align="left"><input type='text' name='ApiKey' id='ApiKey'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">API密钥：</td>
-                    <td align="left"><input type='text' name='ApiSecret' id='ApiSecret'></input></td>
-                    <td align="right">API会话：</td>
-                    <td align="left"><input type='text' name='ApiToken' id='ApiToken'></input></td>
-                </tr>
-                <tr>
-                    <td align="right">平台：</td>
-                    <td align="left"><input type='text' name='Platform' id='Platform'></input></td>
-                    <td align="right">状态：</td>
-                    <td align="left"><input type='text' name='Status' id='Status'></input></td>
+                    <td align="left">
+                        <input type='text' name='AccountUrl' id='AccountUrl'></input></td>
+                    <td align="right">负责人：</td>
+                    <td align="left">
+                        <input type='text' name='Manager' id='Manager'></input></td>
                 </tr>
                 <tr>
                     <td align="right">描述：</td>
-                    <td align="left"><input type='text' name='Description' id='Description'></input></td>
-                    <td align="right">负责人：</td>
-                    <td align="left"><input type='text' name='Manager' id='Manager'></input></td>
+                    <td align="left" colspan="3">
+                        <input type='text' name='Description' id='Description'></input></td>
+
                 </tr>
 
-			</table>
+            </table>
         }
     </div>
 </div>

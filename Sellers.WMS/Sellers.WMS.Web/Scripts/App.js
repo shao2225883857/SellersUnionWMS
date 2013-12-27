@@ -73,7 +73,6 @@ function ajaxFrom(form, url) {
             if (data.IsSuccess) {
 
             }
-
         }
     });
 }
@@ -129,7 +128,6 @@ function del(grid, url, t) {
     });
 };
 
-
 function comboboxInit(url, postdata, combo, vf, tf, h) {
     $.ajax({
         url: url,
@@ -155,7 +153,6 @@ function comboboxInit(url, postdata, combo, vf, tf, h) {
                         h(r);
                     }
                 },
-
             });
         }
     });

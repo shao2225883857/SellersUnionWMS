@@ -2,27 +2,143 @@
     Layout = null;
 }
 <script>
-    $(function() {
-        $('#dgUser').datagrid({});
-        
-        $('#dgUser').datagrid({});
+    var key = 0;
+    $(function () {
+        $('#dgUser').datagrid({
+            url: '@Url.Action("List", "User")',
+            idField: 'Id',
+            iconCls: 'icon-view',
+            height: 390,
+            width: 350,
+            nowrap: true,
+            singleSelect: true,
+            animate: true,
+            resizable: true,
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 100,
+            pageList: [50, 100, 200],
+            rownumbers: true,
+            columns: [[
+                { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                { title: '编号', field: 'Code', width: 100, sortable: true, align: 'center' },
+                { title: '登录名', field: 'Username', width: 100, sortable: true, align: 'center' },
+                { title: '姓名', field: 'Realname', width: 150, sortable: true, align: 'center' }
+            ]],
+            onLoadSuccess: function (data) {
+                if (data.rows.length > 0) {
+                    $('#dg').datagrid("selectRow", 0);
+                    treeInit(data.rows[0].Id);
+                    key = data.rows[0].Id;
+                }
+            },
+            onClickRow: function (rowIndex, rowData) {
+                key = rowData.Id;
+                treeInit(rowData.Id);
+            }
+        });
+
+
     });
+    var loading = false;
+    function treeInit(id) {
+        
+        $('#trModule').tree({
+            url: '@Url.Action("TreeByUser", "Module")/' + id,
+            checkbox: true,
+            cascadeCheck: false,
+            onBeforeLoad: function (node, param) {
+                loading = true;
+            },
+            onLoadSuccess: function (node, data) {
+                loading = false;
+            },
+            onCheck: function (node, checked) {
+                if (loading)
+                    return;
+                if (checked) {
+                    var parentNode = $("#trModule").tree('getParent', node.target);
+                    if (parentNode != null) {
+                        if (!parentNode.checked)
+                            $("#trModule").tree('check', parentNode.target);
+                    }
+                    $.ajax({
+                        url: '/Module/CreateModuleByUser',
+                        type: 'post',
+                        data: 'm=' + node.id + '&k=' + key,
+                        success: function (res) {
+
+                        }
+                    });
+                } else {
+                    var ids = [];
+                    var childNode = $("#trModule").tree('getChildren', node.target);
+                    if (childNode.length > 0) {
+                        for (var i = 0; i < childNode.length; i++) {
+                            $("#trModule").tree('uncheck', childNode[i].target);
+                            ids.push(childNode[i].id);
+                        }
+                        //alert("2");
+                    }
+                    $.ajax({
+                        url: '/Module/DeleteModuleByUser',
+                        type: 'post',
+                        data: 'm=' + node.id + '&k=' + key + '&ids=' + ids.join(','),
+                        success: function (res) {
+
+                        }
+                    });
+                }
+            }
+
+        });
+    }
+    @*onCheck: function (node, checked) {
+        if(checked) {
+            var pnode = $('#trModule').tree('getParent', node.target);
+            $.ajax({
+                url: '@Html.Action("CreateModuleByUser","Module")',
+                        type: 'post',
+                        data: 'm=' + node.id + '&k=' + key + '&p=' + pnode.id,
+                        success:function (res) {
+                            
+                        }
+                    })
+                } else {
+                    var pnode = $('#trModule').tree('getParent', node.target);
+                    $.ajax({
+                        url: '@Html.Action("DeleteModuleByUser","Module")',
+                        type: 'post',
+                        data: 'm=' + node.id + '&k=' + key + '&p=' + pnode.id+'&ids=',
+                        success: function (res) {
+
+                        }
+                    })
+                }
+            }*@
 </script>
+
 
 <div class="easyui-layout" data-options="fit:true,border:false">
     <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
         <div class="tip-info">
             <div class="tip-tip icon-tip"></div>
-            <div>The DataGrid is created from markup, no JavaScript code needed.</div>
+            <div>菜单在勾选后会自动保存</div>
         </div>
-        <div style="float:left">
-            <div>
-                <table id="dgUser"></table>
+        <div style="float: left">
+            <div style="float: left; height: 400px;">
+                <fieldset>
+                    <legend>用户列表</legend>
+                    <table id="dgUser"></table>
+                </fieldset>
             </div>
-            <div>
-               <ul id="trModule" ></ul>
+            <div style="float: left;">
+                <fieldset>
+                    <legend>菜单权限</legend>
+                    <div id="trModule" style="height: 400px; width: 230px; overflow: scroll;"></div>
+                </fieldset>
             </div>
         </div>
-       
+
     </div>
 </div>

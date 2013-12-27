@@ -8,6 +8,7 @@ using System.Web.UI;
 using Sellers.WMS.Domain;
 using Sellers.WMS.Utils.Extensions;
 using NHibernate;
+using Sellers.WMS.Web.Controllers.Filters;
 
 namespace Sellers.WMS.Web.Controllers
 {
@@ -38,11 +39,11 @@ namespace Sellers.WMS.Web.Controllers
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
             sb.Append("<a id=\"a_refresh\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"icon-reload\"  title=\"重新加载\"  onclick='refreshClick()'>刷新</a> ");
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append(string.Format(linkbtn_template, "add", "icon-user_add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加","addClick()"));
-            sb.Append(string.Format(linkbtn_template, "edit", "icon-user_edit", permissionEdit ? "" : "disabled=\"True\"", "修改用户", "修改", "editClick()"));
-            sb.Append(string.Format(linkbtn_template, "delete", "icon-user_delete", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
+            sb.Append(string.Format(linkbtn_template, "add", "icon-add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加", "addClick()"));
+            sb.Append(string.Format(linkbtn_template, "edit", "icon-edit", permissionEdit ? "" : "disabled=\"True\"", "修改用户", "修改", "editClick()"));
+            sb.Append(string.Format(linkbtn_template, "delete", "icon-remove", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport? "": "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-export'\">导出</a>");
+            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport ? "" : "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-undo'\">导出</a>");
 
             return sb.ToString();
         }
@@ -64,7 +65,7 @@ namespace Sellers.WMS.Web.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public  ModuleType GetById(int Id)
+        public ModuleType GetById(int Id)
         {
             ModuleType obj = Get<ModuleType>(Id);
             return obj;
@@ -88,11 +89,11 @@ namespace Sellers.WMS.Web.Controllers
         [HttpPost, ActionName("Delete")]
         public JsonResult DeleteConfirmed(int id)
         {
-			bool isOk = DeleteObj<ModuleType>(id);
+            bool isOk = DeleteObj<ModuleType>(id);
             return Json(new { IsSuccess = isOk });
         }
 
-		public JsonResult List(int page, int rows, string sort, string order, string search)
+        public JsonResult List(int page, int rows, string sort, string order, string search)
         {
             string where = "";
             string orderby = " order by Id desc ";
@@ -114,7 +115,7 @@ namespace Sellers.WMS.Web.Controllers
                 .SetMaxResults(rows)
                 .List<ModuleType>();
 
-            object count = NSession.CreateQuery("select count(Id) from ModuleType " + where ).UniqueResult();
+            object count = NSession.CreateQuery("select count(Id) from ModuleType " + where).UniqueResult();
             return Json(new { total = count, rows = objList });
         }
 
@@ -151,32 +152,47 @@ namespace Sellers.WMS.Web.Controllers
             }
             return Json(new { total = fristList.Count, rows = fristList });
         }
-      
 
-        //private JsonResult SelectList(int id, string type)
-        //{
-        //    //IList<ModuleType> objList = NSession.CreateQuery("from ModuleType").List<ModuleType>();
-        //    ////获得这个类型的菜单权限
-        //    //List<PermissionScopeType> scopeList = NSession.CreateQuery("from PermissionScopeType where ResourceCategory=:p1 and ResourceId=:p2 and TargetCategory =:p3").SetString("p1", type).SetInt32("p2", id).SetString("p3", TargetCategoryEnum.Module.ToString()).List<PermissionScopeType>().ToList<PermissionScopeType>();
+        public JsonResult TreeByUser(int id)
+        {
+            return SelectList(id, ResourceCategoryEnum.User.ToString());
+        }
 
-        //    //IList<ModuleType> fristList = objList.Where(p => p.ParentId == 0).OrderByDescending(p => p.SortCode).ToList();
-        //    //List<SystemTree> tree = new List<SystemTree>();
-        //    //SystemTree root = new SystemTree { id = "0", text = "所有菜单" };
-        //    //foreach (ModuleType item in fristList)
-        //    //{
-        //    //    List<ModuleType> fooList = objList.Where(p => p.ParentId == item.Id).OrderByDescending(p => p.SortCode).ToList();
-        //    //    item.children = fooList;
-        //    //    List<SystemTree> tree2 = ConvertToTree(fooList, scopeList);
+        public JsonResult TreeByRole(int id)
+        {
+            return SelectList(id, ResourceCategoryEnum.Role.ToString());
+        }
 
+        public JsonResult TreeByDepartment(int id)
+        {
+            return SelectList(id, ResourceCategoryEnum.Department.ToString());
+        }
 
-              
-        //    //    root.children.Add(new SystemTree { id = item.Id.ToString(), text = item.FullName, children = tree2 });
-        //    //    GetChildren(objList, item, tree2);
-        //    //}
+        private JsonResult SelectList(int id, string type)
+        {
+            IList<ModuleType> objList = NSession.CreateQuery("from ModuleType").List<ModuleType>();
+            //获得这个类型的菜单权限
+            List<PermissionScopeType> scopeList = NSession.CreateQuery("from PermissionScopeType where ResourceCategory=:p1 and ResourceId=:p2 and TargetCategory =:p3").SetString("p1", type).SetInt32("p2", id).SetString("p3", TargetCategoryEnum.Module.ToString()).List<PermissionScopeType>().ToList<PermissionScopeType>();
 
-        //    //tree.Add(root);
-        //    //return Json(tree);
-        //}
+            IList<ModuleType> fristList = objList.Where(p => p.ParentId == 0).OrderByDescending(p => p.SortCode).ToList();
+            List<SystemTree> tree = new List<SystemTree>();
+
+            SystemTree root = new SystemTree { id = "0", text = "所有菜单" };
+            if (scopeList.FindIndex(p => p.TargetId == 0) != -1)
+                root.@checked = true;
+            foreach (ModuleType item in fristList)
+            {
+                bool ischecked = scopeList.FindIndex(p => p.TargetId == item.Id) != -1;
+                List<ModuleType> fooList = objList.Where(p => p.ParentId == item.Id).OrderByDescending(p => p.SortCode).ToList();
+                item.children = fooList;
+                List<SystemTree> tree2 = ConvertToTree(fooList, scopeList);
+                root.children.Add(new SystemTree { id = item.Id.ToString(), text = item.FullName, children = tree2, @checked = ischecked });
+                GetChildren(objList, item, tree2);
+            }
+
+            tree.Add(root);
+            return Json(tree);
+        }
 
         public List<SystemTree> ConvertToTree(List<ModuleType> fooList, List<PermissionScopeType> scopeList = null)
         {
@@ -222,6 +238,35 @@ namespace Sellers.WMS.Web.Controllers
                 tree.children = mlist;
                 GetChildren(objList, k, mlist);
             }
+        }
+
+
+        public JsonResult CreateModuleByUser(int m, int k)
+        {
+            bool isOk = false;
+            PermissionScopeType permissionScope = new PermissionScopeType();
+            permissionScope.ResourceCategory = ResourceCategoryEnum.User.ToString();
+            permissionScope.TargetCategory = TargetCategoryEnum.Module.ToString();
+            permissionScope.ResourceId = k;
+            permissionScope.TargetId = m;
+            Save(permissionScope);
+
+            return Json(new { IsSuccess = isOk });
+        }
+
+        public JsonResult DeleteModuleByUser(int m, int k, string ids)
+        {
+            bool isOk = false;
+
+            NSession.Delete(string.Format("from  PermissionScopeType where TargetId={0} and TargetCategory='{1}' and ResourceCategory='{2}' and ResourceId={3}", m, TargetCategoryEnum.Module.ToString(), ResourceCategoryEnum.User.ToString(), k));
+
+            if (!string.IsNullOrEmpty(ids))
+            {
+                NSession.Delete(string.Format("from PermissionScopeType where TargetId in({0}) and TargetCategory='{1}' and ResourceCategory='{2}' and ResourceId={3}", ids, TargetCategoryEnum.Module.ToString(), ResourceCategoryEnum.User.ToString(), k));
+            }
+
+            NSession.Flush();
+            return Json(new { IsSuccess = isOk });
         }
     }
 }

@@ -29,9 +29,9 @@ namespace Sellers.WMS.Web.Controllers
             this.permissionDelete = this.IsAuthorized("User.Delete");
             this.permissionEdit = this.IsAuthorized("User.Edit");
             this.permissionExport = this.IsAuthorized("User.Export");
-            this.permissionModuleSetup=this.this.IsAuthorized("Module.Setup");
-            this.permissionPermissionSetup=this.IsAuthorized("Permission.Setup");
-            this.permissionDataSetup=this.IsAuthorized("Data.Setup");
+            this.permissionModuleSetup = this.IsAuthorized("Module.Setup");
+            this.permissionPermissionSetup = this.IsAuthorized("Permission.Setup");
+            this.permissionDataSetup = this.IsAuthorized("Data.Setup");
         }
 
         /// <summary>  
@@ -44,11 +44,11 @@ namespace Sellers.WMS.Web.Controllers
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
             sb.Append("<a id=\"a_refresh\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"icon-reload\"  title=\"重新加载\"  onclick='refreshClick()'>刷新</a> ");
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append(string.Format(linkbtn_template, "add", "icon-user_add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加", "addClick()"));
-            sb.Append(string.Format(linkbtn_template, "edit", "icon-user_edit", permissionEdit ? "" : "disabled=\"True\"", "修改用户", "修改", "editClick()"));
-            sb.Append(string.Format(linkbtn_template, "delete", "icon-user_delete", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
+            sb.Append(string.Format(linkbtn_template, "add", "icon-add", permissionAdd ? "" : "disabled=\"True\"", "添加用户", "添加", "addClick()"));
+            sb.Append(string.Format(linkbtn_template, "edit", "icon-edit", permissionEdit ? "" : "disabled=\"True\"", "修改用户", "修改", "editClick()"));
+            sb.Append(string.Format(linkbtn_template, "delete", "icon-remove", permissionDelete ? "" : "disabled=\"True\"", "删除用户", "删除", "delClick()"));
             sb.Append("<div class='datagrid-btn-separator'></div> ");
-            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport ? "" : "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-export'\">导出</a>");
+            sb.Append("<a href=\"#\" class='easyui-menubutton' " + (permissionExport ? "" : "disabled='True'") + " data-options=\"menu:'#dropdown',iconCls:'icon-undo'\">导出</a>");
             sb.Append(string.Format(linkbtn_template, "moduleSetup", "icon-user_moudle", permissionModuleSetup ? "" : "disabled=\"True\"", "设置菜单访问", "设置菜单访问", "moduleSetup()"));
             sb.Append(string.Format(linkbtn_template, "permissionSetup", "icon-user_permission", permissionPermissionSetup ? "" : "disabled=\"True\"", "设置操作权限", "设置操作权限", "permissionSetup()"));
             sb.Append(string.Format(linkbtn_template, "dataSetup", "icon-user_data", permissionDataSetup ? "" : "disabled=\"True\"", "设置数据权限", "设置数据权限", "dataSetup()"));
@@ -56,6 +56,11 @@ namespace Sellers.WMS.Web.Controllers
         }
 
         public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult SetupUserModule()
         {
             return View();
         }

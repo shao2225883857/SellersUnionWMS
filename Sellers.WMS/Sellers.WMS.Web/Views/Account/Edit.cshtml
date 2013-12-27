@@ -5,7 +5,14 @@
 <script type="text/javascript">
     $(function () {
         //这里写加载下拉列表、修改编辑控件的初始化值
-		//parent.$.messager.progress('close');
+        //parent.$.messager.progress('close');
+
+        $('#Platform').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/SalePlatform',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
 
         $('#form').form({
             url: '@Url.Action("Edit", "Account")',
@@ -42,37 +49,36 @@
         {
             <table class="grid">
                 <tr>
-                    <td align="right">主键：</td>
-                    <td align="left"><input  type='text' name='Id' id='Id' value='@Model.Id' ></input></td>
                     <td align="right">账户名称：</td>
-                    <td align="left"><input  type='text' name='AccountName' id='AccountName' value='@Model.AccountName' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">平台网址：</td>
-                    <td align="left"><input  type='text' name='AccountUrl' id='AccountUrl' value='@Model.AccountUrl' ></input></td>
-                    <td align="right">APIKey：</td>
-                    <td align="left"><input  type='text' name='ApiKey' id='ApiKey' value='@Model.ApiKey' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">API密钥：</td>
-                    <td align="left"><input  type='text' name='ApiSecret' id='ApiSecret' value='@Model.ApiSecret' ></input></td>
-                    <td align="right">API会话：</td>
-                    <td align="left"><input  type='text' name='ApiToken' id='ApiToken' value='@Model.ApiToken' ></input></td>
+                    <td align="left" colspan="3">
+                        <input  type='text' name='AccountName' id='AccountName' value='@Model.AccountName' ></input><input  type='hidden' name='Id' id='Id' value='@Model.Id' ></input></td>
                 </tr>
                 <tr>
                     <td align="right">平台：</td>
-                    <td align="left"><input  type='text' name='Platform' id='Platform' value='@Model.Platform' ></input></td>
-                    <td align="right">状态：</td>
-                    <td align="left"><input  type='text' name='Status' id='Status' value='@Model.Status' ></input></td>
+                    <td align="left">
+                        <input  type='text' name='Platform' id='Platform' value='@Model.Platform' ></input></td>
+                    <td align="right">API会话：</td>
+                    <td align="left">
+                        <input  type='text' name='ApiToken' id='ApiToken' value='@Model.ApiToken' ></input></td>
                 </tr>
                 <tr>
-                    <td align="right">描述：</td>
-                    <td align="left"><input  type='text' name='Description' id='Description' value='@Model.Description' ></input></td>
+                    <td align="right">平台网址：</td>
+                    <td align="left">
+                        <input  type='text' name='AccountUrl' id='AccountUrl' value='@Model.AccountUrl' ></input></td>
                     <td align="right">负责人：</td>
-                    <td align="left"><input  type='text' name='Manager' id='Manager' value='@Model.Manager' ></input></td>
+                    <td align="left">
+                        <input  type='text' name='Manager' id='Manager' value='@Model.Manager' ></input></td>
                 </tr>
 
-			</table>
+
+                <tr>
+                    <td align="right">描述：</td>
+                    <td align="left" colspan="3">
+                        <input  type='text' name='Description' id='Description' value='@Model.Description' ></input></td>
+
+                </tr>
+
+            </table>
         }
     </div>
 </div>

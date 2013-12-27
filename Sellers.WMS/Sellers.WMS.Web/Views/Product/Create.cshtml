@@ -109,7 +109,8 @@
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.IsSuccess) {
-
+                    alert("保存成功!");
+                    window.close();
                 }
                 else {
                     alert(result.Result);

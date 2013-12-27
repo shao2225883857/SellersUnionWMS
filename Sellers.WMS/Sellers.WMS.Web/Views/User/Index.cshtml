@@ -9,6 +9,7 @@
     var cid = 0;
     $(function () {
 
+
         grid = $('#dg').datagrid({
             url: '@Url.Action("List", "User")',
             idField: 'Id',
@@ -42,17 +43,14 @@
                 { title: '备注', field: 'Description', width: 100, sortable: true, align: 'center' }
             ]],
             toolbar: '#toolbar',
-            rowStyler: function (index, row, css) {
-                if (row.Id != "") {
-                    return 'font-weight:bold;';
-                }
-            },
+          
             onLoadSuccess: function (data) {
                 if (data.rows.length > 0) {
                     $('#dg').datagrid("selectRow", 0);
                 }
             }
-        });
+    });
+        
         $('#uitree').tree({
             url: '@Url.Action("ALLTreeList", "Organize")',
             state: closed,
@@ -77,6 +75,15 @@
                     f.submit();
                 }
             }]
+        });
+    }
+    
+    function moduleSetup() {
+        parent.$.modalDialog({
+            title: '设置用户菜单',
+            width: 650,
+            height: 500,
+            href: '@Url.Action("SetupUserModule", "User")'
         });
     }
 

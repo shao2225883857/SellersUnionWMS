@@ -156,5 +156,8 @@ namespace Sellers.WMS.Domain
         /// </summary>
         public virtual String Description { get; set; }
 
+
+        public virtual IList<PermissionScopeType> PermissionList { get; set; }
+
     }
 }
