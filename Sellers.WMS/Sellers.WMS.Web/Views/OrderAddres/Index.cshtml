@@ -1,0 +1,182 @@
+﻿
+@model IEnumerable<Sellers.WMS.Domain.OrderAddresType>
+@{
+    ViewBag.Title = "Index";
+}
+<body class="easyui-layout">
+<script language="javascript" type="text/javascript">
+        var grid;
+        $(function () {
+            grid = $('#dg').datagrid({
+                url:  '@Url.Action("List", "OrderAddres")',
+                idField: 'Id',
+                iconCls: 'icon-view',
+                height: 600,
+                width: function () { return document.body.clientWidth * 0.9 },
+                nowrap: true,  
+				singleSelect:true, 
+				animate: true,  
+				resizable: true,  
+                pagination: true,
+				pageNumber: 1,
+                pageSize: 100,
+                pageList: [50, 100, 200],
+                rownumbers: true,
+                columns: [[
+                    { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                    { title: '客户Id', field: 'BId', width: 100, sortable: true,align: 'center' },
+                    { title: '收件人', field: 'Addressee', width: 100, sortable: true,align: 'center' },
+                    { title: '电话', field: 'Tel', width: 100, sortable: true,align: 'center' },
+                    { title: '手机', field: 'Phone', width: 100, sortable: true,align: 'center' },
+                    { title: '街道', field: 'Street', width: 100, sortable: true,align: 'center' },
+                    { title: '区', field: 'County', width: 100, sortable: true,align: 'center' },
+                    { title: '市', field: 'City', width: 100, sortable: true,align: 'center' },
+                    { title: '省', field: 'Province', width: 100, sortable: true,align: 'center' },
+                    { title: '国家', field: 'Country', width: 100, sortable: true,align: 'center' },
+                    { title: '国家代码', field: 'CountryCode', width: 100, sortable: true,align: 'center' },
+                    { title: 'email', field: 'Emial', width: 100, sortable: true,align: 'center' },
+                    { title: '邮编', field: 'PostCode', width: 100, sortable: true,align: 'center' }
+
+                ]]
+                ,
+                toolbar: '#toolbar',
+				rowStyler: function (index, row, css) {
+					if (row.Id != "") {
+						return 'font-weight:bold;';
+					}
+				},
+				onLoadSuccess: function (data) {
+					if (data.rows.length > 0) {
+						$('#dg').datagrid("selectRow", 0);
+					}
+				}
+            })
+        });
+
+        function addClick() {
+            parent.$.modalDialog({
+                title: '添加数据',
+                width: 650,
+                height: 350,
+                href: '@Url.Action("Create", "OrderAddres")',
+                buttons: [{
+                    text: '添加',
+                    handler: function () {
+                        parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                }]
+            });
+        }
+
+        //编辑框
+        function editClick() {
+            var id = getselectedRow(grid);
+            if (id) {
+                parent.$.modalDialog({
+                    title: '编辑数据',
+                    width: 650,
+                    height: 300,
+                    href: '@Url.Action("Edit", "OrderAddres")/' + id,
+                    buttons: [{
+                        text: '修改',
+                        handler: function () {
+                            parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
+                        }
+                    }]
+                });
+            }
+        }
+
+        function doSearch() {
+            var search = "";
+            if ($('#txtId').val().length != 0)
+                search += 'Id&' + $('#txtId').val() + '^';
+            if ($('#txtBId').val().length != 0)
+                search += 'BId&' + $('#txtBId').val() + '^';
+            if ($('#txtAddressee').val().length != 0)
+                search += 'Addressee&' + $('#txtAddressee').val() + '^';
+            if ($('#txtTel').val().length != 0)
+                search += 'Tel&' + $('#txtTel').val() + '^';
+            if ($('#txtPhone').val().length != 0)
+                search += 'Phone&' + $('#txtPhone').val() + '^';
+            if ($('#txtStreet').val().length != 0)
+                search += 'Street&' + $('#txtStreet').val() + '^';
+            if ($('#txtCounty').val().length != 0)
+                search += 'County&' + $('#txtCounty').val() + '^';
+            if ($('#txtCity').val().length != 0)
+                search += 'City&' + $('#txtCity').val() + '^';
+            if ($('#txtProvince').val().length != 0)
+                search += 'Province&' + $('#txtProvince').val() + '^';
+            if ($('#txtCountry').val().length != 0)
+                search += 'Country&' + $('#txtCountry').val() + '^';
+            if ($('#txtCountryCode').val().length != 0)
+                search += 'CountryCode&' + $('#txtCountryCode').val() + '^';
+            if ($('#txtEmial').val().length != 0)
+                search += 'Emial&' + $('#txtEmial').val() + '^';
+            if ($('#txtPostCode').val().length != 0)
+                search += 'PostCode&' + $('#txtPostCode').val() + '^';
+
+            grid.datagrid("load", {
+                search: search
+            });
+        }
+</script>
+<div region="center">
+		<fieldset>
+            <legend>数据查询</legend>
+            <table border="0">
+                                 <tr>
+                    <td class='z-searchlable'>主键:</td>
+                    <td><input type='text' id='txtId' /></td>
+                    <td class='z-searchlable'>客户Id:</td>
+                    <td><input type='text' id='txtBId' /></td>
+                    <td class='z-searchlable'>收件人:</td>
+                    <td><input type='text' id='txtAddressee' /></td>
+                    <td class='z-searchlable'>电话:</td>
+                    <td><input type='text' id='txtTel' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>手机:</td>
+                    <td><input type='text' id='txtPhone' /></td>
+                    <td class='z-searchlable'>街道:</td>
+                    <td><input type='text' id='txtStreet' /></td>
+                    <td class='z-searchlable'>区:</td>
+                    <td><input type='text' id='txtCounty' /></td>
+                    <td class='z-searchlable'>市:</td>
+                    <td><input type='text' id='txtCity' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>省:</td>
+                    <td><input type='text' id='txtProvince' /></td>
+                    <td class='z-searchlable'>国家:</td>
+                    <td><input type='text' id='txtCountry' /></td>
+                    <td class='z-searchlable'>国家代码:</td>
+                    <td><input type='text' id='txtCountryCode' /></td>
+                    <td class='z-searchlable'>email:</td>
+                    <td><input type='text' id='txtEmial' /></td>
+                    <td class='z-searchlable'>邮编:</td>
+                    <td><input type='text' id='txtPostCode' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                        
+                </tr>
+
+            </table>
+        </fieldset>
+		<div id="toolbar">
+			@Html.Raw(ViewData["toolbarButtons"])
+        </div> 
+        <table id="dg">
+        </table>
+		<div id="dropdown" style="width:200px; display:none;">  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick1">Excel2003表格所有页</div>  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click:downloadClick2">Excel2003表格指定页</div> 
+			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click:downloadClick3">Excel2003压缩zip</div>  
+			<div data-options="iconCls:'icon-page_excel'"   data-bind="click:downloadClick4">Excel2007/2010</div>  
+			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click:downloadClick5">PDF</div>  
+			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click:downloadClick6">Word</div>   
+		</div>
+</div>
+</body>

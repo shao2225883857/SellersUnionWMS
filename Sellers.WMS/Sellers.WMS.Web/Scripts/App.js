@@ -48,7 +48,7 @@ function getStartDateTime(value, t) {
 
 function getStartDate(value) {
     var today = new Date();
-    var enddate = getOnlyDate(today.setDate(today.getDate() - value).toString());
+    var enddate = getDate(today.setDate(today.getDate() - value).toString());
     return enddate;
 }
 

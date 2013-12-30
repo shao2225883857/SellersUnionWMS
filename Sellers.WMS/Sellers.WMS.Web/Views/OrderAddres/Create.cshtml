@@ -1,0 +1,89 @@
+﻿@model Sellers.WMS.Domain.OrderAddresType
+
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		//parent.$.messager.progress('close');
+        $('#c_form').form({
+            url: '@Url.Action("Create", "OrderAddres")',
+            onSubmit: function () {
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.IsSuccess) {
+                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
+                    //parent.layout_west_tree.tree('reload');
+                    parent.$.modalDialog.penner_grid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                }
+				else{
+					alert(result.Result);
+				}
+            }
+        });
+    });
+    
+</script>
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "c_form" }))
+        {
+            <table class="grid">
+                <tr>
+                    <td align="right">主键：</td>
+                    <td align="left"><input type='text' name='Id' id='Id'></input></td>
+                    <td align="right">客户Id：</td>
+                    <td align="left"><input type='text' name='BId' id='BId'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">收件人：</td>
+                    <td align="left"><input type='text' name='Addressee' id='Addressee'></input></td>
+                    <td align="right">电话：</td>
+                    <td align="left"><input type='text' name='Tel' id='Tel'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">手机：</td>
+                    <td align="left"><input type='text' name='Phone' id='Phone'></input></td>
+                    <td align="right">街道：</td>
+                    <td align="left"><input type='text' name='Street' id='Street'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">区：</td>
+                    <td align="left"><input type='text' name='County' id='County'></input></td>
+                    <td align="right">市：</td>
+                    <td align="left"><input type='text' name='City' id='City'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">省：</td>
+                    <td align="left"><input type='text' name='Province' id='Province'></input></td>
+                    <td align="right">国家：</td>
+                    <td align="left"><input type='text' name='Country' id='Country'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">国家代码：</td>
+                    <td align="left"><input type='text' name='CountryCode' id='CountryCode'></input></td>
+                    <td align="right">email：</td>
+                    <td align="left"><input type='text' name='Emial' id='Emial'></input></td>
+                    <td align="right">邮编：</td>
+                    <td align="left"><input type='text' name='PostCode' id='PostCode'></input></td>
+                </tr>
+
+			</table>
+        }
+    </div>
+</div>

@@ -1,0 +1,218 @@
+﻿@{
+    ViewBag.Title = "OrderImport";
+}
+<link href="~/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+
+<script type="text/javascript">
+    var type = 0;
+    $(function () {
+
+        $('#up_file').uploadify({
+            'auto': false,
+            'buttonText': '请选择订单文件',
+            'swf': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+            'uploader': '/Home/SaveFile/',
+            'multi': false,
+            'onUploadSuccess': function (file, data, response) {
+                eval("data=" + data);
+                $('#hfile').val(data.SaveName);
+                if (type == 1) {
+                    formPost('c_Import', '@Url.Action("ImportByAmount", "Order")');
+                } else {
+                    formPost('c_Import', '@Url.Action("ImportData", "Order")', null, null, null, '@Url.Action("ShowResult", "Home")');
+                }
+                $('#c_Import').clear();
+            }
+        });
+
+        $('#Platform').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/SalePlatform',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            required: true,
+            width: 150,
+            panelHeight: 'auto',
+            onChange: changePlatform
+        });
+        $('#Platform2').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/SalePlatform',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            required: true,
+            width: 150,
+            panelHeight: 'auto',
+            onChange: changePlatform2
+        });
+
+        var d = new Date(-1);
+        $('#st').datebox({
+            required: true
+        });
+        $('#et').datebox({
+            required: true
+        });
+
+        $('#et').datebox("setValue", getStartDate(-1));
+        $('#st').datebox("setValue", getStartDate(3));
+    });
+
+    function changePlatform2(n, o) {
+        comboboxInit('/Account/GetAccountListByPlatform/', "id=" + n, 'Account2', 'Id', 'AccountName');
+    }
+
+    function changePlatform(n, o) {
+        comboboxInit('/Account/GetAccountListByPlatform/', "id=" + n, 'Account', 'Id', 'AccountName');
+    }
+    function addOrder() {
+        $("#tt").tabs("loading", "导入中。。。");
+        type = 0;
+        $('#up_file').uploadify('upload', '*');
+        $("#tt").tabs("loaded");
+    }
+
+    function formPost(form, url, r) {
+        $('#' + form).form('submit', {
+            url: url,
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                result = eval('(' + result + ')');
+                if (result.IsSuccess) {
+                    alert("操作成功");
+                } else {
+                    if (result.ErrorMsg)
+                        alert("保存失败!" + result.Result);
+                    else {
+                        alert("保存失败!");
+                    }
+                }
+                if (result.info) {
+                    window.open(r);
+                    closeLoad();
+                }
+            }
+        });
+    }
+
+
+    function importAmount() {
+        $("#tt").tabs("loading", "导入中。。。");
+        type = 1;
+        $('#up_file').uploadify('upload', '*');
+        $("#tt").tabs("loaded");
+    }
+
+    function Gexport() {
+        type = 1;
+        $('#up_file2').uploadify('upload', '*');
+    }
+
+    function closeLoad() {
+        $("#tt").tabs("loaded");
+    }
+
+    function synData() {
+        $("#tt").tabs("loading", "导入中...");
+        formPost('SynData', '@Url.Action("SynData", "Order")', '@Url.Action("ShowResult", "Home")');
+    }
+
+    (function () {
+        $.extend($.fn.tabs.methods, {
+            //显示遮罩  
+            loading: function (jq, msg) {
+                return jq.each(function () {
+                    var panel = $(this).tabs("getSelected");
+                    if (msg == undefined) {
+                        msg = "  正在加载数据，请稍候.                                                                                                                                                                                                                           ..";
+                    }
+                    $("<div class=\"datagrid-mask\"></div>").css({ display: "block", width: panel.width(), height: panel.height() }).appendTo(panel);
+                    $("<div class=\"datagrid-mask-msg\"></div>").html(msg).appendTo(panel).css({ display: "block", left: (panel.width() - $("div.datagrid-mask-msg", panel).outerWidth()) / 2, top: (panel.height() - $("div.datagrid-mask-msg", panel).outerHeight()) / 2 });
+                });
+            }
+            ,
+            //隐藏遮罩  
+            loaded: function (jq) {
+                return jq.each(function () {
+                    var panel = $(this).tabs("getSelected");
+                    panel.find("div.datagrid-mask-msg").remove();
+                    panel.find("div.datagrid-mask").remove();
+                });
+            }
+        });
+    })(jQuery);
+</script>
+<body class="easyui-layout">
+    <div region="center">
+        <div id="tt" class="easyui-tabs" style="width: 600px; height: 400px;">
+            <div title="订单导入" style="padding: 20px;">
+                @using (Html.BeginForm("ImportData", "Order", FormMethod.Post, new { id = "c_Import" }))
+                {
+                    <table class="dv-table" border="0" style="width: 400px; height: 250px;">
+                        <tr>
+                            <td>平台:</td>
+                            <td>
+                                <input id="Platform" name="Platform" /></td>
+                        </tr>
+                        <tr>
+                            <td>账户:</td>
+                            <td>
+                                <input id="Account" name="Account" /></td>
+                        </tr>
+                        <tr>
+                            <td>文件:</td>
+                            <td>
+                                <input id="hfile" type="hidden" value="" name="hfile" />
+                                <input id="up_file" type="file" name="up_file" /></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#" class="easyui-linkbutton" onclick="addOrder()" data-options="iconCls:'icon-add'">导入订单</a>
+                                <a href="#" class="easyui-linkbutton" onclick="importAmount()" data-options="iconCls:'icon-add'">导入金额</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+
+            <div title="订单同步" style="overflow: auto; padding: 20px;">
+                @using (Html.BeginForm("SynData", "Order", FormMethod.Post, new { id = "SynData" }))
+                {
+                    <table class="dv-table" border="0" style="width: 400px; height: 250px;">
+                        <tr>
+                            <td>平台:</td>
+                            <td>
+                                <input id="Platform2" name="Platform" /></td>
+                        </tr>
+                        <tr>
+                            <td>账户:</td>
+                            <td>
+                                <input id="Account2" name="Account" /></td>
+                        </tr>
+                        <tr>
+                            <td>开始时间:</td>
+                            <td>
+                                <input id="st" name="st" type="text"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>结束时间:</td>
+                            <td>
+                                <input id="et" name="et" type="text"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#" class="easyui-linkbutton" onclick="synData()" data-options="iconCls:'icon-add'">开始同步</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+

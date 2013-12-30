@@ -11,7 +11,7 @@ using NHibernate;
 
 namespace Sellers.WMS.Web.Controllers
 {
-    public class <#ControllerRootName#>Controller : BaseController
+    public class OrderProductController : BaseController
     {
         public ViewResult Index()
         {
@@ -22,10 +22,10 @@ namespace Sellers.WMS.Web.Controllers
 
         public override void GetPermission()
         {
-            this.permissionAdd = this.IsAuthorized("<#ControllerRootName#>.Add");
-            this.permissionDelete = this.IsAuthorized("<#ControllerRootName#>.Delete");
-            this.permissionEdit = this.IsAuthorized("<#ControllerRootName#>.Edit");
-            this.permissionExport = this.IsAuthorized("<#ControllerRootName#>.Export");
+            this.permissionAdd = this.IsAuthorized("OrderProduct.Add");
+            this.permissionDelete = this.IsAuthorized("OrderProduct.Delete");
+            this.permissionEdit = this.IsAuthorized("OrderProduct.Edit");
+            this.permissionExport = this.IsAuthorized("OrderProduct.Export");
         }
 
         /// <summary>  
@@ -53,7 +53,7 @@ namespace Sellers.WMS.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(<#ControllerRootName#>Type obj)
+        public JsonResult Create(OrderProductType obj)
         {
             bool isOk = Save(obj);
             return Json(new { IsSuccess = isOk });
@@ -64,31 +64,31 @@ namespace Sellers.WMS.Web.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public  <#ControllerRootName#>Type GetById(int Id)
+        public  OrderProductType GetById(int Id)
         {
-            <#ControllerRootName#>Type obj = Get<<#ControllerRootName#>Type>(Id);
+            OrderProductType obj = Get<OrderProductType>(Id);
             return obj;
         }
 
         [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult Edit(int id)
         {
-            <#ControllerRootName#>Type obj = GetById(id);
+            OrderProductType obj = GetById(id);
             return View(obj);
         }
 
         [HttpPost]
         [OutputCache(Location = OutputCacheLocation.None)]
-        public ActionResult Edit(<#ControllerRootName#>Type obj)
+        public ActionResult Edit(OrderProductType obj)
         {
-            bool isOk = Update<<#ControllerRootName#>Type>(obj);
+            bool isOk = Update<OrderProductType>(obj);
             return Json(new { IsSuccess = isOk });
         }
 
         [HttpPost, ActionName("Delete")]
         public JsonResult DeleteConfirmed(int id)
         {
-			bool isOk = DeleteObj<<#ControllerRootName#>Type>(id);
+			bool isOk = DeleteObj<OrderProductType>(id);
             return Json(new { IsSuccess = isOk });
         }
 
@@ -109,14 +109,15 @@ namespace Sellers.WMS.Web.Controllers
                     where = " where " + where;
                 }
             }
-            IList<<#ControllerRootName#>Type> objList = NSession.CreateQuery("from <#ControllerRootName#>Type " + where + orderby)
+            IList<OrderProductType> objList = NSession.CreateQuery("from OrderProductType " + where + orderby)
                 .SetFirstResult(rows * (page - 1))
                 .SetMaxResults(rows)
-                .List<<#ControllerRootName#>Type>();
+                .List<OrderProductType>();
 
-            object count = NSession.CreateQuery("select count(Id) from <#ControllerRootName#>Type " + where ).UniqueResult();
+            object count = NSession.CreateQuery("select count(Id) from OrderProductType " + where ).UniqueResult();
             return Json(new { total = count, rows = objList });
         }
 
     }
 }
+

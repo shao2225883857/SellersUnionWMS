@@ -51,6 +51,10 @@
     <Compile Include="Entities\DataDictionaryDetailType.cs" />
     <Compile Include="Entities\DataDictionaryType.cs" />
     <Compile Include="Entities\ModuleType.cs" />
+    <Compile Include="Entities\OrderAddressType.cs" />
+    <Compile Include="Entities\OrderBuyerType.cs" />
+    <Compile Include="Entities\OrderProductType.cs" />
+    <Compile Include="Entities\OrderType.cs" />
     <Compile Include="Entities\OrganizeType.cs" />
     <Compile Include="Entities\PermissionItemType.cs" />
     <Compile Include="Entities\PermissionScopeType.cs" />
@@ -76,6 +80,10 @@
     <Compile Include="Mappings\DataDictionaryDetailTypeMap.cs" />
     <Compile Include="Mappings\DataDictionaryTypeMap.cs" />
     <Compile Include="Mappings\ModuleTypeMap.cs" />
+    <Compile Include="Mappings\OrderAddressTypeMap.cs" />
+    <Compile Include="Mappings\OrderBuyerTypeMap.cs" />
+    <Compile Include="Mappings\OrderProductTypeMap.cs" />
+    <Compile Include="Mappings\OrderTypeMap.cs" />
     <Compile Include="Mappings\OrganizeTypeMap.cs" />
     <Compile Include="Mappings\PermissionItemTypeMap.cs" />
     <Compile Include="Mappings\PermissionScopeTypeMap.cs" />

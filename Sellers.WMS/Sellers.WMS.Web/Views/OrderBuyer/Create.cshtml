@@ -1,0 +1,81 @@
+﻿@model Sellers.WMS.Domain.OrderBuyerType
+
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		//parent.$.messager.progress('close');
+        $('#c_form').form({
+            url: '@Url.Action("Create", "OrderBuyer")',
+            onSubmit: function () {
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.IsSuccess) {
+                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
+                    //parent.layout_west_tree.tree('reload');
+                    parent.$.modalDialog.penner_grid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                }
+				else{
+					alert(result.Result);
+				}
+            }
+        });
+    });
+    
+</script>
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "c_form" }))
+        {
+            <table class="grid">
+                <tr>
+                    <td align="right">主键：</td>
+                    <td align="left"><input type='text' name='Id' id='Id'></input></td>
+                    <td align="right">客户名称：</td>
+                    <td align="left"><input type='text' name='BuyerName' id='BuyerName'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">客户邮件：</td>
+                    <td align="left"><input type='text' name='BuyerEmail' id='BuyerEmail'></input></td>
+                    <td align="right">客户购买次数：</td>
+                    <td align="left"><input type='text' name='BuyCount' id='BuyCount'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">客户购买金额：</td>
+                    <td align="left"><input type='text' name='BuyAmount' id='BuyAmount'></input></td>
+                    <td align="right">第一次购买时间：</td>
+                    <td align="left"><input type='text' name='FristBuyOn' id='FristBuyOn'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">最后一次购买时间：</td>
+                    <td align="left"><input type='text' name='LastBuyOn' id='LastBuyOn'></input></td>
+                    <td align="right">客户备注：</td>
+                    <td align="left"><input type='text' name='Remark' id='Remark'></input></td>
+                </tr>
+                <tr>
+                    <td align="right">客户类型：</td>
+                    <td align="left"><input type='text' name='BuyerType' id='BuyerType'></input></td>
+                    <td align="right">平台：</td>
+                    <td align="left"><input type='text' name='Platform' id='Platform'></input></td>
+                </tr>
+
+			</table>
+        }
+    </div>
+</div>

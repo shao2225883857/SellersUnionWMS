@@ -110,6 +110,14 @@ namespace Sellers.WMS.Web.Controllers
             return Json(new { IsSuccess = isOk });
         }
 
+        public JsonResult GetAccountListByPlatform(string id)
+        {
+            IList<AccountType> objList = NSession.CreateQuery("from AccountType where Platform=:p1").SetString("p1", id)
+
+              .List<AccountType>();
+            return Json(new { total = objList.Count, rows = objList });
+        }
+
         public JsonResult List(int page, int rows, string sort, string order, string search)
         {
             string where = "";

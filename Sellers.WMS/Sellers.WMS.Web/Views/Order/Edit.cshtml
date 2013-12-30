@@ -1,0 +1,120 @@
+﻿@model Sellers.WMS.Domain.OrderType
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        //这里写加载下拉列表、修改编辑控件的初始化值
+		//parent.$.messager.progress('close');
+
+        $('#e_form').form({
+            url: '@Url.Action("Edit", "Order")',
+            onSubmit: function () {
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.IsSuccess) {
+                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
+                    //parent.layout_west_tree.tree('reload');
+                    parent.$.modalDialog.penner_grid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                }
+                else {
+                    alert(result.Result);
+                }
+            }
+        });
+    });
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "e_form" }))
+        {
+            <table class="grid">
+                <tr>
+                    <td align="right">主键：</td>
+                    <td align="left"><input  type='text' name='Id' id='Id' value='@Model.Id' ></input></td>
+                    <td align="right">订单编号：</td>
+                    <td align="left"><input  type='text' name='OrderNo' id='OrderNo' value='@Model.OrderNo' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">外部编号：</td>
+                    <td align="left"><input  type='text' name='OrderExNo' id='OrderExNo' value='@Model.OrderExNo' ></input></td>
+                    <td align="right">订单状态：</td>
+                    <td align="left"><input  type='text' name='Status' id='Status' value='@Model.Status' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">是否打印：</td>
+                    <td align="left"><input  type='text' name='IsPrint' id='IsPrint' value='@Model.IsPrint' ></input></td>
+                    <td align="right">合并订单：</td>
+                    <td align="left"><input  type='text' name='IsMerger' id='IsMerger' value='@Model.IsMerger' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">拆分订单：</td>
+                    <td align="left"><input  type='text' name='IsSplit' id='IsSplit' value='@Model.IsSplit' ></input></td>
+                    <td align="right">缺货订单：</td>
+                    <td align="left"><input  type='text' name='IsOutOfStock' id='IsOutOfStock' value='@Model.IsOutOfStock' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">重发订单：</td>
+                    <td align="left"><input  type='text' name='IsRepeat' id='IsRepeat' value='@Model.IsRepeat' ></input></td>
+                    <td align="right">货币：</td>
+                    <td align="left"><input  type='text' name='CurrencyCode' id='CurrencyCode' value='@Model.CurrencyCode' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">总金额：</td>
+                    <td align="left"><input  type='text' name='Amount' id='Amount' value='@Model.Amount' ></input></td>
+                    <td align="right">流水交易号：</td>
+                    <td align="left"><input  type='text' name='TId' id='TId' value='@Model.TId' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">买家：</td>
+                    <td align="left"><input  type='text' name='BuyerName' id='BuyerName' value='@Model.BuyerName' ></input></td>
+                    <td align="right">买家邮箱：</td>
+                    <td align="left"><input  type='text' name='BuyerEmail' id='BuyerEmail' value='@Model.BuyerEmail' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">买家Id：</td>
+                    <td align="left"><input  type='text' name='BuyerId' id='BuyerId' value='@Model.BuyerId' ></input></td>
+                    <td align="right">买家留言：</td>
+                    <td align="left"><input  type='text' name='BuyerMemo' id='BuyerMemo' value='@Model.BuyerMemo' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">商家留言：</td>
+                    <td align="left"><input  type='text' name='SellerMemo' id='SellerMemo' value='@Model.SellerMemo' ></input></td>
+                    <td align="right">发货方式：</td>
+                    <td align="left"><input  type='text' name='LogisticMode' id='LogisticMode' value='@Model.LogisticMode' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">国家：</td>
+                    <td align="left"><input  type='text' name='Country' id='Country' value='@Model.Country' ></input></td>
+                    <td align="right">地址Id：</td>
+                    <td align="left"><input  type='text' name='AddressId' id='AddressId' value='@Model.AddressId' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">重量：</td>
+                    <td align="left"><input  type='text' name='Weight' id='Weight' value='@Model.Weight' ></input></td>
+                    <td align="right">生成时间：</td>
+                    <td align="left"><input  type='text' name='GenerateOn' id='GenerateOn' value='@Model.GenerateOn' ></input></td>
+                </tr>
+                <tr>
+                    <td align="right">账户：</td>
+                    <td align="left"><input  type='text' name='Account' id='Account' value='@Model.Account' ></input></td>
+                    <td align="right">平台：</td>
+                    <td align="left"><input  type='text' name='Platform' id='Platform' value='@Model.Platform' ></input></td>
+                </tr>
+
+			</table>
+        }
+    </div>
+</div>

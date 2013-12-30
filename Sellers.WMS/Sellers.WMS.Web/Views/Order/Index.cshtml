@@ -1,0 +1,253 @@
+﻿
+@model IEnumerable<Sellers.WMS.Domain.OrderType>
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/EasyUI/datagrid-detailview.js"></script>
+<body class="easyui-layout">
+<script language="javascript" type="text/javascript">
+    var grid;
+    $(function () {
+        grid = $('#dg').datagrid({
+            url: '@Url.Action("List", "Order")',
+            idField: 'Id',
+            iconCls: 'icon-view',
+            height: 600,
+            width: function () { return document.body.clientWidth * 0.9 },
+            nowrap: true,
+            view: detailview,
+            singleSelect: true,
+            animate: true,
+            resizable: true,
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 100,
+            pageList: [50, 100, 200],
+            rownumbers: true,
+            columns: [[
+                { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
+                { title: '订单编号', field: 'OrderNo', width: 100, sortable: true, align: 'center' },
+                { title: '外部编号', field: 'OrderExNo', width: 100, sortable: true, align: 'center' },
+                { title: '订单状态', field: 'Status', width: 100, sortable: true, align: 'center' },
+                //{ title: '是否打印', field: 'IsPrint', width: 100, sortable: true,align: 'center' },
+                //{ title: '合并订单', field: 'IsMerger', width: 100, sortable: true,align: 'center' },
+                //{ title: '拆分订单', field: 'IsSplit', width: 100, sortable: true,align: 'center' },
+                //{ title: '缺货订单', field: 'IsOutOfStock', width: 100, sortable: true,align: 'center' },
+                //{ title: '重发订单', field: 'IsRepeat', width: 100, sortable: true,align: 'center' },
+                { title: '货币', field: 'CurrencyCode', width: 100, sortable: true, align: 'center' },
+                { title: '总金额', field: 'Amount', width: 100, sortable: true, align: 'center' },
+                { title: '流水交易号', field: 'TId', width: 100, sortable: true, align: 'center' },
+                { title: '买家', field: 'BuyerName', width: 100, sortable: true, align: 'center' },
+                //{ title: '买家邮箱', field: 'BuyerEmail', width: 100, sortable: true,align: 'center' },
+                //{ title: '买家Id', field: 'BuyerId', width: 100, sortable: true,align: 'center' },
+                //{ title: '买家留言', field: 'BuyerMemo', width: 100, sortable: true, align: 'center' },
+                //{ title: '商家留言', field: 'SellerMemo', width: 100, sortable: true, align: 'center' },
+                { title: '发货方式', field: 'LogisticMode', width: 100, sortable: true, align: 'center' },
+                { title: '国家', field: 'Country', width: 100, sortable: true, align: 'center' },
+                { title: '地址Id', field: 'AddressId', width: 100, sortable: true, align: 'center' },
+                { title: '重量', field: 'Weight', width: 100, sortable: true, align: 'center' },
+                { title: '生成时间', field: 'GenerateOn', width: 100, sortable: true, align: 'center' },
+                { title: '账户', field: 'Account', width: 100, sortable: true, align: 'center' },
+                { title: '平台', field: 'Platform', width: 100, sortable: true, align: 'center' }
+            ]],
+            toolbar: '#toolbar',
+            onLoadSuccess: function (data) {
+                if (data.rows.length > 0) {
+                    $('#dg').datagrid("selectRow", 0);
+                }
+            },
+            detailFormatter: function (index, row) {
+                var html = "<table>";
+                for (var i = 0; i < row.ProductList.length; i++) {
+                    html += '<tr>'
+                        + '<td><img src="' + row.ProductList[i]["ImgUrl"] + '"/>'
+                        + row.ProductList[i]["Title"] + "</td>"
+                        + "<td>" + row.ProductList[i]["SKU"] + "</td>"
+                        + "<td>" + row.ProductList[i]["Qty"] + "</td>"
+                        + "<td>" + row.ProductList[i]["ItemId"] + "</td>"
+                        + "<td>" + row.ProductList[i]["Price"] + "</td>"
+                        + '</tr>';
+                }
+                html += "</table>";
+                return html;
+            }
+        });
+    });
+
+    function addClick() {
+        parent.$.modalDialog({
+            title: '添加数据',
+            width: 650,
+            height: 350,
+            href: '@Url.Action("Create", "Order")',
+            buttons: [{
+                text: '添加',
+                handler: function () {
+                    parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                    var f = parent.$.modalDialog.handler.find('#form');
+                    f.submit();
+                }
+            }]
+        });
+    }
+
+    //编辑框
+    function editClick() {
+        var id = getselectedRow(grid);
+        if (id) {
+            parent.$.modalDialog({
+                title: '编辑数据',
+                width: 650,
+                height: 300,
+                href: '@Url.Action("Edit", "Order")/' + id,
+                buttons: [{
+                    text: '修改',
+                    handler: function () {
+                        parent.$.modalDialog.penner_grid = grid;//将grid绑定到公共变量中
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                }]
+            });
+        }
+    }
+
+    function doSearch() {
+        var search = "";
+        if ($('#txtId').val().length != 0)
+            search += 'Id&' + $('#txtId').val() + '^';
+        if ($('#txtOrderNo').val().length != 0)
+            search += 'OrderNo&' + $('#txtOrderNo').val() + '^';
+        if ($('#txtOrderExNo').val().length != 0)
+            search += 'OrderExNo&' + $('#txtOrderExNo').val() + '^';
+        if ($('#txtStatus').val().length != 0)
+            search += 'Status&' + $('#txtStatus').val() + '^';
+        if ($('#txtIsPrint').val().length != 0)
+            search += 'IsPrint&' + $('#txtIsPrint').val() + '^';
+        if ($('#txtIsMerger').val().length != 0)
+            search += 'IsMerger&' + $('#txtIsMerger').val() + '^';
+        if ($('#txtIsSplit').val().length != 0)
+            search += 'IsSplit&' + $('#txtIsSplit').val() + '^';
+        if ($('#txtIsOutOfStock').val().length != 0)
+            search += 'IsOutOfStock&' + $('#txtIsOutOfStock').val() + '^';
+        if ($('#txtIsRepeat').val().length != 0)
+            search += 'IsRepeat&' + $('#txtIsRepeat').val() + '^';
+        if ($('#txtCurrencyCode').val().length != 0)
+            search += 'CurrencyCode&' + $('#txtCurrencyCode').val() + '^';
+        if ($('#txtAmount').val().length != 0)
+            search += 'Amount&' + $('#txtAmount').val() + '^';
+        if ($('#txtTId').val().length != 0)
+            search += 'TId&' + $('#txtTId').val() + '^';
+        if ($('#txtBuyerName').val().length != 0)
+            search += 'BuyerName&' + $('#txtBuyerName').val() + '^';
+        if ($('#txtBuyerEmail').val().length != 0)
+            search += 'BuyerEmail&' + $('#txtBuyerEmail').val() + '^';
+        if ($('#txtBuyerId').val().length != 0)
+            search += 'BuyerId&' + $('#txtBuyerId').val() + '^';
+        if ($('#txtBuyerMemo').val().length != 0)
+            search += 'BuyerMemo&' + $('#txtBuyerMemo').val() + '^';
+        if ($('#txtSellerMemo').val().length != 0)
+            search += 'SellerMemo&' + $('#txtSellerMemo').val() + '^';
+        if ($('#txtLogisticMode').val().length != 0)
+            search += 'LogisticMode&' + $('#txtLogisticMode').val() + '^';
+        if ($('#txtCountry').val().length != 0)
+            search += 'Country&' + $('#txtCountry').val() + '^';
+        if ($('#txtAddressId').val().length != 0)
+            search += 'AddressId&' + $('#txtAddressId').val() + '^';
+        if ($('#txtWeight').val().length != 0)
+            search += 'Weight&' + $('#txtWeight').val() + '^';
+        if ($('#txtGenerateOn').val().length != 0)
+            search += 'GenerateOn&' + $('#txtGenerateOn').val() + '^';
+        if ($('#txtAccount').val().length != 0)
+            search += 'Account&' + $('#txtAccount').val() + '^';
+        if ($('#txtPlatform').val().length != 0)
+            search += 'Platform&' + $('#txtPlatform').val() + '^';
+
+        grid.datagrid("load", {
+            search: search
+        });
+    }
+</script>
+<div region="center">
+		<fieldset>
+            <legend>数据查询</legend>
+            <table border="0">
+                                 <tr>
+                    <td class='z-searchlable'>主键:</td>
+                    <td><input type='text' id='txtId' /></td>
+                    <td class='z-searchlable'>订单编号:</td>
+                    <td><input type='text' id='txtOrderNo' /></td>
+                    <td class='z-searchlable'>外部编号:</td>
+                    <td><input type='text' id='txtOrderExNo' /></td>
+                    <td class='z-searchlable'>订单状态:</td>
+                    <td><input type='text' id='txtStatus' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>是否打印:</td>
+                    <td><input type='text' id='txtIsPrint' /></td>
+                    <td class='z-searchlable'>合并订单:</td>
+                    <td><input type='text' id='txtIsMerger' /></td>
+                    <td class='z-searchlable'>拆分订单:</td>
+                    <td><input type='text' id='txtIsSplit' /></td>
+                    <td class='z-searchlable'>缺货订单:</td>
+                    <td><input type='text' id='txtIsOutOfStock' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>重发订单:</td>
+                    <td><input type='text' id='txtIsRepeat' /></td>
+                    <td class='z-searchlable'>货币:</td>
+                    <td><input type='text' id='txtCurrencyCode' /></td>
+                    <td class='z-searchlable'>总金额:</td>
+                    <td><input type='text' id='txtAmount' /></td>
+                    <td class='z-searchlable'>流水交易号:</td>
+                    <td><input type='text' id='txtTId' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>买家:</td>
+                    <td><input type='text' id='txtBuyerName' /></td>
+                    <td class='z-searchlable'>买家邮箱:</td>
+                    <td><input type='text' id='txtBuyerEmail' /></td>
+                    <td class='z-searchlable'>买家Id:</td>
+                    <td><input type='text' id='txtBuyerId' /></td>
+                    <td class='z-searchlable'>买家留言:</td>
+                    <td><input type='text' id='txtBuyerMemo' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>商家留言:</td>
+                    <td><input type='text' id='txtSellerMemo' /></td>
+                    <td class='z-searchlable'>发货方式:</td>
+                    <td><input type='text' id='txtLogisticMode' /></td>
+                    <td class='z-searchlable'>国家:</td>
+                    <td><input type='text' id='txtCountry' /></td>
+                    <td class='z-searchlable'>地址Id:</td>
+                    <td><input type='text' id='txtAddressId' /></td>
+                </tr>
+                <tr>
+                    <td class='z-searchlable'>重量:</td>
+                    <td><input type='text' id='txtWeight' /></td>
+                    <td class='z-searchlable'>生成时间:</td>
+                    <td><input type='text' id='txtGenerateOn' /></td>
+                    <td class='z-searchlable'>账户:</td>
+                    <td><input type='text' id='txtAccount' /></td>
+                    <td class='z-searchlable'>平台:</td>
+                    <td><input type='text' id='txtPlatform' /><a href='#' class='easyui-linkbutton' iconcls='icon-search' onclick='doSearch();'>查询</a></td>
+                        
+                </tr>
+
+            </table>
+        </fieldset>
+		<div id="toolbar">
+			@Html.Raw(ViewData["toolbarButtons"])
+        </div> 
+        <table id="dg">
+        </table>
+		<div id="dropdown" style="width:200px; display:none;">  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click: downloadClick1">Excel2003表格所有页</div>  
+			<div data-options="iconCls:'icon-ext-xls'"      data-bind="click: downloadClick2">Excel2003表格指定页</div> 
+			<div data-options="iconCls:'icon-ext-rar'"      data-bind="click: downloadClick3">Excel2003压缩zip</div>  
+			<div data-options="iconCls:'icon-page_excel'"   data-bind="click: downloadClick4">Excel2007/2010</div>  
+			<div data-options="iconCls:'icon-ext-pdf'"      data-bind="click: downloadClick5">PDF</div>  
+			<div data-options="iconCls:'icon-ext-doc'"      data-bind="click: downloadClick6">Word</div>   
+		</div>
+</div>
+</body>

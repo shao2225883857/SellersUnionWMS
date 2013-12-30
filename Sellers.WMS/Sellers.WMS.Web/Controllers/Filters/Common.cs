@@ -17,7 +17,30 @@ namespace Sellers.WMS.Web
 
         public const string ImgPath = "/Product/Images/";
 
+        public static object obj1 = new object();
 
+        public static string GetOrderNo(ISession NSession)
+        {
+            lock (obj1)
+            {
+                string result = string.Empty;
+                NSession.Clear();
+                IList<SerialNumberType> list = NSession.CreateQuery(" from SerialNumberType where Code=:p").SetString("p", "OrderNo").List<SerialNumberType>();
+                if (list.Count > 0)
+                {
+                    list[0].BeginNo = list[0].BeginNo + 1;
+                    NSession.Update(list[0]);
+                    NSession.Flush();
+                    return list[0].BeginNo.ToString();
+                }
+                return "";
+            }
+        }
+
+        public static DateTime GetAliDate(string DateStr)
+        {
+            return new DateTime(Convert.ToInt32(DateStr.Substring(0, 4)), Convert.ToInt32(DateStr.Substring(4, 2)), Convert.ToInt32(DateStr.Substring(6, 2)), Convert.ToInt32(DateStr.Substring(8, 2)), Convert.ToInt32(DateStr.Substring(10, 2)), Convert.ToInt32(DateStr.Substring(12, 2)));
+        }
 
         public static DataTable GetDataTable(string fileName)
         {

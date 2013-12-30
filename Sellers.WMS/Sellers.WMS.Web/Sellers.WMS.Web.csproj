@@ -132,6 +132,10 @@
     <Compile Include="Controllers\Filters\ExceptionFilterAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
+    <Compile Include="Controllers\OrderAddresController.cs" />
+    <Compile Include="Controllers\OrderBuyerController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\OrderProductController.cs" />
     <Compile Include="Controllers\OrganizeController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\PermissionItemController.cs" />
@@ -1239,6 +1243,26 @@
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Views\User\SetupUserModule.cshtml" />
     <Content Include="Views\Home\GetAliexpressAuthCode.cshtml" />
+    <Content Include="Views\OrderAddres\Create.cshtml" />
+    <Content Include="Views\OrderAddres\Delete.cshtml" />
+    <Content Include="Views\OrderAddres\Details.cshtml" />
+    <Content Include="Views\OrderAddres\Edit.cshtml" />
+    <Content Include="Views\OrderAddres\Index.cshtml" />
+    <Content Include="Views\OrderBuyer\Create.cshtml" />
+    <Content Include="Views\OrderBuyer\Delete.cshtml" />
+    <Content Include="Views\OrderBuyer\Details.cshtml" />
+    <Content Include="Views\OrderBuyer\Edit.cshtml" />
+    <Content Include="Views\OrderBuyer\Index.cshtml" />
+    <Content Include="Views\OrderProduct\Create.cshtml" />
+    <Content Include="Views\OrderProduct\Delete.cshtml" />
+    <Content Include="Views\OrderProduct\Details.cshtml" />
+    <Content Include="Views\OrderProduct\Edit.cshtml" />
+    <Content Include="Views\OrderProduct\Index.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
+    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\OrderImport.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
