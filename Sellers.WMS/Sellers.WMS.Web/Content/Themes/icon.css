@@ -68,6 +68,20 @@
 }
 
 
+/* icons */
+.message-icon {
+  float: left;
+  width: 32px;
+  height: 32px;
+}
+.message-icon-info {background: url('icons/jbox-icons.png') no-repeat scroll 0 0;}
+.message-icon-question {background: url('icons/jbox-icons.png') no-repeat scroll -36px 0;}
+.message-icon-success {background: url('icons/jbox-icons.png') no-repeat scroll -72px 0;}
+.message-icon-warning {background: url('icons/jbox-icons.png') no-repeat scroll -108px 0;}
+.message-icon-error {background: url('icons/jbox-icons.png') no-repeat scroll -144px 0;}
+.message-icon-none {display: none; overflow:hidden;}
+
+
 .tu0101
 {
     background-position: -0px -0px;

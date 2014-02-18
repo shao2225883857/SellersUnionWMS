@@ -57,14 +57,11 @@ editGridViewModel = function (grid) {
     };
     this.getChanges = function (include, ignore) {
         if (!include) include = [], ignore = true;
-        alert("123");
         //var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
-        //    updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
-        //    inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
-
+        //var updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
+        //var inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
         //var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
         //changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
-
         return changes;
     };
     this.isChangedAndValid = function () {
@@ -81,7 +78,6 @@ wms.viewModel.search = function (data) {
     this.dataSource = data.dataSource;
     this.form = ko.mapping.fromJS(data.form);
     delete this.form.__ko_mapping__;
-
     this.grid = {
         size: { w: 4, h: 94 },
         url: self.urls.query,

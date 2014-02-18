@@ -1,13 +1,46 @@
 ﻿@model Sellers.WMS.Domain.OrderType
 @{
-    Layout = null;
+    
 }
 <script type="text/javascript">
-    $(function () {
-        //这里写加载下拉列表、修改编辑控件的初始化值
-		//parent.$.messager.progress('close');
 
-        $('#e_form').form({
+    var editgrid;
+    $(function () {
+        //parent.$.messager.progress('close');
+        editgrid = editGridViewModel($('#dgProducts'), "/OrderProduct/Save/", "/OrderProduct/Delete/");
+        grid = $('#dgProducts').datagrid({
+            idField: 'Id',
+            singleSelect: true,
+            animate: true,
+            fitColumns: true,
+            url: '@Url.Action("List", "OrderProduct")/@ViewData["id"]',
+            toolbar: [{
+                id: 'btnAdd',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    editgrid.addnew({ Qty: 1, Price: 0 });
+                }
+            }, '-', {
+                id: 'btnEdit',
+                text: '保存',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    editgrid.accept();
+                }
+            }, '-', {
+                id: 'btnDelete',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    editgrid.deleterow();
+                }
+            }],
+            onDblClickRow: function (rowIndex) { editgrid.begin(rowIndex); },
+            onClickRow: function (rowIndex) { editgrid.ended(); }
+        });
+
+        $('#c_form').form({
             url: '@Url.Action("Edit", "Order")',
             onSubmit: function () {
                 parent.$.messager.progress({
@@ -24,10 +57,7 @@
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.IsSuccess) {
-                    //parent.$.modalDialog.openner_treeGrid.treegrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_treeGrid这个对象，是因为resource.jsp页面预定义好了
-                    //parent.layout_west_tree.tree('reload');
-                    parent.$.modalDialog.penner_grid.datagrid('reload');
-                    parent.$.modalDialog.handler.dialog('close');
+                    alert("修改成功！");
                 }
                 else {
                     alert(result.Result);
@@ -35,86 +65,171 @@
             }
         });
     });
-</script>
-<div class="easyui-layout" data-options="fit:true,border:false">
-    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
-        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "e_form" }))
-        {
-            <table class="grid">
-                <tr>
-                    <td align="right">主键：</td>
-                    <td align="left"><input  type='text' name='Id' id='Id' value='@Model.Id' ></input></td>
-                    <td align="right">订单编号：</td>
-                    <td align="left"><input  type='text' name='OrderNo' id='OrderNo' value='@Model.OrderNo' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">外部编号：</td>
-                    <td align="left"><input  type='text' name='OrderExNo' id='OrderExNo' value='@Model.OrderExNo' ></input></td>
-                    <td align="right">订单状态：</td>
-                    <td align="left"><input  type='text' name='Status' id='Status' value='@Model.Status' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">是否打印：</td>
-                    <td align="left"><input  type='text' name='IsPrint' id='IsPrint' value='@Model.IsPrint' ></input></td>
-                    <td align="right">合并订单：</td>
-                    <td align="left"><input  type='text' name='IsMerger' id='IsMerger' value='@Model.IsMerger' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">拆分订单：</td>
-                    <td align="left"><input  type='text' name='IsSplit' id='IsSplit' value='@Model.IsSplit' ></input></td>
-                    <td align="right">缺货订单：</td>
-                    <td align="left"><input  type='text' name='IsOutOfStock' id='IsOutOfStock' value='@Model.IsOutOfStock' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">重发订单：</td>
-                    <td align="left"><input  type='text' name='IsRepeat' id='IsRepeat' value='@Model.IsRepeat' ></input></td>
-                    <td align="right">货币：</td>
-                    <td align="left"><input  type='text' name='CurrencyCode' id='CurrencyCode' value='@Model.CurrencyCode' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">总金额：</td>
-                    <td align="left"><input  type='text' name='Amount' id='Amount' value='@Model.Amount' ></input></td>
-                    <td align="right">流水交易号：</td>
-                    <td align="left"><input  type='text' name='TId' id='TId' value='@Model.TId' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">买家：</td>
-                    <td align="left"><input  type='text' name='BuyerName' id='BuyerName' value='@Model.BuyerName' ></input></td>
-                    <td align="right">买家邮箱：</td>
-                    <td align="left"><input  type='text' name='BuyerEmail' id='BuyerEmail' value='@Model.BuyerEmail' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">买家Id：</td>
-                    <td align="left"><input  type='text' name='BuyerId' id='BuyerId' value='@Model.BuyerId' ></input></td>
-                    <td align="right">买家留言：</td>
-                    <td align="left"><input  type='text' name='BuyerMemo' id='BuyerMemo' value='@Model.BuyerMemo' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">商家留言：</td>
-                    <td align="left"><input  type='text' name='SellerMemo' id='SellerMemo' value='@Model.SellerMemo' ></input></td>
-                    <td align="right">发货方式：</td>
-                    <td align="left"><input  type='text' name='LogisticMode' id='LogisticMode' value='@Model.LogisticMode' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">国家：</td>
-                    <td align="left"><input  type='text' name='Country' id='Country' value='@Model.Country' ></input></td>
-                    <td align="right">地址Id：</td>
-                    <td align="left"><input  type='text' name='AddressId' id='AddressId' value='@Model.AddressId' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">重量：</td>
-                    <td align="left"><input  type='text' name='Weight' id='Weight' value='@Model.Weight' ></input></td>
-                    <td align="right">生成时间：</td>
-                    <td align="left"><input  type='text' name='GenerateOn' id='GenerateOn' value='@Model.GenerateOn' ></input></td>
-                </tr>
-                <tr>
-                    <td align="right">账户：</td>
-                    <td align="left"><input  type='text' name='Account' id='Account' value='@Model.Account' ></input></td>
-                    <td align="right">平台：</td>
-                    <td align="left"><input  type='text' name='Platform' id='Platform' value='@Model.Platform' ></input></td>
-                </tr>
 
-			</table>
+    function saveClick() {
+        $('#c_form').submit();
+    }
+</script>
+<body class="easyui-layout">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+                <div class="z-toolbar">
+            <a href="#" plain="true" class="easyui-linkbutton" icon="icon-save" title="保存" onclick="saveClick()">保存</a>
+            @*<a href="#" plain="true" class="easyui-linkbutton" icon="icon-undo" title="撤消" data-bind="click: rejectClick">撤消</a>*@
+        </div>
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "c_form" }))
+        {
+            <fieldset>
+                <legend>基本信息</legend>
+                <table class="grid">
+                    <tr>
+                        <td class="z-lable">订单编号：</td>
+                        <td align="left"><input type='text' name='OrderNo' id='OrderNo' class="z-txt" value="@Model.OrderNo" readonly="readonly"></input>
+                            <input type="hidden" name="Id" value="@Model.Id"/>
+                            <input type="hidden" name="Id" value="@Model.AddressId" />
+                        </td>
+                        <td class="z-lable">外部编号：</td>
+                        <td align="left"><input type='text' name='OrderExNo' id='OrderExNo'  class="z-txt"  value="@Model.OrderExNo"></input></td>
+                        <td class="z-lable">流水交易号：</td>
+                        <td align="left"><input type='text' name='TId' id='TId'  class="z-txt"  value="@Model.TId"></input></td>
+                    </tr>
+                    <tr>
+                        <td  class="z-lable">账户：</td>
+                        <td align="left"><input type='text' name='Account' id='Account'  class="z-txt"  value="@Model.Account"></input></td>
+                        <td  class="z-lable">平台：</td>
+                        <td align="left"><input type='text' name='Platform' id='Platform'  class="z-txt"  value="@Model.Platform"></input></td>
+                        <td  class="z-lable">金额：</td>
+                        <td align="left"><input type='text' name='CurrencyCode' id='CurrencyCode'  value="@Model.CurrencyCode"></input><input type='text' name='Amount' id='Amount' value="@Model.Amount"></input></td>
+
+                    </tr>
+                    <tr>
+                        <td  class="z-lable">买家：</td>
+                        <td align="left"><input type='text' name='BuyerName' id='BuyerName'  class="z-txt"  value="@Model.BuyerName"></input></td>
+                        <td  class="z-lable">买家邮箱：</td>
+                        <td align="left" colspan="3"><input type='text' name='BuyerEmail' id='BuyerEmail'  class="z-txt"  value="@Model.BuyerEmail" ></input></td>
+                        
+                    </tr>
+                    <tr>
+                        <td  class="z-lable">买家留言：</td>
+                        <td align="left" colspan="5"><textarea  name='BuyerMemo' id='BuyerMemo'  value="@Model.BuyerMemo"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td  class="z-lable">商家留言：</td>
+                        <td align="left" colspan="5"><textarea name='SellerMemo' id='SellerMemo'  value="@Model.SellerMemo"></textarea></td>
+                    </tr>
+                </table>
+            </fieldset>
+            <div id="tt" class="easyui-tabs" style="height: 250px;">
+               
+                <div title="发货地址" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td align="right" class="z-lable">收件人：</td>
+                            <td align="left"><input type='text' name='Address.Addressee' id='Address.Addressee' class="z-txt" value="@Model.Address.Addressee"></input></td>
+                            <td align="right" class="z-lable">电话：</td>
+                            <td align="left"><input type='text' name='Address.Tel' id='Address.Tel' class="z-txt" value="@Model.Address.Tel"></input></td> 
+                            <td align="right" class="z-lable">手机：</td>
+                            <td align="left"><input type='text' name='Address.Phone' id='Address.Phone' class="z-txt" value="@Model.Address.Phone"></input></td>
+                        </tr>
+                        <tr>
+                            <td align="right">街道：</td>
+                            <td align="left" colspan="5"><input type='text' name='Address.Street' id='Address.Street' class="z-txt"  value="@Model.Address.Street"></input></td>
+                           
+                        </tr>
+                        <tr>
+                            <td align="right"  class="z-lable">县：</td>
+                            <td align="left"><input type='text' name='Address.County' id='Address.County' class="z-txt"  value="@Model.Address.County"></input></td>
+                            <td align="right"   class="z-lable" >市：</td>
+                            <td align="left"><input type='text' name='Address.City' id='Address.City' class="z-txt" value="@Model.Address.City"></input></td> 
+                            <td align="right"   class="z-lable" >省：</td>
+                            <td align="left"><input type='text' name='Address.Province' id='Address.Province' class="z-txt"  value="@Model.Address.Province"></input></td>
+                        </tr>
+                        <tr>
+                           <td align="right"   class="z-lable">email：</td>
+                            <td align="left"><input type='text' name='Address.Email' id='Address.Email' class="z-txt"  value="@Model.Address.Email"></input></td>
+                            <td align="right"   class="z-lable">邮编：</td>
+                            <td align="left"><input type='text' name='Address.PostCode' id='Address.PostCode' class="z-txt"  value="@Model.Address.PostCode"></input></td>
+                            <td align="right"   class="z-lable">国家：</td>
+                            <td align="left"><input type='text' name='Address.Country' id='Address.Country' class="z-txt" value="@Model.Address.Country"></input></td>
+                        </tr>
+                    </table>
+                </div>
+                <div title="发货信息" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td align="right" class="z-lable">发货方式：</td>
+                            <td align="left"><input type='text' name='LogisticMode' id='LogisticMode' class="z-txt" value="@Model.LogisticMode"></input></td>                            <td align="right" class="z-lable">追踪码：</td>
+                            <td align="left"><input type='text' name='TrackCode' id='TrackCode' class="z-txt" value="@Model.TrackCode"></input></td> 
+                            <td align="right" class="z-lable">重  量：</td>
+                            <td align="left"><input type='text' name='Weight' id='Weight' class="z-txt" value="@Model.Weight"></input></td>
+                        </tr>
+                        <tr>
+                            <td align="right">街道：</td>
+                            <td align="left" colspan="5"><input type='text' name='Address.Street' id='Address.Street' class="z-txt"  value="@Model.Address.Street"></input></td>
+                           
+                        </tr>
+                        <tr>
+                            <td align="right"  class="z-lable">县：</td>
+                            <td align="left"><input type='text' name='Address.County' id='Address.County' class="z-txt"  value="@Model.Address.County"></input></td>
+                            <td align="right"   class="z-lable" >市：</td>
+                            <td align="left"><input type='text' name='Address.City' id='Address.City' class="z-txt" value="@Model.Address.City"></input></td> 
+                            <td align="right"   class="z-lable" >省：</td>
+                            <td align="left"><input type='text' name='Address.Province' id='Address.Province' class="z-txt"  value="@Model.Address.Province"></input></td>
+                        </tr>
+                        <tr>
+                           <td align="right"   class="z-lable">email：</td>
+                            <td align="left"><input type='text' name='Address.Email' id='Address.Email' class="z-txt"  value="@Model.Address.Email"></input></td>
+                            <td align="right"   class="z-lable">邮编：</td>
+                            <td align="left"><input type='text' name='Address.PostCode' id='Address.PostCode' class="z-txt"  value="@Model.Address.PostCode"></input></td>
+                            <td align="right"   class="z-lable">国家：</td>
+                            <td align="left"><input type='text' name='Address.Country' id='Address.Country' class="z-txt" value="@Model.Address.Country"></input></td>
+                        </tr>
+                    </table>
+                </div>
+                 <div title="产品信息" style="padding: 20px;">
+          <table id="dgProducts"  rownumbers="true" singleselect="true">
+            <thead>
+                <tr>
+                    <th field="ExSKU" width="80" data-options="editor:'text'"  value="@Model.OrderNo">ExSKU
+                    </th>
+                    <th field="Title" width="100" data-options="editor:'text'">名称
+                    </th>
+                    <th field="SKU" width="80" data-options="
+                        editor:{
+							type:'combogrid',
+							options:{
+								panelWidth: 410,
+                                mode: 'remote',
+                                idField: 'SKU',
+                                textField: 'SKU',
+                                url: '/Product/GetListBySKU',
+                                fit: true,
+                                required:true,
+                                columns: [[
+                                    { field: 'SKU', title: 'SKU', width: 100 },
+                                    { field: 'Title', title: 'Title', width: 200 },
+                                    { field: 'Standard', title: '规格', width: 100 }
+                                ]]
+							}
+						}
+                        ">SKU
+                    </th>
+                    <th field="Qty" width="80" data-options="editor:{ type: 'numberbox'}">数量
+                    </th>
+                    <th field="Standard" width="80" data-options="editor:'text'">规格
+                    </th>
+                    <th field="Remark" width="100" data-options="editor:'text'">描述
+                    </th>
+                    <th field="Price" width="80" data-options="editor:{ type: 'numberbox', options: { precision: 5 }}">价格
+                    </th>
+                    <th field="ImgUrl" width="100" data-options="editor:'text'">网址
+                    </th>
+                </tr>
+            </thead>
+        </table>
+
+                </div>
+            </div>
         }
     </div>
-</div>
+
+</body>

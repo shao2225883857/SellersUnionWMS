@@ -1,5 +1,5 @@
 ﻿//--------------------------------------------------------------------
-// All Rights Reserved , Copyright (C) 2012-12-30 , Dean TECH, Ltd.
+// All Rights Reserved , Copyright (C) 2014-01-06 , Dean TECH, Ltd.
 //--------------------------------------------------------------------
 
 using System;
@@ -10,7 +10,7 @@ namespace Sellers.WMS.Domain
 {
 
     /// <summary>
-    /// OrderAddresType
+    /// OrderAddressType
     /// 订单买家地址表
     /// 
     /// 修改纪录

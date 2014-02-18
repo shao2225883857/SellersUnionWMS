@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sellers.WMS.Domain", "Selle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sellers.WMS.Generator", "Sellers.WMS.Generator\Sellers.WMS.Generator.csproj", "{6C026A21-DD98-49AB-B46C-D9609789CC9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sellers.Cheng.Test", "Sellers.Cheng.Test\Sellers.Cheng.Test.csproj", "{E5FA20A3-656D-498C-8B30-281CAC2F94C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cheng", "cheng", "{549C1057-8B36-41FE-B9CD-1467DA50B4F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,8 +53,15 @@ Global
 		{6C026A21-DD98-49AB-B46C-D9609789CC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C026A21-DD98-49AB-B46C-D9609789CC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C026A21-DD98-49AB-B46C-D9609789CC9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FA20A3-656D-498C-8B30-281CAC2F94C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FA20A3-656D-498C-8B30-281CAC2F94C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FA20A3-656D-498C-8B30-281CAC2F94C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FA20A3-656D-498C-8B30-281CAC2F94C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E5FA20A3-656D-498C-8B30-281CAC2F94C7} = {549C1057-8B36-41FE-B9CD-1467DA50B4F7}
 	EndGlobalSection
 EndGlobal

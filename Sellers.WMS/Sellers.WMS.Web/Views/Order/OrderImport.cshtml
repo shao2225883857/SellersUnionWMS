@@ -146,37 +146,6 @@
 <body class="easyui-layout">
     <div region="center">
         <div id="tt" class="easyui-tabs" style="width: 600px; height: 400px;">
-            <div title="订单导入" style="padding: 20px;">
-                @using (Html.BeginForm("ImportData", "Order", FormMethod.Post, new { id = "c_Import" }))
-                {
-                    <table class="dv-table" border="0" style="width: 400px; height: 250px;">
-                        <tr>
-                            <td>平台:</td>
-                            <td>
-                                <input id="Platform" name="Platform" /></td>
-                        </tr>
-                        <tr>
-                            <td>账户:</td>
-                            <td>
-                                <input id="Account" name="Account" /></td>
-                        </tr>
-                        <tr>
-                            <td>文件:</td>
-                            <td>
-                                <input id="hfile" type="hidden" value="" name="hfile" />
-                                <input id="up_file" type="file" name="up_file" /></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <a href="#" class="easyui-linkbutton" onclick="addOrder()" data-options="iconCls:'icon-add'">导入订单</a>
-                                <a href="#" class="easyui-linkbutton" onclick="importAmount()" data-options="iconCls:'icon-add'">导入金额</a>
-                            </td>
-                        </tr>
-                    </table>
-                }
-            </div>
-
             <div title="订单同步" style="overflow: auto; padding: 20px;">
                 @using (Html.BeginForm("SynData", "Order", FormMethod.Post, new { id = "SynData" }))
                 {
@@ -212,6 +181,38 @@
                     </table>
                 }
             </div>
+            <div title="订单导入" style="padding: 20px;">
+                @using (Html.BeginForm("ImportData", "Order", FormMethod.Post, new { id = "c_Import" }))
+                {
+                    <table class="dv-table" border="0" style="width: 400px; height: 250px;">
+                        <tr>
+                            <td>平台:</td>
+                            <td>
+                                <input id="Platform" name="Platform" /></td>
+                        </tr>
+                        <tr>
+                            <td>账户:</td>
+                            <td>
+                                <input id="Account" name="Account" /></td>
+                        </tr>
+                        <tr>
+                            <td>文件:</td>
+                            <td>
+                                <input id="hfile" type="hidden" value="" name="hfile" />
+                                <input id="up_file" type="file" name="up_file" /></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#" class="easyui-linkbutton" onclick="addOrder()" data-options="iconCls:'icon-add'">导入订单</a>
+                                <a href="#" class="easyui-linkbutton" onclick="importAmount()" data-options="iconCls:'icon-add'">导入金额</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+
+            
         </div>
     </div>
 </body>

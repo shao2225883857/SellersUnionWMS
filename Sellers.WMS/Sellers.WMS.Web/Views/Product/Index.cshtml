@@ -10,7 +10,7 @@
                 url: '@Url.Action("List", "Product")',
                 idField: 'Id',
                 iconCls: 'icon-view',
-                height: 600,
+                height: 420,
                 width: function () { return document.body.clientWidth * 0.9 },
                 nowrap: true,
                 singleSelect: true,
@@ -25,23 +25,19 @@
                     { title: '主键', field: 'Id', width: 100, sortable: true, hidden: true },
                     { title: '主编号', field: 'TempSKU', width: 100, sortable: true, align: 'center' },
                     { title: '商品编号', field: 'SKU', width: 100, sortable: true, align: 'center' },
-                    { title: '商品名称', field: 'Title', width: 100, sortable: true, align: 'center' },
-                    { title: '图片', field: 'ImgPath', width: 100, sortable: true, align: 'center', formatter: getSmallImg },
-                    { title: '商品状态', field: 'Status', width: 100, sortable: true, align: 'center' },
-                    { title: '商品特性', field: 'ProductAttr', width: 100, sortable: true, align: 'center' },
+                      { title: '图片', field: 'ImgPath', width: 100, sortable: true, align: 'center', formatter: getSmallImg },
+                    { title: '标题', field: 'Title', width: 100, sortable: true, align: 'center' },
+                    { title: '状态', field: 'Status', width: 80, sortable: true, align: 'center' },
+                    { title: '商品特性', field: 'ProductAttr', width: 80, sortable: true, align: 'center' },
                     { title: '类别', field: 'Category', width: 100, sortable: true, align: 'center' },
-                    { title: '型号', field: 'Model', width: 100, sortable: true, align: 'center' },
-                    { title: '品牌', field: 'Brand', width: 100, sortable: true, align: 'center' },
                     { title: '规格', field: 'Standard', width: 100, sortable: true, align: 'center' },
-                    { title: '商品价格', field: 'Price', width: 100, sortable: true, align: 'center' },
-                    { title: '重量', field: 'Weight', width: 100, sortable: true, align: 'center' },
-                    { title: '7Day', field: 'Day7', width: 100, sortable: true, align: 'center' },
-                    { title: '15Day', field: 'Day15', width: 100, sortable: true, align: 'center' },
-                    { title: '30Day', field: 'Day30', width: 100, sortable: true, align: 'center' },
-                    { title: '长', field: 'Long', width: 100, sortable: true, align: 'center' },
-                    { title: '宽', field: 'Wide', width: 100, sortable: true, align: 'center' },
-                    { title: '高', field: 'High', width: 100, sortable: true, align: 'center' },
-                    { title: '库存天数', field: 'DayByStock', width: 100, sortable: true, align: 'center' }
+                    { title: '价格', field: 'Price', width: 80, sortable: true, align: 'center' },
+                    { title: '重量', field: 'Weight', width: 80, sortable: true, align: 'center' },
+                    { title: '7Day', field: 'Day7', width: 100, sortable: true, align: 'center', formatter:showSales },
+                    { title: '长宽高', field: 'Long', width: 100, sortable: true, align: 'center', formatter: showVol },
+                    { title: '库存天数', field: 'DayByStock', width: 100, sortable: true, align: 'center' },
+                    { title: '型号', field: 'Model', width: 100, sortable: true, align: 'center' },
+                    { title: '品牌', field: 'Brand', width: 100, sortable: true, align: 'center' }
                 ]],
                 toolbar: '#toolbar',
                 rowStyler: function (index, row, css) {
@@ -85,16 +81,30 @@
             });
         });
 
+        function showVol(v,r,i) {
+            return v + '*' + r.Wide + '*' + r.High;
+        }
+
+        function showSales(v,r,i) {
+            return v + '/' + r.Day15 + '/' + r.Day30;
+        }
+
         function addClick() {
             openTab("官品管理-添加商品", '@Url.Action("Create", "Product")', true);
 
         }
         function editClick() {
             var id = getselectedRow(grid);
-            openTab("官品管理-编辑商品", '@Url.Action("Edit", "Product")/'+id, true);
+            openTab("官品管理-编辑商品", '@Url.Action("Edit", "Product")/' + id, true);
 
         }
 
+        function delClick() {
+            var id = getselectedRow(grid);
+            del(grid, '@Url.Action("Delete", "Product")/' + id, 0);
+
+
+        }
 
 
         function doSearch() {
@@ -145,7 +155,6 @@
                     <td><input type='text' id='txtTitle' /></td>
                     <td class="z-searchlable">商品状态:</td>
                     <td><input type='text' id='txtStatus' /></td>
-
                 </tr>
                 <tr>
                     <td class="z-searchlable">商品特性:</td>

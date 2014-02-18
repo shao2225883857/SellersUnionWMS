@@ -38,7 +38,7 @@ namespace Sellers.WMS.Web.Controllers
         /// 加载工具栏  
         /// </summary>  
         /// <returns>工具栏HTML</returns>  
-        public override string BuildToolBarButtons()
+        public override string BuildToolBarButtons(int t = 0)
         {
             StringBuilder sb = new StringBuilder();
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
@@ -69,6 +69,7 @@ namespace Sellers.WMS.Web.Controllers
         public JsonResult Create(UserType obj)
         {
             obj.LastVisit = DateTime.Now;
+           
             RoleType role = this.Get<RoleType>(obj.RoleId);
             if (role != null)
                 obj.RoleName = role.Realname;

@@ -7,6 +7,7 @@ using System.Web;
 using NHibernate;
 using Sellers.WMS.Data.Repository;
 using Sellers.WMS.Domain;
+using Sellers.WMS.Utils.Extensions;
 using Sellers.WMS.Web.Controllers;
 using Sellers.WMS.Web.Controllers.Filters;
 
@@ -17,15 +18,29 @@ namespace Sellers.WMS.Web
 
         public const string ImgPath = "/Product/Images/";
 
+
         public static object obj1 = new object();
 
         public static string GetOrderNo(ISession NSession)
+        {
+            return GetNo(NSession, "OrderNo");
+        }
+        public static string GetSKUNo(ISession NSession)
+        {
+            return GetNo(NSession, "SKUNo");
+        }
+
+
+        public static string GetNo(ISession NSession, string NoType)
         {
             lock (obj1)
             {
                 string result = string.Empty;
                 NSession.Clear();
-                IList<SerialNumberType> list = NSession.CreateQuery(" from SerialNumberType where Code=:p").SetString("p", "OrderNo").List<SerialNumberType>();
+                IList<SerialNumberType> list =
+                    NSession.CreateQuery(" from SerialNumberType where Code=:p").SetString("p", NoType).List
+                        <SerialNumberType>();
+
                 if (list.Count > 0)
                 {
                     list[0].BeginNo = list[0].BeginNo + 1;
@@ -33,9 +48,20 @@ namespace Sellers.WMS.Web
                     NSession.Flush();
                     return list[0].BeginNo.ToString();
                 }
+                else
+                {
+                    SerialNumberType snt = new SerialNumberType();
+                    snt.BeginNo = 1;
+                    snt.Code = NoType;
+                    NSession.Save(snt);
+                    NSession.Flush();
+                    return snt.BeginNo.ToString();
+                }
                 return "";
             }
         }
+
+
 
         public static DateTime GetAliDate(string DateStr)
         {
@@ -51,6 +77,27 @@ namespace Sellers.WMS.Web
             oada.Fill(ds);
             return ds.Tables[0];
         }
+
+        #region 获得返回的数据
+        public static ResultInfo GetResult(string key, string info, string result, string field1, string field2, string field3, string field4)
+        {
+            ResultInfo r = new ResultInfo();
+            r.Field1 = field1;
+            r.Field2 = field2;
+            r.Field3 = field3;
+            r.Field4 = field4;
+            r.Key = key;
+            r.Info = info;
+            r.Result = result;
+            r.CreateOn = DateTime.Now;
+            return r;
+        }
+
+        public static ResultInfo GetResult(string key, string info, string result)
+        {
+            return GetResult(key, info, result, "", "", "", "");
+        }
+        #endregion
 
         public static ArrayList ExcelSheetName(string filepath)
         {
@@ -99,8 +146,6 @@ namespace Sellers.WMS.Web
         /// <param name="Obj">[0]:Name,[1]:Value</param>
         public static void CreateCookies(string u, string p, int t)
         {
-
-
             try
             {
                 HttpCookie cookie = new HttpCookie("sellersUser")
@@ -152,7 +197,6 @@ namespace Sellers.WMS.Web
 
         public static bool LoginByUser(string p, string u, ISession NSession)
         {
-
             IList<UserType> list = NSession.CreateQuery(" from  UserType where Username=:p1 and Password=:p2").SetString("p1", p).SetString("p2", u).List<UserType>();
             if (list.Count > 0)
             {   //登录成功
@@ -164,7 +208,7 @@ namespace Sellers.WMS.Web
                         SetString("p1", ResourceCategoryEnum.User.ToString()).SetInt32("p2", user.Id).List
                         <PermissionScopeType>();
                 NSession.Flush();
-                //GetPM(user, NSession);
+                
                 System.Web.HttpContext.Current.Session["user"] = user;
                 return true;
             }

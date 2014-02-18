@@ -59,6 +59,7 @@
     <Compile Include="Entities\PermissionItemType.cs" />
     <Compile Include="Entities\PermissionScopeType.cs" />
     <Compile Include="Entities\PermissionType.cs" />
+    <Compile Include="Entities\PrintDataType.cs" />
     <Compile Include="Entities\PrintTemplateType.cs" />
     <Compile Include="Entities\ProductCategoryType.cs" />
     <Compile Include="Entities\ProductComposeType.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Entities\ProductPriceRecrodType.cs" />
     <Compile Include="Entities\ProductSKUType.cs" />
     <Compile Include="Entities\ProductType.cs" />
+    <Compile Include="Entities\ReturnAddressType.cs" />
     <Compile Include="Entities\RoleType.cs" />
     <Compile Include="Entities\SerialNumberType.cs" />
     <Compile Include="Entities\SKUCodeType.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Mappings\PermissionItemTypeMap.cs" />
     <Compile Include="Mappings\PermissionScopeTypeMap.cs" />
     <Compile Include="Mappings\PermissionTypeMap.cs" />
+    <Compile Include="Mappings\PrintDataTypeMapMap.cs" />
     <Compile Include="Mappings\PrintTemplateTypeMap.cs" />
     <Compile Include="Mappings\ProductCategoryTypeMap.cs" />
     <Compile Include="Mappings\ProductComposeTypeMap.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Mappings\ProductPriceRecrodTypeMap.cs" />
     <Compile Include="Mappings\ProductSKUTypeMap.cs" />
     <Compile Include="Mappings\ProductTypeMap.cs" />
+    <Compile Include="Mappings\ReturnAddressTypeMap.cs" />
     <Compile Include="Mappings\RoleTypeMap.cs" />
     <Compile Include="Mappings\SerialNumberTypeMap.cs" />
     <Compile Include="Mappings\SKUCodeTypeMap.cs" />

@@ -37,6 +37,7 @@ namespace Sellers.WMS.Domain
             Map(x => x.IsPrint);
             Map(x => x.IsMerger);
             Map(x => x.IsSplit);
+            Map(x => x.Enabled);
             Map(x => x.IsOutOfStock);
             Map(x => x.IsRepeat);
             Map(x => x.CurrencyCode).Length(10);
@@ -47,11 +48,14 @@ namespace Sellers.WMS.Domain
             Map(x => x.BuyerId);
             Map(x => x.BuyerMemo).Length(1000);
             Map(x => x.SellerMemo).Length(1000);
-            Map(x => x.LogisticMode).Length(40);
+            Map(x => x.LogisticMode).Length(200);
+            Map(x => x.TrackCode).Length(200);
             Map(x => x.Country).Length(40);
             Map(x => x.AddressId);
             Map(x => x.Weight);
             Map(x => x.GenerateOn);
+            Map(x => x.ScanOn);
+            Map(x => x.ScanBy);
             Map(x => x.Account).Length(40);
             Map(x => x.Platform).Length(40);
         }

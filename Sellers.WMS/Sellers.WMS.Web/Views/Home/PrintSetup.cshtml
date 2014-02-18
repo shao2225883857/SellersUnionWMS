@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "PrintSetup";
+}
+<script>
+
+    $(function() {
+        $('#PrintTemp').combobox({
+            url: '/PrintTemplate/GetListByClass/Order',
+            valueField: 0,
+            textField: 1,
+            required: true,
+            width: 300,
+            panelHeight: 'auto'
+        });
+        comboboxInit('@Url.Action("List", "ReturnAddress")', 'page=1&rows=100', "ReturnAddress", 'Id', 'Street', 300);
+    });
+
+
+    function showPrintWindow() {
+        $.ajax({
+            type: "POST",
+            url: "/Home/SetPrintData",
+            data:  "&r=" + $("#ReturnAddress").combobox("getValue") + "&ids=" + $("#txtData").val(),
+            success: function (msg) {
+                if (msg.IsSuccess != "") {
+                    $('#printdata').val(msg.Result);
+                    window.open('/Home/PrintDetail/' + $("#PrintTemp").combobox("getValue"));
+                }
+            }
+        });
+    }
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;">
+        <table style="margin-left: 20px; margin-top: 50px;">
+            <tr>
+                <td>打印模板</td>
+                <td>
+                    <input type="text" id="PrintTemp" /></td>
+            </tr>
+            <tr>
+                <td>回邮地址</td>
+                <td>
+                    <input type="text" id="ReturnAddress" />
+                </td>
+            </tr>
+            <tr>
+                <td>打印数据</td>
+                <td><input type="hidden" id="printdata" />
+                    <textarea style="width: 600px; height: 300px;" id="txtData">@ViewData["ids"]</textarea></td>
+            </tr>
+  
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" onclick="showPrintWindow()" value="打印" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

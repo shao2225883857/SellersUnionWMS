@@ -120,14 +120,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\MenuItem.cs" />
+    <Compile Include="Common\OrderHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DataDictionaryController.cs" />
     <Compile Include="Controllers\DataDictionaryDetailController.cs" />
-    <Compile Include="Controllers\Filters\Common.cs" />
-    <Compile Include="Controllers\Filters\Enums.cs" />
+    <Compile Include="Common\Common.cs" />
+    <Compile Include="Common\Enums.cs" />
     <Compile Include="Controllers\Filters\ErrorAttribute.cs" />
     <Compile Include="Controllers\Filters\ExceptionFilterAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Controllers\ProductImgController.cs" />
     <Compile Include="Controllers\ProductPriceRecrodController.cs" />
     <Compile Include="Controllers\ProductSKUController.cs" />
+    <Compile Include="Controllers\ReturnAddressController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SerialNumberController.cs" />
     <Compile Include="Controllers\SKUCodeController.cs" />
@@ -174,6 +176,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\Themes\icons\jbox-icons-ie6.gif" />
+    <Content Include="Content\Themes\icons\jbox-icons.png" />
     <Content Include="Images\Default.css" />
     <Content Include="Images\user_all_bg.gif" />
     <Content Include="Images\user_bottom_c.gif" />
@@ -507,6 +511,11 @@
     <Content Include="Scripts\EasyUI\plugins\jquery.validatebox.js" />
     <Content Include="Scripts\EasyUI\plugins\jquery.window.js" />
     <Content Include="Scripts\knockout-3.0.0.js" />
+    <Content Include="Scripts\Report\CreateControl.js" />
+    <Content Include="Scripts\Report\grbsctl5.cab" />
+    <Content Include="Scripts\Report\grbsctl5.exe" />
+    <Content Include="Scripts\Report\GRInstall.js" />
+    <Content Include="Scripts\Report\GRUtility.js" />
     <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\ViewModel.js" />
     <Content Include="Content\Themes\black\accordion.css" />
@@ -997,6 +1006,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
+    <Content Include="TextFile1.txt" />
+    <Content Include="TextFile2.txt" />
     <Content Include="Uploads\20131224\07dd304a-3541-4cf2-87cb-2df9b6f75932.png" />
     <Content Include="Uploads\20131224\26b8f802-9367-48d8-aeb4-aa6e1c5fe3c8.png" />
     <Content Include="Uploads\20131224\3da94d3d-0288-46a7-b011-2baa1e5e44d8.png" />
@@ -1243,11 +1254,11 @@
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Views\User\SetupUserModule.cshtml" />
     <Content Include="Views\Home\GetAliexpressAuthCode.cshtml" />
-    <Content Include="Views\OrderAddres\Create.cshtml" />
-    <Content Include="Views\OrderAddres\Delete.cshtml" />
-    <Content Include="Views\OrderAddres\Details.cshtml" />
-    <Content Include="Views\OrderAddres\Edit.cshtml" />
-    <Content Include="Views\OrderAddres\Index.cshtml" />
+    <Content Include="Views\OrderAddress\Create.cshtml" />
+    <Content Include="Views\OrderAddress\Delete.cshtml" />
+    <Content Include="Views\OrderAddress\Details.cshtml" />
+    <Content Include="Views\OrderAddress\Edit.cshtml" />
+    <Content Include="Views\OrderAddress\Index.cshtml" />
     <Content Include="Views\OrderBuyer\Create.cshtml" />
     <Content Include="Views\OrderBuyer\Delete.cshtml" />
     <Content Include="Views\OrderBuyer\Details.cshtml" />
@@ -1263,6 +1274,18 @@
     <Content Include="Views\Order\Edit.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderImport.cshtml" />
+    <Content Include="Views\Home\PrintDesign.cshtml" />
+    <Content Include="Views\Home\PrintDetail.cshtml" />
+    <Content Include="Views\Home\PrintSetup.cshtml" />
+    <Content Include="Views\ReturnAddress\Create.cshtml" />
+    <Content Include="Views\ReturnAddress\Delete.cshtml" />
+    <Content Include="Views\ReturnAddress\Details.cshtml" />
+    <Content Include="Views\ReturnAddress\Edit.cshtml" />
+    <Content Include="Views\ReturnAddress\Index.cshtml" />
+    <Content Include="Views\Order\OrderSend.cshtml" />
+    <Content Include="Views\Order\UnHandIndex.cshtml" />
+    <Content Include="Views\Product\AutoCreate.cshtml" />
+    <Content Include="Views\Order\OrderExport.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

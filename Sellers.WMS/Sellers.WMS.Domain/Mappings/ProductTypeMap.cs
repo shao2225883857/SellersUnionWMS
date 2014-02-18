@@ -48,6 +48,7 @@ namespace Sellers.WMS.Domain
             Map(x => x.Long);
             Map(x => x.Wide);
             Map(x => x.High);
+            Map(x => x.PType);
             Map(x => x.DayByStock);
             Map(x => x.Memo).Length(2000);
             Map(x => x.ImgPath).Length(300);

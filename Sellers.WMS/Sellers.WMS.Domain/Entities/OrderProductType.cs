@@ -72,6 +72,11 @@ namespace Sellers.WMS.Domain
         public virtual String Standard { get; set; }
 
         /// <summary>
+        /// 产品状态0：正常，1：缺货，2：停产，3：该产品已经占用了库存
+        /// </summary>
+        public virtual int Status { get; set; }
+
+        /// <summary>
         /// 产品价格
         /// </summary>
         public virtual double Price { get; set; }

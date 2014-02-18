@@ -24,22 +24,22 @@ namespace Sellers.WMS.Utils.AbstractModel
         /// <summary>
         /// 数据创建时间
         /// </summary>
-        public virtual DateTime CreateOn { get; private set; }
+        public virtual DateTime CreateOn { get; set; }
 
         /// <summary>
         /// 创建人
         /// </summary>
-        public virtual String CreateBy { get; private set; }
+        public virtual String CreateBy { get; set; }
 
         /// <summary>
         /// 修改时间
         /// </summary>
-        public virtual DateTime ModifyOn { get; private set; }
+        public virtual DateTime ModifyOn { get; set; }
 
         /// <summary>
         /// 修改人
         /// </summary>
-        public virtual String ModifyBy { get; private set; }
+        public virtual String ModifyBy { get; set; }
 
 
         public virtual void SetId(int id)

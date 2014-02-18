@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "OrderExport";
+}
+
+<script type="text/javascript">
+    function exportexcel(t) {
+        var search = "st=" + $('#st').combobox("getValue") + "&" + "et=" + $('#et').combobox("getValue");
+        var postUrl = "/Order/ExportDown/1";
+        jQuery.ajax({
+            url: "/Order/ExportOrder/",
+            type: "post",
+            data: search,
+            success: function (sss) {
+                location.href = postUrl;
+            }
+        });
+    }
+</script>
+<body class="easyui-layout">
+    <div region="center">
+        开始：<input type="text" id="st" name="st" class="easyui-datetimebox" style="width: 150px" />
+        结束：<input type="text" id="et" name="et" class="easyui-datetimebox" style="width: 150px" />
+        <input type="button" value="导出清单" onclick="exportexcel()" />
+    </div>
+</body>
+

@@ -1,0 +1,53 @@
+﻿@model Sellers.WMS.Domain.ReturnAddressType
+
+@{
+   Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Sellers.WMS.Domain.ReturnAddressType</title>
+</head>
+<body>
+<fieldset>
+    <legend>Sellers.WMS.Domain.ReturnAddressType</legend>
+    <div class="display-label">主键</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Id)
+    </div>
+
+    <div class="display-label">发件人</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RetuanName)
+    </div>
+
+    <div class="display-label">手机</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Phone)
+    </div>
+
+    <div class="display-label">电话</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tel)
+    </div>
+
+    <div class="display-label">邮编</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PostCode)
+    </div>
+
+    <div class="display-label">地址</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Street)
+    </div>
+
+
+</fieldset>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>
+</body>
+</html>

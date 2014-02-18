@@ -47,6 +47,11 @@ namespace Sellers.WMS.Domain
         public virtual string Status { get; set; }
 
         /// <summary>
+        /// 启用
+        /// </summary>
+        public virtual int Enabled { get; set; }
+
+        /// <summary>
         /// 是否打印
         /// </summary>
         public virtual int IsPrint { get; set; }
@@ -117,6 +122,11 @@ namespace Sellers.WMS.Domain
         public virtual String LogisticMode { get; set; }
 
         /// <summary>
+        /// 发货方式
+        /// </summary>
+        public virtual String TrackCode { get; set; }
+
+        /// <summary>
         /// 国家
         /// </summary>
         public virtual String Country { get; set; }
@@ -137,9 +147,23 @@ namespace Sellers.WMS.Domain
         public virtual DateTime GenerateOn { get; set; }
 
         /// <summary>
+        /// 生成时间
+        /// </summary>
+        public virtual DateTime ScanOn { get; set; }
+        /// <summary>
+        /// 生成时间
+        /// </summary>
+        public virtual string ScanBy { get; set; }
+
+        /// <summary>
         /// 账户
         /// </summary>
         public virtual String Account { get; set; }
+
+        /// <summary>
+        /// ValiInfo
+        /// </summary>
+        public virtual String ValiInfo { get; set; }
 
         /// <summary>
         /// 平台
@@ -147,6 +171,8 @@ namespace Sellers.WMS.Domain
         public virtual String Platform { get; set; }
 
         public virtual List<OrderProductType> ProductList { get; set; }
+
+        public virtual OrderAddressType Address { get; set; }
 
     }
 }

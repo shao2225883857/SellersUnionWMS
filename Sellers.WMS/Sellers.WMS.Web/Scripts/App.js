@@ -2,8 +2,8 @@
 /******
 定义各种参数
 */
-var checks = [["1", "是"], ["0", "否"]];
-var checksall = [["ALL", "ALL"], ["1", "是"], ["0", "否"]];
+var checks = [["1", "是"], ["2", "否"]];
+var checksall = [["0", "===请选择==="], ["1", "是"], ["2", "否"]];
 var checkSex = [["男", "男"], ["女", "女"]];;
 
 
@@ -90,6 +90,21 @@ function getselectedRow(gird) {
     return (undefined);
 }
 
+//获取选中行(多行)
+function getselectedRows(gird, c) {
+    if (!c) c = "Id";
+    var rows = gird.datagrid('getSelections');
+    var ids = [];
+    for (var i = 0; i < rows.length; i++) {
+        ids.push(rows[i][c]);
+    }
+    if (ids.length == 0)
+        $.messager.alert('操作提示', '请选择数据!', 'warning');
+    else
+        return ids;
+    return (undefined);
+}
+
 //删除的按钮
 function del(grid, url, t) {
     var rows = grid.datagrid('getSelections');
@@ -128,7 +143,7 @@ function del(grid, url, t) {
     });
 };
 
-function comboboxInit(url, postdata, combo, vf, tf, h) {
+function comboboxInit(url, postdata, combo, vf, tf, w,h) {
     $.ajax({
         url: url,
         type: "post",
@@ -139,7 +154,7 @@ function comboboxInit(url, postdata, combo, vf, tf, h) {
                 valueField: vf,
                 textField: tf,
                 panelHeight: 'auto',
-                width: 150,
+                width: w||150,
                 onLoadSuccess: function () { //加载完成后,设置选中第一项
                     var val = $(this).combobox("getData");
                     for (var item in val[0]) {
@@ -155,6 +170,30 @@ function comboboxInit(url, postdata, combo, vf, tf, h) {
                 },
             });
         }
+    });
+}
+
+//messagex
+
+function showSuccessMessage() {
+    MessagetopCenter("设置成功!");
+}
+function showErrorMessage() {
+    MessagetopCenter("设置失败!");
+}
+
+function MessagetopCenter(m, t) {
+    t = t || "提示";
+    $.messager.show({
+        title: t,
+        msg: m,
+        showType: 'slide',
+        style: {
+            right: '',
+            top: (document.body.scrollTop + document.documentElement.scrollTop),
+            bottom: ''
+        },
+        timeout: 2000
     });
 }
 
@@ -191,7 +230,28 @@ $.modalDialog = function (options) {
         return $.modalDialog.handler = $('<div/>').dialog(opts);
     }
 };
-
+//编辑表格中的datagrid
+$.extend($.fn.datagrid.defaults.editors, {
+    combogrid: {
+        init: function (container, options) {
+            var input = $('<input type="text" class="datagrid-editable-input">').appendTo(container);
+            input.combogrid(options);
+            return input;
+        },
+        destroy: function (target) {
+            $(target).combogrid('destroy');
+        },
+        getValue: function (target) {
+            return $(target).combogrid('getValue');
+        },
+        setValue: function (target, value) {
+            $(target).combogrid('setValue', value);
+        },
+        resize: function (target, width) {
+            $(target).combogrid('resize', width);
+        }
+    }
+});
 //跳出弹窗
 function showdlg(url, dlg, handle) {
     var downloadHelper = $('<iframe style="display:none;" id="dlg"></iframe>').appendTo('body')[0];
@@ -275,6 +335,7 @@ function editGridViewModel(grid, saveurl, delurl) {
         grid.datagrid('selectRow', self.editIndex);
         return false;
     };
+    
     self.addnew = function (rowData) {
         if (self.ended()) {
             if (Object.prototype.toString.call(rowData) != '[object Object]') rowData = {};
@@ -285,6 +346,7 @@ function editGridViewModel(grid, saveurl, delurl) {
             self.begin(self.editIndex, rowData);
         }
     };
+    
     self.deleterow = function () {
         var selectRow = grid.datagrid('getSelected');
         if (selectRow) {
@@ -292,9 +354,9 @@ function editGridViewModel(grid, saveurl, delurl) {
             if (selectIndex == self.editIndex) {
                 grid.datagrid('cancelEdit', self.editIndex);
                 self.editIndex = undefined;
-              
+
             }
-            $.post(delurl,"id="+selectRow.Id, function (rsp) {
+            $.post(delurl, "id=" + selectRow.Id, function (rsp) {
                 if (rsp.IsSuccess) {
                     $.messager.show({
                         title: '提示',
@@ -311,7 +373,6 @@ function editGridViewModel(grid, saveurl, delurl) {
                     showType: 'slide'
                 });
             });
-           
             grid.datagrid('deleteRow', selectIndex);
         }
     };
@@ -329,8 +390,8 @@ function editGridViewModel(grid, saveurl, delurl) {
         if (!include) include = [], ignore = true;
         alert("放弃本方法，使用实时保存模式");
         //var deleted = utils.filterProperties(grid.datagrid('getChanges', "deleted"), include, ignore),
-        //    updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
-        //    inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
+        //var updated = utils.filterProperties(grid.datagrid('getChanges', "updated"), include, ignore),
+        //var inserted = utils.filterProperties(grid.datagrid('getChanges', "inserted"), include, ignore);
         //var changes = { deleted: deleted, inserted: utils.minusArray(inserted, deleted), updated: utils.minusArray(updated, deleted) };
         //changes._changed = (changes.deleted.length + changes.updated.length + changes.inserted.length) > 0;
         return changes;

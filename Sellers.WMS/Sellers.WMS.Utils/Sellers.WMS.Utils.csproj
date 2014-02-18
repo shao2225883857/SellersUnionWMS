@@ -72,8 +72,10 @@
     <Compile Include="Exceptions\OITException.cs" />
     <Compile Include="Exceptions\RepositoryException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
+    <Compile Include="Extensions\EachHelper.cs" />
     <Compile Include="Extensions\EasyUICommon.cs" />
     <Compile Include="Extensions\EasyUIUtil.cs" />
+    <Compile Include="Extensions\ExcelHelper.cs" />
     <Compile Include="Extensions\ImageUtil.cs" />
     <Compile Include="Extensions\ResultInfo.cs" />
     <Compile Include="Extensions\ZConvert.cs" />

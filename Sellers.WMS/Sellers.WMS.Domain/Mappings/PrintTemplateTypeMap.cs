@@ -34,7 +34,7 @@ namespace Sellers.WMS.Domain
             Map(x => x.Code).Length(50);
             Map(x => x.TempName).Length(50);
             Map(x => x.TempType).Length(50);
-            Map(x => x.Content);
+            Map(x => x.Content).CustomType("StringClob").CustomSqlType("ntext");
             Map(x => x.Description).Length(200);
         }
     }

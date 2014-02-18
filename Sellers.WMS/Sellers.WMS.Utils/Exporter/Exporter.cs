@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json;
+using Sellers.WMS.Utils.Extensions;
 
 namespace Sellers.WMS.Utils.Exporter
 {
@@ -178,6 +179,8 @@ namespace Sellers.WMS.Utils.Exporter
 
             return this;
         }
+
+
 
         public Exporter Compress(string type)
         {

@@ -5,11 +5,12 @@
 }
 
 <script type="text/javascript">
-
+    var editgrid;
 	$(function () {
-		//parent.$.messager.progress('close');
+	    //parent.$.messager.progress('close');
+	    
         $('#c_form').form({
-            url: '@Url.Action("Create", "OrderAddres")',
+            url: '@Url.Action("Create", "OrderAddress")',
             onSubmit: function () {
                 parent.$.messager.progress({
                     title: '提示',

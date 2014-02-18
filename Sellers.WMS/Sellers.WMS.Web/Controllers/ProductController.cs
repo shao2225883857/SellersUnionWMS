@@ -22,6 +22,19 @@ namespace Sellers.WMS.Web.Controllers
             return View();
         }
 
+
+        public string BuildCheckBoxList(string name, List<DataDictionaryDetailType> dics)
+        {
+            string ck_template =
+                "<label class='type-check-box-label'><input name='{0}' type='checkbox' id='{0}' value='{1}'><span>{2}</span></label>";
+            StringBuilder sb = new StringBuilder();
+            foreach (DataDictionaryDetailType obj in dics)
+            {
+                sb.AppendLine(string.Format(ck_template, name, obj.DicValue, obj.FullName));
+            }
+            return sb.ToString();
+        }
+
         public override void GetPermission()
         {
             this.permissionAdd = this.IsAuthorized("Product.Add");
@@ -34,7 +47,7 @@ namespace Sellers.WMS.Web.Controllers
         /// 加载工具栏  
         /// </summary>  
         /// <returns>工具栏HTML</returns>  
-        public override string BuildToolBarButtons()
+        public override string BuildToolBarButtons(int t = 0)
         {
             StringBuilder sb = new StringBuilder();
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
@@ -53,6 +66,14 @@ namespace Sellers.WMS.Web.Controllers
         {
             return View();
         }
+
+        public ViewResult AutoCreate()
+        {
+            ViewData["Size"] = BuildCheckBoxList("Size", GetList<DataDictionaryDetailType>("DicCode", "Size", ""));
+            ViewData["Color"] = BuildCheckBoxList("Color", GetList<DataDictionaryDetailType>("DicCode", "Color", ""));
+            return View();
+        }
+
 
         public ActionResult Upload()
         {
@@ -101,33 +122,67 @@ namespace Sellers.WMS.Web.Controllers
             Session["result"] = results;
             return Json(new { IsSuccess = true });
         }
+        
+        [HttpPost]
+        [ValidateInput(false)]
+        public JsonResult AutoCreate(ProductType obj, string[] Size, string[] Color, string Category2)
+        {
+            ProductCategoryType c1 = Get<ProductCategoryType>(ZConvert.ToInt(obj.Category));
+            ProductCategoryType c2 = Get<ProductCategoryType>(ZConvert.ToInt(Category2));
+            List<DataDictionaryDetailType> colors = GetList<DataDictionaryDetailType>("DicCode", "Color", "");
+            List<DataDictionaryDetailType> sizes = GetList<DataDictionaryDetailType>("DicCode", "Size", "");
+            string sku = c1.Code + c2.Code;
+            string num = Common.GetNo(NSession, sku);
+            while (num.Length<3)
+            {
+                num = "0" + num;
+            }
+            sku = sku + num;
+            obj.TempSKU = sku;
+            obj.Category = c2.Name;
+            for (int i = 0; i < Size.Length; i++)
+            {
+                DataDictionaryDetailType size = sizes.Find(p => p.DicValue == Size[i]);
+                for (int j = 0; j < Color.Length; j++)
+                {
+                    DataDictionaryDetailType color = colors.Find(p => p.DicValue == Color[j]);
+                    obj.SKU = obj.TempSKU + size.DicValue + color.DicValue;
+                    obj.Standard = color.FullName + "  " + size.FullName;
+                    if (!IsFieldExist<ProductType>("SKU", obj.SKU, "-1"))
+                    {
+                        obj.Id = 0;
+                        NSession.Clear();
+                        bool isOk = Save(obj);
+                    }
+                }
+            }
+            return Json(new { IsSuccess = true });
+        }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Create(ProductType obj)
         {
             if (!IsFieldExist<ProductType>("SKU", obj.SKU, "-1"))
             {
                 ProductImgType productImg = new ProductImgType();
                 productImg.SKU = obj.SKU;
-                productImg.MainSKU = obj.SKU;
-
+                productImg.MainSKU = obj.TempSKU;
                 productImg.Img = ImageUtil.GetPictureData(Server.MapPath("~" + obj.ImgPath));
                 productImg.ImgName = obj.SKU;
-
                 ImageUtil.DrawImageRectRect(Server.MapPath("~" + obj.ImgPath),
                                             Server.MapPath("~" + Common.ImgPath) + obj.SKU + ".png", 310, 310);
                 productImg.Src = obj.ImgPath = Common.ImgPath + obj.SKU + ".png";
-
-
                 bool isOk = Save(obj);
                 if (isOk)
                 {
                     Save(productImg);
-
                 }
                 return Json(new { IsSuccess = isOk });
             }
-            return Json(new { IsSuccess = false });
+            return Json(new { IsSuccess = false, Result = "SKU已经存在!" });
+
+
         }
 
         public JsonResult BatchImport(string filename)
@@ -152,7 +207,6 @@ namespace Sellers.WMS.Web.Controllers
                 product.Long = ZConvert.ToInt(dr["长"].ToString().Trim());
                 product.High = ZConvert.ToInt(dr["高"].ToString().Trim());
                 product.Wide = ZConvert.ToInt(dr["宽"].ToString().Trim());
-
                 if (!IsFieldExist<ProductType>("SKU", product.SKU, "-1"))
                 {
                     Save(product);
@@ -221,6 +275,16 @@ namespace Sellers.WMS.Web.Controllers
 
             object count = NSession.CreateQuery("select count(Id) from ProductType " + where).UniqueResult();
             return Json(new { total = count, rows = objList });
+        }
+
+        public JsonResult GetListBySKU(string q)
+        {
+            IList<ProductType> objList = NSession.CreateQuery("from ProductType where Status <>'停产' and SKU like '%" + q + "%'")
+                .SetFirstResult(0)
+                .SetMaxResults(20)
+                .List<ProductType>();
+
+            return Json(new { total = objList.Count, rows = objList });
         }
 
     }

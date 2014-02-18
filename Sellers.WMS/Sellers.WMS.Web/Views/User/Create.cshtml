@@ -8,6 +8,7 @@
     $(function () {
         //初始化控件
         $('#Birthday').datebox();
+        $("#Birthday").datebox("setValue", "1990-01-01");
         comboboxInit('@Url.Action("List", "Role")', 'page=1&rows=100', 'RoleId', 'Id', 'Realname');
         $('#CId').combotree({
             url: '/Organize/ALLTreeList/',
@@ -64,7 +65,7 @@
             width: 150
         });
     }
-    
+
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
     <div data-options="region:'center',border:false" title="" style="overflow: hidden;">

@@ -25,7 +25,7 @@ namespace Sellers.WMS.Domain
     /// <date></date>
     /// </author>
     /// </summary>
-    public class OrderProductTypeMap : BaseEntityMap<OrderProductType> 
+    public class OrderProductTypeMap : BaseEntityMap<OrderProductType>
     {
         public OrderProductTypeMap()
         {
@@ -40,7 +40,9 @@ namespace Sellers.WMS.Domain
             Map(x => x.Remark).Length(400);
             Map(x => x.Standard).Length(400);
             Map(x => x.Price);
-            Map(x => x.Url).Length(200);
+            Map(x => x.Status);
+            Map(x => x.Url).Length(300);
+            Map(x => x.ImgUrl).Length(300);
         }
     }
 }

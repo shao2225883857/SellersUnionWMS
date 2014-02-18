@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "OrderSend";
+}
+<style>
+    .z-sacnLabel {
+        text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+        padding-right: 25px;
+        width: 150px;
+    }
+</style>
+<body class="easyui-layout">
+    <div region="center">
+
+        <script type="text/javascript">
+            $(function () {
+                //$('#ll').combogrid({
+                //    panelWidth: 360,
+                //    idField: 'LogisticsCode',
+                //    textField: 'LogisticsName',
+                //    url: '/LogisticsMode/ALLList',
+                //    fit: true,
+                //    columns: [[
+                //        { field: 'LogisticsName', title: '名称', width: 250 },
+                //        { field: 'LogisticsCode', title: '代码', width: 100 },
+                //        { field: 'ParentID', title: '代码', width: 100 }
+                //    ]]
+                //});
+                //$('#ww').combobox({
+                //    url: '/Warehouse/QList',
+                //    valueField: 'Id',
+                //    textField: 'WName',
+                //    required: true
+                //});
+                $('#ll').combobox({
+                    url: '@Url.Action("GetOptions", "DataDictionaryDetail")/LogisticsMode',
+                    valueField: 'DicValue',
+                    textField: 'FullName',
+                    panelHeight: 'auto',
+                    width: 100,
+                    onLoadSuccess: function () {
+                        var val = $(this).combobox("getData");
+                        for (var item in val[0]) {
+                            if (item == 'DicValue') {
+                                $(this).combobox("select", val[0][item]);
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+        <table width="100%" cellspacing="6" cellpadding="0" border="0" style="border-collapse: separate; border-spacing: 6px;">
+            <tbody>
+                <tr valign="top">
+                    <td>
+                        <table width="1000" cellspacing="0" cellpadding="6" border="0" class="blockTable">
+                            <tbody>
+                                <tr>
+                                    <td style="padding-top: 0px; padding-left: 6px; padding-right: 6px; padding-bottom: 8px;">
+                                        <div>
+                                            <table cellspacing="0" cellpadding="1" bordercolor="#eeeeee" border="1" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td height="25" class="z-sacnLabel">选项
+                                                        </td>
+                                                        <td>仓库:<input type="text" id="ww" value="不启用" />
+                                                            物流方式<input type="text" id="ll" />&nbsp;&nbsp;
+                                                    强制<input type="checkbox" id="ckQ" />&nbsp;&nbsp;
+                                                    电子称<input type="checkbox" id="ckCheng" checked="checked" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="tr_ID">
+                                                        <td height="25" class="z-sacnLabel">扫描包裹
+                                                </td>
+                                                        <td>
+                                                            <input id="txt" onkeydown="return txt_keydown(event)" style="font-size: 50px; background-image: none; width: 511px; height: auto" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="tr2">
+                                                        <td class="z-sacnLabel">状态
+                                                </td>
+                                                        <td>
+                                                            <font style="color: Red; font-size: 30px"><span id="spanStatus">等待包裹扫描 </span></font>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="tr4">
+                                                        <td class="z-sacnLabel">信息
+                                                </td>
+                                                        <td>
+                                                            <font style="color: Blue; font-size: 30px"><span id="spanInfo"></span></font>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="z-sacnLabel">重量
+                                                </td>
+                                                        <td>
+                                                            <object id='tc' width="200" height="25" classid="clsid:5FE3EF45-DBFE-3C80-BD1B-D60C9502039C">
+                                                            </object>
+                                                            <input type="hidden" id="txtweight" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            var zl = 0; //重量
+            var o = ""; //包裹编号
+
+            var progress = 0;
+            var txt = document.getElementById("txt");
+            var TrackCodeLength = -1;
+            var TrackCodeLength2 = -1;
+            var oldstr = "";
+            var spanInfo = document.getElementById("spanInfo");
+            var spanStatus = document.getElementById("spanStatus");
+            function txt_keydown(e) {
+
+                var keynum;
+                if (window.event) //IE
+                {
+                    keynum = e.keyCode;
+                }
+                else if (e.which) //Netscape/Firefox/Opera
+                {
+                    keynum = e.which;
+                }
+                if (keynum == 13) {
+
+                    if (txt.value == "") { Reset(); return; }
+
+                    if (progress == 0) {
+                        getOrder(txt.value);
+                    }
+                    else if (progress == 1) {
+                        inputWeight(txt.value);
+                    }
+                    else if (progress == 2) {
+                        OutStock(txt.value);
+                    }
+                    txt.value = "";
+                    return false;
+                }
+                return true;
+            }
+
+            function inputWeight(w) {
+                if (isNaN(w)) {
+                    ShowMessage(null, "请重新输入重量，重量为数字", false);
+                } else {
+                    progress = 2;
+                    zl = w;
+                    ShowMessage(null, "请输入跟踪号", true);
+                }
+
+            }
+
+            function getOrder(str) {
+
+                jQuery.ajax({
+                    url: "/Order/GetOrderBySend/",
+                    type: "post",
+                    data: "o=" + str,
+                    success: function (msg) {
+                        if (msg.IsSuccess) {
+                            if ($("#ckCheng").attr("checked")) {
+                                progress = 2;
+                                o = str;
+                                var tc = document.getElementById('tc');
+                                zl = tc.Value;
+                                ShowMessage(msg.Result, "请输入追踪码", true);
+                            } else {
+                                progress = 1;
+                                o = str;
+                                ShowMessage(msg.Result, "请输入重量", true);
+                            }
+                        } else {
+                            progress = 0;
+                            ShowMessage(msg.Result, "等待扫描", false);
+                        }
+                    }
+                });
+            }
+            function OutStock(str) {
+
+                var m = "";
+
+                // var s = $("#ww").combobox("getValue");
+                if ($("#ckQ").attr("checked")) {
+                    m = $("#ll").combobox("getValue");
+                }
+                if (isNaN(zl)) {
+                    progress = 0;
+                    ShowMessage("重量不存在，请检查电子称，然后重新扫描", "扫描错误", false);
+                    return;
+                }
+                jQuery.ajax({
+                    url: "/Order/ScanBySend/",
+                    type: "post",
+                    data: "o=" + o + "&l=" + str + "&w=" + zl + "&c=1&m=" + m,
+                    success: function (msg) {
+                        if (msg.IsSuccess) {
+                            progress = 0;
+                            ShowMessage(msg.Result, "等待扫描", true);
+                            //print(msg.OId);
+                        } else {
+                            progress = 0;
+                            ShowMessage(msg.Result, "等待扫描", false);
+                        }
+                    }
+                });
+
+            }
+
+            //重置
+            function Reset() {
+                progress = 0;
+                txt.value = "";
+                ShowMessage("", "等待扫描", true);
+            }
+            function ShowMessage(msgInfo, msgStatus, isOk) {
+                if (msgInfo != null) {
+                    spanInfo.innerHTML = msgInfo;
+                }
+                if (msgStatus != null) {
+                    spanStatus.innerHTML = msgStatus;
+                }
+                if (isOk) {
+                    spanInfo.style.color = "Blue";
+                }
+                else {
+                    spanInfo.style.color = "Red";
+                }
+            }
+</script>
+
+    </div>
+</body>

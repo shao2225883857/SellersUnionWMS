@@ -1,0 +1,261 @@
+﻿@model Sellers.WMS.Domain.ProductType
+@{
+    
+}
+<link href="~/Scripts/Uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Scripts/Uploadify/jquery.uploadify-3.1.min.js"></script>
+<script src="~/Scripts/Kindeditor/kindeditor-min.js"></script>
+<script type="text/javascript">
+
+    var editor;
+    var editor2;
+    KindEditor.ready(function (K) {
+        editor = K.create('#Memo', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            allowImageUpload: false,
+            items: [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link'],
+            afterBlur: function () { this.sync(); }
+        });
+    });
+    $(function () {
+
+        //初始化
+        $('#up_file').uploadify({
+            'auto': true,
+            'buttonText': '请选择图片',
+            'swf': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+            'uploader': '/Home/SaveFile/',
+            'multi': false,
+            'onUploadSuccess': function (file, data, response) {
+                eval("data=" + data);
+                $("#pic").attr("src", data.SaveName);
+                $('#ImgPath').val(data.SaveName);
+                //alert(data.SaveName);
+            }
+        });
+
+        $('#TempSKU,#SKU,#Title').validatebox({
+            required: true
+        });
+       
+       
+        $('#Category').combobox({
+            url: '/ProductCategory/List/0',
+            valueField: 'Id',
+            textField: 'Name',
+            required: true,
+            width: 150,
+            onChange: changeCategory,
+            onLoadSuccess: function () {
+                var val = $(this).combobox("getData");
+                for (var item in val[0]) {
+                    if (item == 'Id') {
+                        $(this).combobox("select", val[0][item]);
+                    }
+                }
+            }
+        });
+       
+        
+
+        $('#ProductAttr').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductAttr',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Status').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/ProductState',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Brand').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/Brand',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
+
+        $('#Weight').numberbox({
+            min: 0
+        });
+
+        $('#Price').numberbox({
+            min: 0,
+            precision: 2
+        });
+        $('#Wide').numberbox({
+            min: 0
+        });
+        $('#Long').numberbox({
+            min: 0
+        });
+        $('#High').numberbox({
+            min: 0
+        });
+
+        $('#form').form({
+            url: '@Url.Action("AutoCreate", "Product")',
+            onSubmit: function () {
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+              
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.IsSuccess) {
+                    alert("保存成功!");
+                    window.close();
+                }
+                else {
+                    alert(result.Result);
+                }
+            }
+        });
+    });
+    
+    function changeCategory(n, o) {
+        $('#Category2').combobox({
+            url: '/ProductCategory/List/'+n,
+            valueField: 'Id',
+            textField: 'Name',
+            required: true,
+            width: 150,
+          
+            onLoadSuccess: function () {
+                var val = $(this).combobox("getData");
+                for (var item in val[0]) {
+                    if (item == 'Id') {
+                        $(this).combobox("select", val[0][item]);
+                    }
+                }
+            }
+        });
+    }
+
+    function saveClick() {
+        var f = $('#form');
+        f.submit();
+    }
+
+</script>
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" >
+        <div class="z-toolbar">
+            <a href="#" plain="true" class="easyui-linkbutton" icon="icon-save" title="保存" onclick="saveClick()">保存</a>
+            <a href="#" plain="true" class="easyui-linkbutton" icon="icon-undo" title="撤消" data-bind="click: rejectClick">撤消</a>
+        </div>
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "form" }))
+        {
+            <fieldset>
+                <legend>产品信息</legend>
+                <table class="grid">
+                    <tr>
+                        <td align="center" valign="bottom" colspan="2" rowspan="7" style="width: 150px;">
+                            <img src="" id="pic" width="200px" height="200px" />
+                            <input id="up_file" type="file" name="up_file" />
+                            <input type="hidden" id="ImgPath" name='ImgPath' />
+                        </td>
+                        <td class="z-lable">一级类别：</td>
+                        <td align="left">
+                            <input type='text' name='Category' id='Category' class="z-txt"></input></td>
+                        <td class="z-lable">二级类别：</td>
+                        <td align="left">
+                            <input type='text' name='Category2' id='Category2' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">尺码：</td>
+                        <td colspan="3" class="attr-value-field">
+
+                            @Html.Raw(ViewData["Size"])</td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">颜色：</td>
+                        <td colspan="3" class="attr-value-field">@Html.Raw(ViewData["Color"])</td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">商品名称：</td>
+                        <td align="left" colspan="3">
+                            <input type='text' name='Title' id='Title' style="width: 400px;"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">商品状态：</td>
+                        <td align="left">
+                            <input type='text' name='Status' id='Status' class="z-txt"></input></td>
+                        <td class="z-lable">商品特性：</td>
+                        <td align="left">
+                            <input type='text' name='ProductAttr' id='ProductAttr' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+
+                        <td class="z-lable">商品价格：</td>
+                        <td align="left">
+                            <input type='text' name='Price' id='Price' class="z-txt"></input></td>
+                        <td class="z-lable">品牌：</td>
+                        <td align="left">
+                            <input type='text' name='Brand' id='Brand' class="z-txt"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="z-lable">型号：</td>
+                        <td align="left">
+                            <input type='text' name='Model' id='Model' class="z-txt"></input></td>
+                        <td class="z-lable">重量：</td>
+                        <td align="left">
+                            <input type='text' name='Weight' id='Weight' class="z-txt"></input></td>
+                    </tr>
+                </table>
+            </fieldset>
+            <div id="tt" class="easyui-tabs" style="height: 250px;">
+                <div title="仓库信息" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td class="z-lable">长：</td>
+                            <td align="left">
+                                <input type='text' name='Wide' id='Long' class="z-txt"></input></td>
+                            <td class="z-lable">宽：</td>
+                            <td align="left">
+                                <input type='text' name='Wide' id='Wide' class="z-txt"></input></td>
+                            <td class="z-lable">高：</td>
+                            <td align="left">
+                                <input type='text' name='High' id='High'></input></td>
+                        </tr>
+                        <tr>
+                            <td class="z-lable">库存天数：</td>
+                            <td align="left" colspan="5">
+                                <input type='text' name='DayByStock' id='DayByStock' class="z-txt"></input></td>
+
+                        </tr>
+                    </table>
+
+                </div>
+                <div title="产品详细描述" style="padding: 20px;">
+                    <table class="grid">
+                        <tr>
+                            <td class="z-lable z-searchlable">简单描述：</td>
+                            <td align="left">
+                                <textarea name='Memo' id='Memo' style="width: 800px; height: 40px; resize: none;"></textarea>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>

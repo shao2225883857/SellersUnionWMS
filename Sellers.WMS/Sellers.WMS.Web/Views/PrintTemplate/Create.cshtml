@@ -6,8 +6,15 @@
 
 <script type="text/javascript">
 
-	$(function () {
-		//parent.$.messager.progress('close');
+    $(function () {
+
+
+        $('#TempType').combobox({
+            url: '@Url.Action("GetOptions", "DataDictionaryDetail")/PrintTemplate',
+            valueField: 'DicValue',
+            textField: 'FullName',
+            panelHeight: 'auto'
+        });
         $('#form').form({
             url: '@Url.Action("Create", "PrintTemplate")',
             onSubmit: function () {
@@ -30,13 +37,13 @@
                     parent.$.modalDialog.penner_grid.datagrid('reload');
                     parent.$.modalDialog.handler.dialog('close');
                 }
-				else{
-					alert(result.Result);
-				}
+                else {
+                    alert(result.Result);
+                }
             }
         });
     });
-    
+
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -45,25 +52,22 @@
         {
             <table class="grid">
                 <tr>
-                    <td align="right">主键标识：</td>
-                    <td align="left"><input type='text' name='Id' id='Id'></input></td>
-                    <td align="right">模板代码：</td>
-                    <td align="left"><input type='text' name='Code' id='Code'></input></td>
-                </tr>
-                <tr>
                     <td align="right">模板名称：</td>
-                    <td align="left"><input type='text' name='TempName' id='TempName'></input></td>
-                    <td align="right">模板分类：</td>
-                    <td align="left"><input type='text' name='TempType' id='TempType'></input></td>
+                    <td align="left">
+                        <input type='text' name='TempName' id='TempName'></input></td>
                 </tr>
                 <tr>
-                    <td align="right">模板内容：</td>
-                    <td align="left"><input type='text' name='Content' id='Content'></input></td>
+                    <td align="right">模板分类：</td>
+                    <td align="left">
+                        <input type='text' name='TempType' id='TempType'></input></td>
+                </tr>
+                <tr>
                     <td align="right">描述：</td>
-                    <td align="left"><input type='text' name='Description' id='Description'></input></td>
+                    <td align="left">
+                        <input type='text' name='Description' id='Description'></input></td>
                 </tr>
 
-			</table>
+            </table>
         }
     </div>
 </div>

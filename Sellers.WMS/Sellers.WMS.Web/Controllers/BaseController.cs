@@ -67,7 +67,8 @@ namespace Sellers.WMS.Web.Controllers
             return true;
         }
 
-        public virtual string BuildToolBarButtons()
+   
+        public virtual string BuildToolBarButtons(int t)
         {
             return "";
         }
@@ -78,6 +79,7 @@ namespace Sellers.WMS.Web.Controllers
             ExFilterField.Add("LOGIN");
             ExFilterField.Add("REG");
             ExFilterField.Add("LOGOFF");
+            ExFilterField.Add("PRINTSAVE");
             bool iscon = false;
             var controller = filterContext.RouteData.Values["controller"].ToString().ToString();
             var action = filterContext.RouteData.Values["action"].ToString().ToUpper();
@@ -276,10 +278,10 @@ namespace Sellers.WMS.Web.Controllers
         }
 
         //获取所有列表
-        public virtual IList<T> GetAll<T>() where T : BaseEntity
+        public virtual List<T> GetAll<T>() where T : BaseEntity
         {
             return NSession.CreateCriteria<T>()
-                        .List<T>();
+                        .List<T>().ToList();
         }
 
 

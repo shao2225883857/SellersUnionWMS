@@ -131,5 +131,9 @@ namespace Sellers.WMS.Domain
         /// </summary>
         public virtual String ImgPath { get; set; }
 
+        /// <summary>
+        /// 产品类型
+        /// </summary>
+        public virtual int PType { get; set; }
     }
 }

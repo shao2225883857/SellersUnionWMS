@@ -33,7 +33,7 @@ namespace Sellers.WMS.Web.Controllers
         /// 加载工具栏  
         /// </summary>  
         /// <returns>工具栏HTML</returns>  
-        public override string BuildToolBarButtons()
+        public override string BuildToolBarButtons(int t = 0)
         {
             StringBuilder sb = new StringBuilder();
             string linkbtn_template = "<a id=\"a_{0}\" class=\"easyui-linkbutton\" style=\"float:left\"  plain=\"true\" href=\"javascript:;\" icon=\"{1}\"  {2} title=\"{3}\" onclick='{5}'>{4}</a>";
@@ -189,7 +189,6 @@ namespace Sellers.WMS.Web.Controllers
                 root.children.Add(new SystemTree { id = item.Id.ToString(), text = item.FullName, children = tree2, @checked = ischecked });
                 GetChildren(objList, item, tree2);
             }
-
             tree.Add(root);
             return Json(tree);
         }
@@ -214,7 +213,6 @@ namespace Sellers.WMS.Web.Controllers
                 }
             }
             return tree;
-
         }
 
         private void GetChildren(IList<ModuleType> objList, ModuleType item)
@@ -239,7 +237,6 @@ namespace Sellers.WMS.Web.Controllers
                 GetChildren(objList, k, mlist);
             }
         }
-
 
         public JsonResult CreateModuleByUser(int m, int k)
         {
@@ -268,6 +265,7 @@ namespace Sellers.WMS.Web.Controllers
             NSession.Flush();
             return Json(new { IsSuccess = isOk });
         }
+
     }
 }
 

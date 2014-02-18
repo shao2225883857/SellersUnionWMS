@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Sellers.WMS.Cheng.Setup", "Sellers.WMS.Cheng.Setup\Sellers.WMS.Cheng.Setup.vdproj", "{FDE3F61D-BFDC-445E-BDE5-269FBD76A50D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sellers.WMS.Cheng.ActiveX", "..\Sellers.WMS.Cheng.ActiveX\Sellers.WMS.Cheng.ActiveX.csproj", "{67D5CD73-38DF-4265-A15C-1A29A1110C5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDE3F61D-BFDC-445E-BDE5-269FBD76A50D}.Debug|Any CPU.ActiveCfg = Debug
+		{FDE3F61D-BFDC-445E-BDE5-269FBD76A50D}.Debug|Any CPU.Build.0 = Debug
+		{FDE3F61D-BFDC-445E-BDE5-269FBD76A50D}.Release|Any CPU.ActiveCfg = Release
+		{FDE3F61D-BFDC-445E-BDE5-269FBD76A50D}.Release|Any CPU.Build.0 = Release
+		{67D5CD73-38DF-4265-A15C-1A29A1110C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67D5CD73-38DF-4265-A15C-1A29A1110C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67D5CD73-38DF-4265-A15C-1A29A1110C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67D5CD73-38DF-4265-A15C-1A29A1110C5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
